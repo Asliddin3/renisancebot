@@ -3,9 +3,9 @@ from aiogram import types
 from aiogram.dispatcher.filters.builtin import CommandStart
 from keyboards.default.start_keyboard import menu
 from loader import dp, db, bot
-video_id="BAACAgIAAxkBAAIBW2SxkkK0sjZLIGPlJNg91Nu3yJ3vAAJgNgACFk6ISQYUqVC9KQlbLwQ"
-photo_id ="AgACAgIAAxkBAAIBbmSxlI0RkAPEJWySSCQb5fN5fH17AAJ7yDEbFk6ISeUNL-JB06fvAQADAgADeQADLwQ"
-jshshr_id="AgACAgIAAxkBAAICrmSydd0LVmwAAQOSNME9O5dBBqqj5wACP80xG17NkEmjTQbukZs5oQEAAwIAA3kAAy8E"
+video_id="BAACAgIAAxkBAAMIZLQRJUMUfaBg495TkXA-sXg0Ne0AAm8uAAKriKFJ8bKNRBtW57AvBA"
+photo_id ="AgACAgIAAxkBAAMGZLQQ7a_4ZnMiTr0IivEQKK4Cn9YAAmLJMRuriKFJZ1KOPEuwo5gBAAMCAAN5AAMvBA"
+jshshr_id="AgACAgIAAxkBAAMKZLQRXJWpmD__HyB8VsLE593dEDwAAmXJMRuriKFJDEWzEw8w3bUBAAMCAAN5AAMvBA"
 @dp.message_handler(CommandStart())
 async def bot_start(message: types.Message):
     try:
