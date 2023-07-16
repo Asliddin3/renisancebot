@@ -1,0 +1,146 @@
+import asyncio
+
+from aiogram import types
+from filters.admin_filter import AdminFilter
+from data.config import ADMINS
+from loader import dp, db, bot
+from keyboards.default.admin_keyboard import main_admin,back
+from keyboards.inline.admin_keaborad import make_contract_keyboard,make_archive_keyboard,application
+from keyboards.default.start_keyboard import menu
+
+
+# @dp.message_handler(text="/exit",user_id=ADMINS)
+# async def exit_admin_panel(message:types.Message):
+#     await db.update_user_state(telegram_id=message.from_user.id,state="menu::::")
+#     await message.answer(text="Bosh menu",reply_markup=menu)
+
+@dp.callback_query_handler(application.filter(),AdminFilter(),user_id=ADMINS)
+async def catch_admin_callback_data(call:types.CallbackQuery,callback_data:dict):
+    contract_id=callback_data.get("contract_id")
+    action=callback_data.get("action")
+    if action=="accept":
+        await db.update_contract_state(id=int(contract_id),state="accepted")
+        await call.answer("Shartnoma jonatildi")
+    elif action=="archive":
+        await db.update_contract_state(id=int(contract_id),state="archive")
+        await call.answer("Arhivega solindi")
+    elif action=="delete":
+        await db.update_contract_state(id=(contract_id),state="delete")
+        await call.answer("Bazadan ochirildi")
+
+
+@dp.message_handler(AdminFilter(),user_id=ADMINS)
+async def catch_admin_commands(message:types.Message):
+    state=await db.get_user_state_by_telegram_id(message.from_user.id)
+    state=state.split(";")
+    if state[0]=="admin" and state[1]=="":
+        text=message.text
+        if text=="Chiqish":
+            await message.answer("Bosh menu",reply_markup=menu)
+            state="menu::::"
+            await db.update_user_state(telegram_id=message.from_user.id,state=state)
+            return
+        elif text=="Ariza topshirganlar":
+            contracts=await db.get_new_contracts()
+            if len(contracts)==0:
+                await message.answer("Yangi arizalar mavjud emas")
+                return
+            for contract in contracts:
+                markup=make_contract_keyboard(contract[0])
+                text=prepare_contract_data(contract)
+                await message.answer(text=text,reply_markup=markup)
+                photo=contract[10].split(":")
+                photo_id,ptype=photo[1],photo[0]
+                if ptype=="photo":
+                    await message.answer_photo(photo=photo_id)
+                else:
+                    await message.answer_document(document=photo_id)
+        elif text=="Arhivdagilar":
+            contracts = await db.get_archived_contracts()
+            if len(contracts)==0:
+                await message.answer("Arhivda arizalar mavjud emas")
+                return
+            for contract in contracts:
+                markup = make_archive_keyboard(contract[0])
+                text = prepare_contract_data(contract)
+                await message.answer(text=text, reply_markup=markup)
+                photo = contract[10].split(":")
+                photo_id, ptype = photo[1], photo[0]
+                if ptype == "photo":
+                    await message.answer_photo(photo=photo_id)
+                else:
+                    await message.answer_document(document=photo_id)
+                # await message.answer_photo(photo=contract[10])
+        elif text=="Qabul bo'lganlar":
+            contracts=await db.get_accepted_contracts()
+            if len(contracts)==0:
+                await message.answer("Qabul bolgan arizalar mavjud emas")
+                return
+            for contract in contracts:
+                text = prepare_contract_data(contract)
+                await message.answer(text=text)
+                photo = contract[10].split(":")
+                photo_id, ptype = photo[1], photo[0]
+                if ptype == "photo":
+                    await message.answer_photo(photo=photo_id)
+                else:
+                    await message.answer_document(document=photo_id)
+                # await message.answer_photo(photo=contract[10])
+        elif text=="Elon qilish":
+            state[1]="notification"
+            await message.answer(text="Iltimos eloni matni kiriting",reply_markup=back)
+            state=";".join(state)
+            await db.update_user_state(telegram_id=message.from_user.id,state=state)
+    elif state[1]=="notification":
+        if message.text=="🔙 Ortga":
+            state[1]=""
+            state=";".join(state)
+            await db.update_user_state(telegram_id=message.from_user.id,state=state)
+            await message.answer(text="Admin menu",reply_markup=main_admin)
+        else:
+            users = await db.select_all_users()
+            for user in users:
+                user_id = user[0]
+                await bot.send_message(
+                  chat_id=user_id, text=message.text
+                 )
+                await asyncio.sleep(0.05)
+
+
+Times = {
+         'daytime':"Kunduzgi",
+        "evening":'Kechgi' ,
+        "distance":"Sirtqi"
+}
+langDic={
+    "uz":"O'zbek",
+    "ru":"Ruscha",
+}
+
+def prepare_contract_data(contract:list):
+    res=f"<b>ID</b>:   {contract[0]}\n" \
+        f"<b>F.I.SH</b>:         {contract[1]}\n" \
+        f"<b>Telefon raqami</b>: {contract[2]}\n" \
+        f"<b>Ikkinch telefon</b>:{contract[3]}\n" \
+        f"<b>Fakultet nomi</b>:  {contract[4]}\n" \
+        f"<b>Ta'lim shakli</b>:  {Times[contract[5]]}\n" \
+        f"<b>Ta'lim tili</b>:    {langDic[contract[6]]}\n" \
+        f"<b>Address</b>:        {contract[7]}\n" \
+        f"<b>Passport IDsi</b>:  {contract[8]}\n" \
+        f"<b>JSHSHIR</b>:        {contract[9]}\n"
+    return res
+
+
+@dp.message_handler(text="/admin", user_id=ADMINS)
+async def send_ad_to_all(message: types.Message):
+    state="admin;;"
+    await db.update_user_state(telegram_id=message.from_user.id,state=state)
+    await message.answer("Siz admin panelni ochdingiz",reply_markup=main_admin)
+    # users = await db.select_all_users()
+    # for user in users:
+    #     # print(user[3])
+    #     user_id = user[3]
+    #     await bot.send_message(
+    #         chat_id=user_id, text="Siz admin pan"
+    #     )
+    #     await asyncio.sleep(0.05)
