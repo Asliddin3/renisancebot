@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-=ly1!h+gs5m_)b3ol7wj8h06+x0ok#y2(hdxn5^r5jnnhdsl$)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1','78.40.219.247','localhost']
 
 
 # Application definition
@@ -79,7 +79,7 @@ WSGI_APPLICATION = 'ebozor.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'univer_testdb',
+        'NAME': 'univer_db',
         'USER': 'postgres',
         'PASSWORD': 'compos1995',
         'HOST': 'localhost',

@@ -1,0 +1,17 @@
+{
+  apps:
+	[
+	{
+	name:"django",
+	script:"manage.py",
+	args:["runserver","78.40.219.247:8000"],
+	exec_mode:"fork",
+	instances:"1",
+	wait_ready:true,
+	autorestart:false,
+	max_restarts:5,
+	interpreter:"python"
+	}
+	]
+
+}
