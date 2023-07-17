@@ -79,7 +79,7 @@ WSGI_APPLICATION = 'ebozor.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'univer_testdb',
+        'NAME': 'univer_db',
         'USER': 'postgres',
         'PASSWORD': 'compos1995',
         'HOST': 'localhost',
