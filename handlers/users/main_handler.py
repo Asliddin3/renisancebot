@@ -162,6 +162,8 @@ async def catch_answers(call:CallbackQuery,callback_data:dict):
         await db.update_user_state(telegram_id=call.from_user.id,state=state)
         return
     else:
+        # if question!=state[4]:
+        #     return
         if answer==value:
             await db.increment_user_result(telegram_id=call.from_user.id)
             await call.answer("Javobingiz to'gri")
@@ -170,11 +172,16 @@ async def catch_answers(call:CallbackQuery,callback_data:dict):
     if number!=None:
         markup=make_test_keyboard(str(number))
         await call.message.edit_text(text=new_question,reply_markup=markup)
+        # state[4]=str(number)
+        state=":".join(state)
+        await db.update_user_state(telegram_id=call.from_user.id,state=state)
     else:
         result=await db.get_user_result(call.from_user.id)
         state[0]="menu"
-        await db.create_user_contract(telegram_id=call.from_user.id,
-                                      fakultet_id=int(state[3]),result=result)
+        # await db.create_user_contract(telegram_id=call.from_user.id,
+        #                               fakultet_id=int(state[3]),result=result)
+        await db.update_contract_field(contract_id=int(state[4]),field="state",
+                                       value="registered",telegram_id=call.from_user.id)
         state=":".join(state)
         await db.update_user_state(telegram_id=call.from_user.id,state=state)
         await call.message.delete()
@@ -236,7 +243,6 @@ async def main_handler(message:Message):
         state[0]="fakultet"
         state[2]=Times[message.text]
         fakultets=await db.get_fakultets(language=state[1],time=Times[message.text])
-        print(fakultets)
         if len(fakultets)==0:
             await message.answer("Bu ta'lim shakli boicha fakultet mavjud emas",reply_markup=format)
             return
@@ -254,7 +260,10 @@ async def main_handler(message:Message):
         if message.text.isdigit():
             await message.answer("F.I.SH hato kiritildi iltimos qaytadan kiriting")
             return
-        await db.update_user_real_name(telegram_id=message.from_user.id,real_name=message.text)
+        # await db.update_user_real_name(telegram_id=message.from_user.id,real_name=message.text)
+        name=message.text
+        row=await db.create_new_user_contract(telegram_id=message.from_user.id,fakultet_id=int(state[3]),full_name=name)
+        state[4]=str(row[0])
         await message.answer("Iltimos talabaning telefon raqamini shu formata kiriting +998991112233",reply_markup=backKeyboard)
         state[0]="phone"
     elif state[0]=="phone":
@@ -273,7 +282,8 @@ async def main_handler(message:Message):
             return
         await message.answer("Iltimos qoshimcha telefon raqamni shu formata kiriting  +998901112233",reply_markup=backKeyboard)
         state[0]="extra_phone"
-        await db.update_user_phone(message.from_user.id,phone)
+        await db.update_contract_field(contract_id=int(state[4]),field="phone",telegram_id=message.from_user.id,value=phone)
+        # await db.update_user_phone(message.from_user.id,phone)
     elif state[0]=="extra_phone":
         phone_number_pattern = re.compile(r'^\+998\d{9}$')
         if not phone_number_pattern.match(message.text):
@@ -286,18 +296,20 @@ async def main_handler(message:Message):
             return
         await message.answer("Iltimos talabani passport raqamini yuboring  AB1231212", reply_markup=backKeyboard)
         state[0] = "passport"
-        await db.update_user_extra_phone(message.from_user.id, phone)
+        await db.update_contract_field(contract_id=int(state[4]),field="extra_phone",telegram_id=message.from_user.id,value=phone)
+        # await db.update_user_extra_phone(message.from_user.id, phone)
     elif state[0]=="passport":
         passport_id_pattern = re.compile(r'^[A-Z]{2}\d{7}$')
         if not passport_id_pattern.match(message.text):
             await message.answer("Passport raqami hato kiritildi iltimos shu formata kiriting AB1234567")
             return
         text=message.text.upper()
-        count = await db.check_for_phone_exists(text)
+        count = await db.check_for_passport_exists(text)
         if count != 0:
             await message.answer("Bu passport id raqamga contract tuzilgan")
             return
-        await db.update_user_passport(telegram_id=message.from_user.id,passport=text)
+        # await db.update_user_passport(telegram_id=message.from_user.id,passport=text)
+        await db.update_contract_field(contract_id=int(state[4]),field="passport",telegram_id=message.from_user.id,value=text)
         state[0]="JSHSHIR"
         await message.answer("Iltimos talabani JSHSHIR ni kiriting ",reply_markup=backKeyboard)
         await message.answer_photo(photo=jshshr_id)
@@ -307,45 +319,31 @@ async def main_handler(message:Message):
         if not pattern.match(message.text):
             await message.answer("JSHSHIR hato kiritildi")
             return
-        await db.update_user_jshshir(telegram_id=message.from_user.id,jshshir=message.text)
+        # await db.update_user_jshshir(telegram_id=message.from_user.id,jshshir=message.text)
+        await db.update_contract_field(contract_id=int(state[4]),field="jshshir",telegram_id=message.from_user.id,value=message.text)
         state[0]="address"
         await message.answer(text="Iltimos yashash joyingizni kiriting passportdagi misol:"
                                   "Toshkent shahar Yakasaroy tumani Shota Rustaveli Kochasi 87 dom 99 honadon",reply_markup=backKeyboard)
     elif state[0]=="address":
-        await db.update_user_address(message.from_user.id,message.text)
+        await db.update_contract_field(contract_id=int(state[4]),field="address",telegram_id=message.from_user.id,value=message.text)
+        # await db.update_user_address(message.from_user.id,message.text)
         state[0]="photo"
         await message.answer(text="Talabaning passport yoki id kartasini rasmini jonating",reply_markup=backKeyboard)
     elif state[0]=="test" and "Imtihonni boshlash":
         keyboard=make_test_keyboard("1")
         question=await db.get_test(1)
-        if question=="":
+        if question==None:
             await message.answer("Testlar hali qoshilmadi")
             return
         await message.answer(text="Test boshlandi",reply_markup=ReplyKeyboardRemove())
         await message.answer(text=question,reply_markup=keyboard)
         state[0]="exam"
-        await db.delete_user_result(telegram_id=message.from_user.id)
+        state[4]="1"
+        await db.remove_contract_user_result(telegram_id=message.from_user.id)
         # await db.update_user_status(message.from_user.id,"registered")
     else:
         await message.answer("Notogri amal bajarildi")
         return
     state=":".join(state)
     await db.update_user_state(message.from_user.id,state)
-
-
-test={
-    1:{
-        "question":"1-Savol."\
-                    "XIX asr o‘rtalarida xonliklar chorvadorlardan olingan soliq turini aniqlang?"\
-                    "A. alg‘ut"\
-                    "B. zakot"\
-                    "C. salg‘ut"\
-                    "D. kafsan,",
-        "answer":"A"
-    },
-    2:{
-        "question":"Test2?",
-        "answer":"A"
-    }
-}
 

@@ -60,8 +60,8 @@ class Database:
         return sql, tuple(parameters.values())
 
     async def add_user(self, full_name, username, telegram_id,state):
-        sql = "INSERT INTO products_user (full_name, username, telegram_id,state,result) " \
-              "VALUES($1, $2, $3,$4,0) returning *"
+        sql = "INSERT INTO products_user (full_name, username, telegram_id,state) " \
+              "VALUES($1, $2, $3,$4) returning *"
         return await self.execute(sql, full_name, username, telegram_id,state, fetchrow=True)
 
     async def select_all_users(self):
@@ -71,22 +71,22 @@ class Database:
     async def update_user_state(self,telegram_id,state):
         sql="UPDATE products_user SET state=$1 WHERE telegram_id=$2"
         return await self.execute(sql,state,telegram_id,execute=True)
-    async def update_user_real_name(self,telegram_id,real_name):
-        sql="UPDATE products_user SET real_name=$1 WHERE telegram_id=$2"
-        return await self.execute(sql,real_name,telegram_id,execute=True)
+    # async def update_user_real_name(self,telegram_id,real_name):
+    #     sql="UPDATE products_user SET real_name=$1 WHERE telegram_id=$2"
+    #     return await self.execute(sql,real_name,telegram_id,execute=True)
 
     async def update_user_status(self,telegram_id,status):
         sql="UPDATE products_user SET status=$1 WHERE telegram_id=$2"
         return await self.execute(sql,status,telegram_id,execute=True)
     async def delete_user_result(self,telegram_id):
-        sql="UPDATE products_user SET result=0 WHERE telegram_id=$1"
+        sql="UPDATE products_contract SET result=0 WHERE telegram_id=$1"
         return await self.execute(sql,telegram_id,execute=True)
     async def increment_user_result(self,telegram_id):
-        sql="UPDATE products_user SET result=result+1 WHERE telegram_id=$1"
+        sql="UPDATE products_contract SET result=result+1 WHERE telegram_id=$1"
         return await self.execute(sql,telegram_id,execute=True)
 
     async def get_user_result(self,telegram_id):
-        sql="SELECT result FROM products_user WHERE telegram_id=$1"
+        sql="SELECT result FROM products_contract WHERE telegram_id=$1"
         return await self.execute(sql,telegram_id,fetchval=True)
 
     async def update_user_phone(self,telegram_id,phone):
@@ -104,12 +104,30 @@ class Database:
               "WHERE telegram_id = $1"
         await self.execute(sql, telegram_id, fakultet_id, result, execute=True)
 
+    async def create_new_user_contract(self,telegram_id,fakultet_id,full_name):
+        # Check if a record with the given telegram_id and state exists
+        select_sql = "SELECT COUNT(*) FROM products_contract WHERE telegram_id=$1 AND state='new'"
+        record_count = await self.execute(select_sql, telegram_id,fetchval=True)
+        if record_count > 0:
+            # Update the existing record
+            update_sql = "UPDATE products_contract SET fakultet_id=$1, full_name=$2 WHERE telegram_id=$3 AND state='new' returning id"
+            return await self.execute(update_sql, fakultet_id, full_name, telegram_id, fetchrow=True)
+        else:
+            # Insert a new record
+            insert_sql = "INSERT INTO products_contract (telegram_id, fakultet_id, full_name, state) VALUES ($1, $2, $3, 'new') returning id"
+            return await self.execute(insert_sql, telegram_id, fakultet_id, full_name, fetchrow=True)
+    async def update_contract_field(self,contract_id,field,value,telegram_id):
+        sql = f"UPDATE products_contract SET {field}=$1 WHERE telegram_id=$2 AND state='new' AND id=$3"
+        return await self.execute(sql, value, telegram_id,contract_id, execute=True)
     async def get_new_contracts(self):
         sql="SELECT products_contract.id,full_name,phone,extra_phone,f.name,f.time,f.lang,address,passport,jshshir,passport_photo " \
             " FROM products_contract INNER JOIN products_fakultet AS f " \
             "ON f.id=fakultet_id  WHERE state='registered'"
         return await self.execute(sql,fetch=True)
 
+    async def remove_contract_user_result(self,telegram_id):
+        sql="UPDATE products_contract SET result=0 WHERE telegram_id=$1 AND state='new'"
+        return await self.execute(sql,telegram_id,execute=True)
     async def get_archived_contracts(self):
         sql = "SELECT products_contract.id,full_name,phone,extra_phone,f.name,f.time,f.lang,address,passport,jshshir,passport_photo " \
               " FROM products_contract INNER JOIN products_fakultet AS f " \
@@ -132,7 +150,7 @@ class Database:
         return await self.execute(sql, fetch=True)
 
     async def update_user_photo(self,telegram_id,photo_id):
-        sql="UPDATE products_user SET photo_id=$1 WHERE telegram_id=$2"
+        sql="UPDATE products_contract SET passport_photo=$1 WHERE telegram_id=$2"
         return await self.execute(sql,photo_id,telegram_id,execute=True)
 
     async def update_user_jshshir(self, telegram_id, jshshir):
@@ -154,7 +172,7 @@ class Database:
         sql = "SELECT * FROM products_user WHERE telegram_id=$1"
         return await self.execute(sql,id,fetchrow=True)
     async def get_user_phone_by_telegram_id(self,telegram_id):
-        sql="SELECT phone FROM products_user WHERE telegram_id=$1"
+        sql="SELECT phone FROM products_contract WHERE telegram_id=$1"
         return await self.execute(sql,telegram_id,fetchval=True)
 
 
@@ -196,7 +214,7 @@ class Database:
         return (answer,question,number)
 
     async def get_contract_by_telefone(self,telefon):
-        sql="SELECT * FROM products_contract WHERE phone=$1"
+        sql="SELECT * FROM products_contract WHERE phone=$1 AND state='registered'"
         return await self.execute(sql,telefon,fetchrow=True)
 
     async def get_fakultet_id_by_name(self, name):
