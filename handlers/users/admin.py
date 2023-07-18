@@ -186,7 +186,8 @@ def prepare_contract_data(contract:list):
         f"<b>JSHSHIR</b>:        {contract[9]}\n"\
         f"<b>DTM</b>:        {contract[11]}\n" \
         f"<b>Test natijasi</b>:        {contract[12]}\n"
-
+    if len(contract)==14:
+        res+=f"<b>Shartnoma jonatilgan sana</b>:        {contract[13]}\n"
     return res
 
 

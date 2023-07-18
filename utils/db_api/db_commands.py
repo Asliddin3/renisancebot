@@ -153,7 +153,8 @@ class Database:
         sql="UPDATE products_contract SET created=$1 WHERE id=$2"
         return await self.execute(sql,created,id,execute=True)
     async def get_accepted_contracts(self):
-        sql = "SELECT products_contract.id,full_name,phone,extra_phone,f.name,f.time,f.lang,address,passport,jshshir,passport_photo,dtm,result" \
+        sql = "SELECT products_contract.id,full_name,phone,extra_phone,f.name,f.time,f.lang," \
+              "address,passport,jshshir,passport_photo,dtm,result,created" \
               " FROM products_contract  INNER JOIN products_fakultet AS f " \
               "ON f.id=fakultet_id WHERE state='accepted'"
         return await self.execute(sql, fetch=True)
