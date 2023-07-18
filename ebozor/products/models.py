@@ -81,7 +81,7 @@ class Contract(models.Model):
     DisplayFields=["id","full_name","phone","fakultet_id","extra_phone","state","passport","jshshir","created"]
     SearchableFields=["id","full_name","phone","extra_phone","passport","jshshir"]
     class Meta:
-        db_table="CONTRACT"
+        db_table="products_contract"
 # class Cart(models.Model):
 #     id = models.AutoField(primary_key=True)
 #     buyer = models.ForeignKey(User)
