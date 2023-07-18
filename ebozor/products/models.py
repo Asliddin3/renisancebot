@@ -70,6 +70,7 @@ class Contract(models.Model):
     extra_phone=models.CharField(verbose_name="Qoshimcha raqam",max_length=100,default="",null=True)
     state=models.CharField(verbose_name="Contract holati",max_length=100,default="registered",choices=ContractState,null=True)
     result=models.IntegerField(verbose_name="Togri topilgan javoblar soni",default=0,null=True)
+    dtm=models.DecimalField(verbose_name="DTM test natijasi",default=0,null=True)
     address=models.CharField(verbose_name="Propiska joyi",max_length=1000,null=True)
     passport = models.CharField(verbose_name="Passport raqami", max_length=100,unique=True,null=True)
     passport_photo=models.CharField(verbose_name="Passoprt rasmini idsi",max_length=1000,null=True)

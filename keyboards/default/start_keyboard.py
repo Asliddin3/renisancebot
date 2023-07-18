@@ -47,6 +47,19 @@ format=ReplyKeyboardMarkup(
         ]
     ],resize_keyboard=True
 )
+
+dtmKey=ReplyKeyboardMarkup(
+    keyboard=[
+        [
+            KeyboardButton("Ha"),
+            KeyboardButton("Yoq")
+        ],
+        [
+            KeyboardButton(text="🔙 Ortga"),
+            KeyboardButton(text="🏠 Bosh menu")
+        ]
+    ]
+)
 backKeyboard=ReplyKeyboardMarkup(
     keyboard=[
         [

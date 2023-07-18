@@ -88,7 +88,7 @@ async def catch_admin_commands(message:types.Message):
                 # await message.answer_photo(photo=contract[10])
         elif text=="Elon qilish":
             state[1]="notification"
-            await message.answer(text="Iltimos eloni matni kiriting",reply_markup=back)
+            await message.answer(text=" eloni matni kiriting",reply_markup=back)
             state=";".join(state)
             await db.update_user_state(telegram_id=message.from_user.id,state=state)
     elif state[1]=="notification":
