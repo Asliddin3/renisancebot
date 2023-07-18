@@ -58,7 +58,8 @@ dtmKey=ReplyKeyboardMarkup(
             KeyboardButton(text="🔙 Ortga"),
             KeyboardButton(text="🏠 Bosh menu")
         ]
-    ]
+    ],
+    resize_keyboard=True
 )
 backKeyboard=ReplyKeyboardMarkup(
     keyboard=[

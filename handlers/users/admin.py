@@ -1,11 +1,12 @@
 import asyncio
 
 from aiogram import types
-from filters.admin_filter import AdminFilter
+from aiogram.types import ContentType
+from filters.admin_filter import AdminFilter,AdminContentFilter
 from data.config import ADMINS
 from loader import dp, db, bot
-from keyboards.default.admin_keyboard import main_admin,back
-from keyboards.inline.admin_keaborad import make_contract_keyboard,make_archive_keyboard,application
+from keyboards.default.admin_keyboard import main_admin,back,notificationType
+from keyboards.inline.admin_keaborad import make_contract_keyboard,make_archive_keyboard,application,make_resend_keyboard
 from keyboards.default.start_keyboard import menu
 from datetime import datetime
 import pytz
@@ -24,7 +25,7 @@ async def catch_admin_callback_data(call:types.CallbackQuery,callback_data:dict)
     if action=="accept":
         current_time = datetime.now(timezone)
         await db.update_contract_state(id=int(contract_id),state="accepted")
-        await db.update_contract_created_time(id=int(contract_id),created=current_time)
+        await db.update_contract_created_time(id=int(contract_id),created=current_time.date())
         await call.answer("Shartnoma jonatildi")
     elif action=="archive":
         await db.update_contract_state(id=int(contract_id),state="archive")
@@ -33,6 +34,34 @@ async def catch_admin_callback_data(call:types.CallbackQuery,callback_data:dict)
         await db.delete_contract(id=int(contract_id))
         await call.answer("Bazadan ochirildi")
 
+
+@dp.message_handler(AdminContentFilter(),content_types=ContentType.ANY)
+async def catch_admin_notification(message:types.Message):
+    state=await db.get_user_state_by_telegram_id(message.from_user.id)
+    state=state.split(";")
+    if state[1] == "all":
+        users = await db.select_all_users()
+    else:
+        users = await db.get_contract_users_by_state(state=state[1])
+    if message.text == "🔙 Ortga":
+        state[1] = "notification"
+        state = ";".join(state)
+        await db.update_user_state(telegram_id=message.from_user.id, state=state)
+        await message.answer(text="Kimlarga elon jonatmoqchisiz", reply_markup=notificationType)
+        return
+    for user in users:
+        user_id = user[0]
+        if len(message.photo) != 0:
+            await bot.send_photo(chat_id=user_id, caption=message.caption,
+                                 photo=message.photo[0].file_id)
+        elif message.video is not None:
+            await bot.send_video(chat_id=user_id, caption=message.caption,
+                                 photo=message.video.file_id)
+        else:
+            await bot.send_message(
+                chat_id=user_id, text=message.text
+            )
+        await asyncio.sleep(0.05)
 
 @dp.message_handler(AdminFilter(),user_id=ADMINS)
 async def catch_admin_commands(message:types.Message):
@@ -76,14 +105,15 @@ async def catch_admin_commands(message:types.Message):
                 else:
                     await message.answer_document(document=photo_id)
                 # await message.answer_photo(photo=contract[10])
-        elif text=="Qabul bo'lganlar":
+        elif text == "Qabul bo'lganlar":
             contracts=await db.get_accepted_contracts()
             if len(contracts)==0:
                 await message.answer("Qabul bolgan arizalar mavjud emas")
                 return
             for contract in contracts:
                 text = prepare_contract_data(contract)
-                await message.answer(text=text)
+                markup=make_resend_keyboard(str(contract[0]))
+                await message.answer(text=text,reply_markup=markup)
                 photo = contract[10].split(":")
                 photo_id, ptype = photo[1], photo[0]
                 if ptype == "photo":
@@ -93,27 +123,34 @@ async def catch_admin_commands(message:types.Message):
                 # await message.answer_photo(photo=contract[10])
         elif text=="Elon qilish":
             state[1]="notification"
-            await message.answer(text=" eloni matni kiriting",reply_markup=back)
             state=";".join(state)
             await db.update_user_state(telegram_id=message.from_user.id,state=state)
+            await message.answer(text="Kimlarga elon jonatmoqchisiz",reply_markup=notificationType)
     elif state[1]=="notification":
         if message.text=="🔙 Ortga":
             state[1]=""
             state=";".join(state)
             await db.update_user_state(telegram_id=message.from_user.id,state=state)
             await message.answer(text="Admin menu",reply_markup=main_admin)
+        elif message.text in ["Registraciyadan o'tganlarga", "Arhivdagilarga", "Hammaga jonatish","Qabul bolganlarga"]:
+            state[1] = notTypes[message.text]
+            state=";".join(state)
+            await db.update_user_state(telegram_id=message.from_user.id,state=state)
+            await message.answer(text="Eloni kiriting",reply_markup=back)
         else:
-            users = await db.select_all_users()
-            for user in users:
-                user_id = user[0]
-                await bot.send_message(
-                  chat_id=user_id, text=message.text
-                 )
-                await asyncio.sleep(0.05)
+            await message.answer("Hato amal kiritildi")
+    elif state[1] in ["all","accepted","archive","registered"]:
+        await message.answer("Bot nosoz ishlayapti")
 
 
+notTypes={
+    "Hammaga jonatish":"all",
+    "Arhivdagilarga":"archive",
+    "Registraciyadan o'tganlarga":"registered",
+    "Qabul bolganlarga":"accepted"
+}
 Times = {
-         'daytime':"Kunduzgi",
+        'daytime':"Kunduzgi",
         "evening":'Kechgi' ,
         "distance":"Sirtqi"
 }

@@ -119,6 +119,10 @@ class Database:
     async def update_contract_field(self,contract_id,field,value,telegram_id):
         sql = f"UPDATE products_contract SET {field}=$1 WHERE telegram_id=$2 AND state='new' AND id=$3"
         return await self.execute(sql, value, telegram_id,contract_id, execute=True)
+
+    async def get_contract_users_by_state(self,state):
+        sql="SELECT telegram_id FROM products_contract WHERE state=$1"
+        return await self.execute(sql,state,fetch=True)
     async def get_new_contracts(self):
         sql="SELECT products_contract.id,full_name,phone,extra_phone,f.name,f.time,f.lang,address,passport,jshshir,passport_photo " \
             " FROM products_contract INNER JOIN products_fakultet AS f " \
@@ -143,7 +147,7 @@ class Database:
         return await self.execute(sql,id,execute=True)
 
     async def update_contract_created_time(self,id,created):
-        sql="UPDATE products_contract SET created=$1, WHERE id=$2"
+        sql="UPDATE products_contract SET created=$1 WHERE id=$2"
         return await self.execute(sql,created,id,execute=True)
     async def get_accepted_contracts(self):
         sql = "SELECT products_contract.id,full_name,phone,extra_phone,f.name,f.time,f.lang,address,passport,jshshir,passport_photo " \
@@ -173,9 +177,9 @@ class Database:
     async def get_user_by_telegram_id(self,id):
         sql = "SELECT * FROM products_user WHERE telegram_id=$1"
         return await self.execute(sql,id,fetchrow=True)
-    async def get_user_phone_by_telegram_id(self,telegram_id):
-        sql="SELECT phone FROM products_contract WHERE telegram_id=$1"
-        return await self.execute(sql,telegram_id,fetchval=True)
+    async def get_user_phone_by_telegram_id(self,telegram_id,phone):
+        sql="SELECT COUNT(*) FROM products_contract WHERE telegram_id=$1 AND phone=$2"
+        return await self.execute(sql,telegram_id,phone,fetchval=True)
 
 
     async def get_user_state_by_telegram_id(self, id):
@@ -223,7 +227,7 @@ class Database:
         sql = "SELECT id FROM products_fakultet WHERE name=$1"
         return await self.execute(sql, name, fetchrow=True)
     async def check_for_phone_exists(self,phone):
-        sql="SELECT COUNT(*) FROM products_contract WHERE phone=$1 AND state='registered'"
+        sql="SELECT id FROM products_contract WHERE phone=$1 AND state='new'"
         return await self.execute(sql,phone,fetchval=True)
     async def check_for_passport_exists(self,phone):
         sql="SELECT COUNT(*) FROM products_contract WHERE passport=$1 AND state='registered'"

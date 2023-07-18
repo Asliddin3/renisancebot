@@ -2,7 +2,7 @@ from loader import dp,db
 from aiogram.types import ContentType,Message,CallbackQuery,ReplyKeyboardRemove
 from keyboards.default.start_keyboard import lang,format,menu,make_fakultet_keyboard,backKeyboard,testKey,dtmKey
 from keyboards.inline.menu_keyboards import make_test_keyboard,test
-
+from filters.user_filter import UserFilter
 import re
 from handlers.users.start import photo_id,jshshr_id,video_id
 
@@ -116,7 +116,7 @@ Times = {
 # async def catch_passport_photo(message:Message):
 #     await message.answer(message.photo[-1].file_id)
 
-@dp.message_handler(content_types=ContentType.PHOTO)
+@dp.message_handler(UserFilter(),content_types=ContentType.PHOTO)
 async def catch_passport_photo(message:Message):
     photo_id=message.photo[-1].file_id
     user = await db.get_user_state_by_telegram_id(message.from_user.id)
@@ -134,13 +134,13 @@ async def catch_passport_photo(message:Message):
         await message.answer("Talabaning attestat yoki diplomini rasmini jonating",reply_markup=backKeyboard)
     else:
         state[0] = "dtm"
-        state=":".join(state)
         await db.update_contract_field(contract_id=int(state[4]),telegram_id=message.from_user.id,
                                        value=photo_id,field="diplom")
+        state=":".join(state)
         await db.update_user_state(telegram_id=message.from_user.id,state=state)
         await message.answer(text="Siz DTM testan o'tganmisiz",reply_markup=dtmKey)
     # await message.answer("Imtihonni boshlash uchun `Imtihonni boshlash` tugmasini bosing.",reply_markup=testKey)
-@dp.message_handler(content_types=ContentType.DOCUMENT)
+@dp.message_handler(UserFilter(),content_types=ContentType.DOCUMENT)
 async def catch_passport_photo(message:Message):
     photo_id=message.document.file_id
     user = await db.get_user_state_by_telegram_id(message.from_user.id)
@@ -158,9 +158,12 @@ async def catch_passport_photo(message:Message):
         await message.answer("Talabaning attestat yoki diplomini rasmini jonating", reply_markup=backKeyboard)
     else:
         state[0] = "dtm"
-        state = ":".join(state)
+        print(state)
+        print("photo",photo_id)
         await db.update_contract_field(contract_id=int(state[4]), telegram_id=message.from_user.id,
                                        value=photo_id, field="diplom")
+        state = ":".join(state)
+
         await db.update_user_state(telegram_id=message.from_user.id, state=state)
         await message.answer(text="Siz DTM testan o'tganmisiz", reply_markup=dtmKey)
 
@@ -237,8 +240,6 @@ async def main_handler(message:Message):
             state[0]="lang"
             await message.answer(" ta'lim tilini tanlang.",reply_markup=lang)
         elif message.text=="Biz haqimizda":
-            await message.answer_photo(photo=photo_id)
-            await message.answer_location(longitude=69.210325,latitude=41.19043)
             await message.answer_video(video_id,
                                        caption=f"<a href=\"https://t.me/renuadmisson/15\">✅Universitet haqida</a>\n" \
                                                f"<a href=\"https://t.me/renuadmisson/8\">✅Taʼlim yoʻnalishlari</a>\n" \
@@ -252,18 +253,8 @@ async def main_handler(message:Message):
                                                f"<a href=\"https://t.me/renuadmisson/27\">✅Hujjat topshirish</a>\n" \
                                                f"<a href=\"https://t.me/renuadmisson/10?single\">✅Litsenziya</a>\n" \
                                                "1 mlrdlik grant", reply_markup=menu)
-            # await message.answer(f"<a href=\"https://t.me/renuadmisson/15\">✅Universitet haqida</a>\n"\
-            #                      f"<a href=\"https://t.me/renuadmisson/8\">✅Taʼlim yoʻnalishlari</a>\n"\
-            #                      f"<a href=\"https://t.me/renuadmisson/57\">✅Kantrakt miqdori</a>\n"\
-            #                      f"<a href=\"https://t.me/renuadmisson/18\">✅Imtiyzolar</a>\n"\
-            #                      f"<a href=\"https://t.me/renuadmisson/16\">✅Nega ayan biz</a>\n"\
-            #                      f"<a href=\"https://t.me/renuadmisson/28\">✅Qabul 2023</a>\n"\
-            #                      f"<a href=\"https://t.me/renuadmisson/23\">✅Univertetga qanday boriladi ?</a>\n"\
-            #                      f"<a href=\"https://t.me/renuadmisson/26\">✅Kantakt maʼlumotlar</a>\n"\
-            #                      f"<a href=\"https://t.me/renuadmisson/25\">✅Lakatsiya</a>\n"\
-            #                      f"<a href=\"https://t.me/renuadmisson/27\">✅Hujjat topshirish</a>\n"\
-            #                      f"<a href=\"https://t.me/renuadmisson/10?single\">✅Litsenziya</a>\n"\
-            #     "1 mlrdlik grant",reply_markup=menu, disable_web_page_preview=True)
+            await message.answer_photo(photo=photo_id)
+            await message.answer_location(longitude=69.210325,latitude=41.19043)
     elif message.text=="🔙 Ortga":
         if state[0]=="full_name":
             state[0] = "fakultet"
@@ -319,12 +310,13 @@ async def main_handler(message:Message):
             return
         phone=message.text.replace("+","")
         tel = await db.get_contract_by_telefone(phone)
+        print(tel)
         if tel is not None:
             await message.answer("Bu nomerga contract tuzilib bolingan")
             return
-        count=await db.check_for_phone_exists(phone)
-        if count!=0:
-            await message.answer("Bu telefon raqamga contract tuzilgan")
+        id=await db.check_for_phone_exists(phone)
+        if id is not None:
+            state[4]=str(id)
             return
         await message.answer("Qoshimcha telefon raqamni shu formata kiriting  +998901112233",reply_markup=backKeyboard)
         state[0]="extra_phone"
@@ -335,12 +327,12 @@ async def main_handler(message:Message):
         if not phone_number_pattern.match(message.text):
             await message.answer("Telefon raqam hato kitildi iltimos shu formata kiriting +998901112233")
             return
-        exists_phone=await db.get_user_phone_by_telegram_id(message.from_user.id)
         phone = message.text.replace("+", "")
-        if exists_phone==phone:
+        count=await db.get_user_phone_by_telegram_id(message.from_user.id,phone)
+        if count!=0:
             await message.answer("Boshqa telefon raqam kiriting bu telefon raqam kiritilgan")
             return
-        await message.answer(" talabani passport raqamini yuboring  AB1231212", reply_markup=backKeyboard)
+        await message.answer("Talabani passport raqamini yuboring  AB1231212", reply_markup=backKeyboard)
         state[0] = "passport"
         await db.update_contract_field(contract_id=int(state[4]),field="extra_phone",telegram_id=message.from_user.id,value=phone)
         # await db.update_user_extra_phone(message.from_user.id, phone)
@@ -393,6 +385,8 @@ async def main_handler(message:Message):
             await message.answer(text="Malumotlaringiz jonatildi."
                                      "Natijalaringiz ko'rib chiqilgandan keyin shartnomani jo'natamiz.",
                                       reply_markup=menu)
+            state="menu::::"
+            await db.update_user_state(telegram_id=message.from_user.id,state=state)
         else:
             await message.answer("Hato amal kiritildi")
             return

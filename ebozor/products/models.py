@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
+from timezone_field import TimeZoneField
 
 
 
@@ -76,11 +77,11 @@ class Contract(models.Model):
     passport_photo=models.CharField(verbose_name="Passoprt rasmini idsi",max_length=1000,null=True)
     diplom =models.CharField(verbose_name="Talabaning Diplom yoki attestati",max_length=1500,null=True)
     jshshir=models.CharField(verbose_name="JSHSHIR",null=True,max_length=30)
-    created=models.TimeField(verbose_name="Shartnoma yaratilgan sana",null=True)
-
-    def __str__(self):
-        return f"{self.id} - {self.full_name} - {self.phone} - {self.result}"
-
+    created=models.DateField(verbose_name="Shartnoma yaratilgan sana",null=True)
+    DisplayFields=["id","full_name","phone","fakultet_id","extra_phone","state","passport","jshshir","created"]
+    SearchableFields=["id","full_name","phone","extra_phone","passport","jshshir"]
+    class Meta:
+        db_table="CONTRACT"
 # class Cart(models.Model):
 #     id = models.AutoField(primary_key=True)
 #     buyer = models.ForeignKey(User)

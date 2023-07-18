@@ -16,6 +16,21 @@ main_admin=ReplyKeyboardMarkup(
     ],
     resize_keyboard=True
 )
+notificationType=ReplyKeyboardMarkup(
+    keyboard=[
+        [
+            KeyboardButton(text="Registraciyadan o'tganlarga"),
+            KeyboardButton(text="Arhivdagilarga")
+        ],
+        [
+            KeyboardButton(text="Hammaga jonatish"),
+            KeyboardButton(text="Qabul bolganlarga")
+        ],[
+            KeyboardButton(text="🔙 Ortga")
+        ]
+    ],
+    resize_keyboard=True
+)
 
 back = ReplyKeyboardMarkup(
     keyboard=[
