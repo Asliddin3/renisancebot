@@ -218,8 +218,6 @@ async def catch_answers(call:CallbackQuery,callback_data:dict):
         #                               fakultet_id=int(state[3]),result=result)
         # await db.update_contract_field(contract_id=int(state[4]),field="state",
         #                                value="registered",telegram_id=call.from_user.id)
-        state=":".join(state)
-        await db.update_user_state(telegram_id=call.from_user.id,state=state)
         await call.message.delete()
         await db.update_contract_field(contract_id=int(state[4]), field="state", telegram_id=call.from_user.id,
                                        value="registered")
