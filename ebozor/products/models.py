@@ -80,8 +80,8 @@ class Contract(models.Model):
     created=models.DateField(verbose_name="Shartnoma yaratilgan sana",null=True)
     DisplayFields=["id","full_name","phone","fakultet_id","extra_phone","state","passport","jshshir","created"]
     SearchableFields=["id","full_name","phone","extra_phone","passport","jshshir"]
-    class Meta:
-        db_table="CONTRACT"
+    # class Meta:
+    #     db_table="CONTRACT"
 # class Cart(models.Model):
 #     id = models.AutoField(primary_key=True)
 #     buyer = models.ForeignKey(User)
