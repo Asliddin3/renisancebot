@@ -33,18 +33,18 @@ async def bot_start(message: types.Message):
                 "1 mlrdlik grant",reply_markup=menu)
     await message.answer_photo(photo=photo_id)
     await message.answer_location(longitude=69.210325, latitude=41.19043)
-    await message.answer(text=f"<a href=\"https://t.me/renuadmisson/15\">✅Universitet haqida</a>\n"\
-                                 f"<a href=\"https://t.me/renuadmisson/8\">✅Taʼlim yoʻnalishlari</a>\n"\
-                                 f"<a href=\"https://t.me/renuadmisson/57\">✅Kantrakt miqdori</a>\n"\
-                                 f"<a href=\"https://t.me/renuadmisson/18\">✅Imtiyzolar</a>\n"\
-                                 f"<a href=\"https://t.me/renuadmisson/16\">✅Nega ayan biz</a>\n"\
-                                 f"<a href=\"https://t.me/renuadmisson/28\">✅Qabul 2023</a>\n"\
-                                 f"<a href=\"https://t.me/renuadmisson/23\">✅Univertetga qanday boriladi ?</a>\n"\
-                                 f"<a href=\"https://t.me/renuadmisson/26\">✅Kantakt maʼlumotlar</a>\n"\
-                                 f"<a href=\"https://t.me/renuadmisson/25\">✅Lakatsiya</a>\n"\
-                                 f"<a href=\"https://t.me/renuadmisson/27\">✅Hujjat topshirish</a>\n"\
-                                 f"<a href=\"https://t.me/renuadmisson/10?single\">✅Litsenziya</a>\n"\
-                "1 mlrdlik grant",reply_markup=menu, disable_web_page_preview=True)
+    # await message.answer(text=f"<a href=\"https://t.me/renuadmisson/15\">✅Universitet haqida</a>\n"\
+    #                              f"<a href=\"https://t.me/renuadmisson/8\">✅Taʼlim yoʻnalishlari</a>\n"\
+    #                              f"<a href=\"https://t.me/renuadmisson/57\">✅Kantrakt miqdori</a>\n"\
+    #                              f"<a href=\"https://t.me/renuadmisson/18\">✅Imtiyzolar</a>\n"\
+    #                              f"<a href=\"https://t.me/renuadmisson/16\">✅Nega ayan biz</a>\n"\
+    #                              f"<a href=\"https://t.me/renuadmisson/28\">✅Qabul 2023</a>\n"\
+    #                              f"<a href=\"https://t.me/renuadmisson/23\">✅Univertetga qanday boriladi ?</a>\n"\
+    #                              f"<a href=\"https://t.me/renuadmisson/26\">✅Kantakt maʼlumotlar</a>\n"\
+    #                              f"<a href=\"https://t.me/renuadmisson/25\">✅Lakatsiya</a>\n"\
+    #                              f"<a href=\"https://t.me/renuadmisson/27\">✅Hujjat topshirish</a>\n"\
+    #                              f"<a href=\"https://t.me/renuadmisson/10?single\">✅Litsenziya</a>\n"\
+    #             "1 mlrdlik grant",reply_markup=menu, disable_web_page_preview=True)
     # await message.answer(
     #     "Xush kelibsiz!",
     #     reply_markup=menu,
