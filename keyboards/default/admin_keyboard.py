@@ -11,6 +11,7 @@ main_admin=ReplyKeyboardMarkup(
             KeyboardButton(text="Qabul bo'lganlar"),
             KeyboardButton(text="Elon qilish")
         ],[
+            KeyboardButton(text="Excel yuklavolish"),
             KeyboardButton(text="Chiqish")
         ]
     ],
@@ -26,7 +27,7 @@ notificationType=ReplyKeyboardMarkup(
             KeyboardButton(text="Hammaga jonatish"),
             KeyboardButton(text="Qabul bolganlarga")
         ],[
-            KeyboardButton(text="Excel yuklavolish"),
+
             KeyboardButton(text="🔙 Ortga")
         ]
     ],
