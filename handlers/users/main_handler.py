@@ -301,6 +301,7 @@ async def main_handler(message:Message):
         # await db.update_user_real_name(telegram_id=message.from_user.id,real_name=message.text)
         name=message.text
         row=await db.create_new_user_contract(telegram_id=message.from_user.id,fakultet_id=int(state[3]),full_name=name)
+        print("result id",row)
         state[4]=str(row[0])
         await message.answer("Talabaning telefon raqamini shu formata kiriting +998991112233",reply_markup=backKeyboard)
         state[0]="phone"
