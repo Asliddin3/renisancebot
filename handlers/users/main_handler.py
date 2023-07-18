@@ -393,7 +393,7 @@ async def main_handler(message:Message):
             await message.answer(text="Malumotlaringiz jonatildi."
                                      "Natijalaringiz ko'rib chiqilgandan keyin shartnomani jo'natamiz.",
                                       reply_markup=menu)
-            state="menu::::"
+            state[0]="menu"
             await db.update_user_state(telegram_id=message.from_user.id,state=state)
         else:
             await message.answer("Hato amal kiritildi")
