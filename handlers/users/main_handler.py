@@ -216,15 +216,18 @@ async def catch_answers(call:CallbackQuery,callback_data:dict):
         state[0]="menu"
         # await db.create_user_contract(telegram_id=call.from_user.id,
         #                               fakultet_id=int(state[3]),result=result)
-        await db.update_contract_field(contract_id=int(state[4]),field="state",
-                                       value="registered",telegram_id=call.from_user.id)
+        # await db.update_contract_field(contract_id=int(state[4]),field="state",
+        #                                value="registered",telegram_id=call.from_user.id)
         state=":".join(state)
         await db.update_user_state(telegram_id=call.from_user.id,state=state)
         await call.message.delete()
-        # await call.message.answer(text=f"Togri topilgan javoblar soni {result}",)
+        await db.update_contract_field(contract_id=int(state[4]), field="state", telegram_id=call.from_user.id,
+                                       value="registered")
         await call.message.answer(text="Malumotlaringiz jonatildi."
-                                       "Natijalaringiz ko'rib chiqilgandan keyin shartnomani jo'natamiz.",reply_markup=menu)
-
+                                  "Natijalaringiz ko'rib chiqilgandan keyin shartnomani jo'natamiz.",
+                             reply_markup=menu)
+        state[0] = "menu"
+        await db.update_user_state(telegram_id=call.from_user.id, state=state)
 
 
 
@@ -314,10 +317,8 @@ async def main_handler(message:Message):
         if tel is not None:
             await message.answer("Bu nomerga contract tuzilib bolingan")
             return
-        id=await db.check_for_phone_exists(phone)
-        if id is not None:
-            state[4]=str(id)
-            return
+        # id=await db.check_for_phone_exists(phone)
+
         await message.answer("Qoshimcha telefon raqamni shu formata kiriting  +998901112233",reply_markup=backKeyboard)
         state[0]="extra_phone"
         await db.update_contract_field(contract_id=int(state[4]),field="phone",telegram_id=message.from_user.id,value=phone)
