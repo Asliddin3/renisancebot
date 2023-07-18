@@ -7,6 +7,9 @@ from loader import dp, db, bot
 from keyboards.default.admin_keyboard import main_admin,back
 from keyboards.inline.admin_keaborad import make_contract_keyboard,make_archive_keyboard,application
 from keyboards.default.start_keyboard import menu
+from datetime import datetime
+import pytz
+timezone = pytz.timezone('Asia/Tashkent')
 
 
 # @dp.message_handler(text="/exit",user_id=ADMINS)
@@ -19,13 +22,15 @@ async def catch_admin_callback_data(call:types.CallbackQuery,callback_data:dict)
     contract_id=callback_data.get("contract_id")
     action=callback_data.get("action")
     if action=="accept":
+        current_time = datetime.now(timezone)
         await db.update_contract_state(id=int(contract_id),state="accepted")
+        await db.update_contract_created_time(id=int(contract_id),created=current_time)
         await call.answer("Shartnoma jonatildi")
     elif action=="archive":
         await db.update_contract_state(id=int(contract_id),state="archive")
         await call.answer("Arhivega solindi")
     elif action=="delete":
-        await db.update_contract_state(id=(contract_id),state="delete")
+        await db.delete_contract(id=int(contract_id))
         await call.answer("Bazadan ochirildi")
 
 

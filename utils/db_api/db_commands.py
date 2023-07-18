@@ -139,10 +139,12 @@ class Database:
         return await self.execute(sql,state,id,execute=True)
 
     async def delete_contract(self,id):
-        sql="DELETE products_contract WHERE id=$1"
+        sql="DELETE products_contract WHERE id=$1 AND state='archive'"
         return await self.execute(sql,id,execute=True)
 
-
+    async def update_contract_created_time(self,id,created):
+        sql="UPDATE products_contract SET created=$1, WHERE id=$2"
+        return await self.execute(sql,created,id,execute=True)
     async def get_accepted_contracts(self):
         sql = "SELECT products_contract.id,full_name,phone,extra_phone,f.name,f.time,f.lang,address,passport,jshshir,passport_photo " \
               " FROM products_contract  INNER JOIN products_fakultet AS f " \

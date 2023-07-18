@@ -70,11 +70,13 @@ class Contract(models.Model):
     extra_phone=models.CharField(verbose_name="Qoshimcha raqam",max_length=100,default="",null=True)
     state=models.CharField(verbose_name="Contract holati",max_length=100,default="registered",choices=ContractState,null=True)
     result=models.IntegerField(verbose_name="Togri topilgan javoblar soni",default=0,null=True)
-    dtm=models.DecimalField(verbose_name="DTM test natijasi",default=0,null=True)
+    dtm=models.DecimalField(verbose_name="DTM test natijasi",default=0,null=True,max_digits=6,decimal_places=2)
     address=models.CharField(verbose_name="Propiska joyi",max_length=1000,null=True)
     passport = models.CharField(verbose_name="Passport raqami", max_length=100,unique=True,null=True)
     passport_photo=models.CharField(verbose_name="Passoprt rasmini idsi",max_length=1000,null=True)
+    diplom =models.CharField(verbose_name="Talabaning Diplom yoki attestati",max_length=1500,null=True)
     jshshir=models.CharField(verbose_name="JSHSHIR",null=True,max_length=30)
+    created=models.TimeField(verbose_name="Shartnoma yaratilgan sana",null=True)
 
     def __str__(self):
         return f"{self.id} - {self.full_name} - {self.phone} - {self.result}"

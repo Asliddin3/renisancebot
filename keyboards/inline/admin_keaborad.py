@@ -30,7 +30,17 @@ def make_contract_keyboard(contract:str):
         ],
     )
     return makrkup
-
+def make_resend_keyboard(contract:str):
+    makrkup=InlineKeyboardMarkup(
+        inline_keyboard=[
+            [
+                InlineKeyboardButton("Shartnomane boshqatan jonatish",callback_data=make_contract_callback_data(
+                    contract_id=contract,action="accept"
+                )),
+            ]
+        ],
+    )
+    return makrkup
 def make_archive_keyboard(contract:str):
     makrkup = InlineKeyboardMarkup(
         inline_keyboard=[

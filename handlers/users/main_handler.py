@@ -71,10 +71,15 @@ backDic={
         "state":"address",
         "text":"Yashash joyingizni kiriting passportdagi"
     },
-    "dtm":{
+    "diplom":{
         "key":backKeyboard,
         "state":"photo",
         "text":"Talabaning passport rasmini kiriting"
+    },
+    "dtm":{
+        "key":backKeyboard,
+        "state":"diplom",
+        "text":"Talabaning attestat yoki diplomini rasmini jonating"
     },
     "ball":{
         "key":dtmKey,
@@ -117,16 +122,23 @@ async def catch_passport_photo(message:Message):
     user = await db.get_user_state_by_telegram_id(message.from_user.id)
     state=user
     state = state.split(":")
-    if state[0]!="photo":
+    if state[0]!="photo" and state[0]!="diplom":
         await message.answer("Hato amal kiritildi")
         return
     photo_id=f"photo:{photo_id}"
-
-    await db.update_user_photo(message.from_user.id,photo_id=str(photo_id))
-    state[0]="dtm"
-    state=":".join(state)
-    await db.update_user_state(telegram_id=message.from_user.id,state=state)
-    await message.answer(text="Siz DTM testan o'tganmisiz",reply_markup=dtmKey)
+    if state[0]=="photo":
+        await db.update_user_photo(message.from_user.id,photo_id=str(photo_id))
+        state[0]="diplom"
+        state=":".join(state)
+        await db.update_user_state(telegram_id=message.from_user.id, state=state)
+        await message.answer("Talabaning attestat yoki diplomini rasmini jonating",reply_markup=backKeyboard)
+    else:
+        state[0] = "dtm"
+        state=":".join(state)
+        await db.update_contract_field(contract_id=int(state[4]),telegram_id=message.from_user.id,
+                                       value=photo_id,field="diplom")
+        await db.update_user_state(telegram_id=message.from_user.id,state=state)
+        await message.answer(text="Siz DTM testan o'tganmisiz",reply_markup=dtmKey)
     # await message.answer("Imtihonni boshlash uchun `Imtihonni boshlash` tugmasini bosing.",reply_markup=testKey)
 @dp.message_handler(content_types=ContentType.DOCUMENT)
 async def catch_passport_photo(message:Message):
@@ -134,15 +146,23 @@ async def catch_passport_photo(message:Message):
     user = await db.get_user_state_by_telegram_id(message.from_user.id)
     state=user
     state = state.split(":")
-    if state[0]!="photo":
+    if state[0] != "photo" and state[0] != "diplom":
         await message.answer("Hato amal kiritildi")
         return
-    photo_id=f"document:{photo_id}"
-    await db.update_user_photo(message.from_user.id,photo_id=str(photo_id))
-    state[0] = "dtm"
-    state = ":".join(state)
-    await db.update_user_state(telegram_id=message.from_user.id, state=state)
-    await message.answer(text="Siz DTM testan o'tganmisiz", reply_markup=dtmKey)
+    photo_id = f"document:{photo_id}"
+    if state[0] == "photo":
+        await db.update_user_photo(message.from_user.id, photo_id=str(photo_id))
+        state[0] = "diplom"
+        state = ":".join(state)
+        await db.update_user_state(telegram_id=message.from_user.id, state=state)
+        await message.answer("Talabaning attestat yoki diplomini rasmini jonating", reply_markup=backKeyboard)
+    else:
+        state[0] = "dtm"
+        state = ":".join(state)
+        await db.update_contract_field(contract_id=int(state[4]), telegram_id=message.from_user.id,
+                                       value=photo_id, field="diplom")
+        await db.update_user_state(telegram_id=message.from_user.id, state=state)
+        await message.answer(text="Siz DTM testan o'tganmisiz", reply_markup=dtmKey)
 
 
 
