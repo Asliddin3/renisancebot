@@ -8,7 +8,7 @@ from .models import User,Contract,Fakultet,Test
 admin.site.register(User)
 admin.site.register(Test)
 admin.site.register(Fakultet)
-
+admin.site.register(Contract)
  # Replace 'your_column_name' with the actual column name
 
 @admin.register(Contract)
