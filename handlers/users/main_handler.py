@@ -403,7 +403,6 @@ async def main_handler(message:Message):
         await message.answer(text="Test boshlandi",reply_markup=ReplyKeyboardRemove())
         await message.answer(text=question,reply_markup=keyboard)
         state[0]="exam"
-        state[4]="1"
         await db.remove_contract_user_result(telegram_id=message.from_user.id)
         # await db.update_user_status(message.from_user.id,"registered")
     else:
