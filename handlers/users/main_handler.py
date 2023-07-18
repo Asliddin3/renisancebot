@@ -196,15 +196,8 @@ async def catch_answers(call:CallbackQuery,callback_data:dict):
         await db.update_user_state(telegram_id=call.from_user.id,state=state)
         return
     else:
-        # if question!=state[4]:
-        #     return
         if answer==value:
             await db.increment_user_result(telegram_id=call.from_user.id)
-            # await call.answer("Javobingiz to'gri")
-        else:
-            pass
-
-            # await call.answer("Javobingiz noto'gri")
     if number!=None:
         markup=make_test_keyboard(str(number))
         await call.message.edit_text(text=new_question,reply_markup=markup)
@@ -225,6 +218,7 @@ async def catch_answers(call:CallbackQuery,callback_data:dict):
                                   "Natijalaringiz ko'rib chiqilgandan keyin shartnomani jo'natamiz.",
                              reply_markup=menu)
         state[0] = "menu"
+        state=":".join(state)
         await db.update_user_state(telegram_id=call.from_user.id, state=state)
 
 
