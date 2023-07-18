@@ -125,7 +125,7 @@ async def catch_admin_commands(message:types.Message):
                     await message.answer_document(document=photo_id)
                 # await message.answer_photo(photo=contract[10])
         elif text=="Excel yuklavolish":
-            contracts = await db.get_accepted_contracts()
+            contracts = await db.get_students()
             df = pd.DataFrame(contracts, columns=['Shartnoma Idsi', 'F.I.SH',"Telefon raqami",
             "Ikkinchi telefon","Fakultet nomi","Ta'lim sharkli","Ta'lim Tili","Address","Passport",
             "JSHSHIR","DTM","Shartnoma berilgan sana"])
