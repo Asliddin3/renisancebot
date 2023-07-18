@@ -11,7 +11,7 @@ admin.site.register(Fakultet)
 admin.site.register(Contract)
  # Replace 'your_column_name' with the actual column name
 
-@admin.register(Contract)
-class ContractAdmin(admin.ModelAdmin):
-    list_display = Contract.DisplayFields
-    search_fields = Contract.SearchableFields
+# @admin.register(Contract)
+# class ContractAdmin(admin.ModelAdmin):
+#     list_display = Contract.DisplayFields
+#     search_fields = Contract.SearchableFields
