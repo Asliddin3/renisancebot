@@ -128,7 +128,7 @@ async def catch_admin_commands(message:types.Message):
             contracts = await db.get_students()
             df = pd.DataFrame(contracts, columns=['Shartnoma Idsi', 'F.I.SH',"Telefon raqami",
             "Ikkinchi telefon","Fakultet nomi","Ta'lim sharkli","Ta'lim Tili","Address","Passport",
-            "JSHSHIR","DTM","Shartnoma berilgan sana"])
+            "JSHSHIR","DTM","Test natijasi","Shartnoma berilgan sana"])
             excel_file_path = 'talabalar.xlsx'  # Specify the file path where the Excel file will be saved
             df.to_excel(excel_file_path, index=False)
             with open(excel_file_path, 'rb') as file:
@@ -184,7 +184,8 @@ def prepare_contract_data(contract:list):
         f"<b>Address</b>:        {contract[7]}\n" \
         f"<b>Passport IDsi</b>:  {contract[8]}\n" \
         f"<b>JSHSHIR</b>:        {contract[9]}\n"\
-        f"<b>DTM</b>:        {contract[11]}\n"
+        f"<b>DTM</b>:        {contract[11]}\n" \
+        f"<b>Test natijasi</b>:        {contract[12]}\n"
 
     return res
 
