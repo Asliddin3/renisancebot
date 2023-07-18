@@ -26,6 +26,7 @@ notificationType=ReplyKeyboardMarkup(
             KeyboardButton(text="Hammaga jonatish"),
             KeyboardButton(text="Qabul bolganlarga")
         ],[
+            KeyboardButton(text="Excel yuklavolish"),
             KeyboardButton(text="🔙 Ortga")
         ]
     ],

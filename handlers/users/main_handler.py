@@ -158,8 +158,6 @@ async def catch_passport_photo(message:Message):
         await message.answer("Talabaning attestat yoki diplomini rasmini jonating", reply_markup=backKeyboard)
     else:
         state[0] = "dtm"
-        print(state)
-        print("photo",photo_id)
         await db.update_contract_field(contract_id=int(state[4]), telegram_id=message.from_user.id,
                                        value=photo_id, field="diplom")
         state = ":".join(state)
@@ -229,7 +227,6 @@ async def main_handler(message:Message):
     user=await db.get_user_state_by_telegram_id(message.from_user.id)
     state=user
     state=state.split(":")
-    print(state)
     if state[0]=="menu":
         if message.text=="Ro'yxatdan o'tish":
             state[0]="lang"
@@ -295,7 +292,6 @@ async def main_handler(message:Message):
         # await db.update_user_real_name(telegram_id=message.from_user.id,real_name=message.text)
         name=message.text
         row=await db.create_new_user_contract(telegram_id=message.from_user.id,fakultet_id=int(state[3]),full_name=name)
-        print("result id",row)
         state[4]=str(row[0])
         await message.answer("Talabaning telefon raqamini shu formata kiriting +998991112233",reply_markup=backKeyboard)
         state[0]="phone"

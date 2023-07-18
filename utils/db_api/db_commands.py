@@ -129,11 +129,14 @@ class Database:
             "ON f.id=fakultet_id  WHERE state='registered'"
         return await self.execute(sql,fetch=True)
 
+
+
+
     async def remove_contract_user_result(self,telegram_id):
         sql="UPDATE products_contract SET result=0 WHERE telegram_id=$1 AND state='new'"
         return await self.execute(sql,telegram_id,execute=True)
     async def get_archived_contracts(self):
-        sql = "SELECT products_contract.id,full_name,phone,extra_phone,f.name,f.time,f.lang,address,passport,jshshir,passport_photo " \
+        sql = "SELECT products_contract.id,full_name,phone,extra_phone,f.name,f.time,f.lang,address,passport,jshshir,passport_photo,dtm " \
               " FROM products_contract INNER JOIN products_fakultet AS f " \
               "ON f.id=fakultet_id  WHERE state='archive'"
         return await self.execute(sql, fetch=True)
@@ -150,11 +153,15 @@ class Database:
         sql="UPDATE products_contract SET created=$1 WHERE id=$2"
         return await self.execute(sql,created,id,execute=True)
     async def get_accepted_contracts(self):
-        sql = "SELECT products_contract.id,full_name,phone,extra_phone,f.name,f.time,f.lang,address,passport,jshshir,passport_photo " \
+        sql = "SELECT products_contract.id,full_name,phone,extra_phone,f.name,f.time,f.lang,address,passport,jshshir,passport_photo,dtm " \
               " FROM products_contract  INNER JOIN products_fakultet AS f " \
               "ON f.id=fakultet_id WHERE state='accepted'"
         return await self.execute(sql, fetch=True)
-
+    async def get_students(self):
+        sql = "SELECT products_contract.id,full_name,phone,extra_phone,f.name,f.time,f.lang,address,passport,jshshir,dtm,created" \
+              " FROM products_contract  INNER JOIN products_fakultet AS f " \
+              "ON f.id=fakultet_id WHERE state='accepted' ORDER BY created"
+        return await self.execute(sql, fetch=True)
     async def update_user_photo(self,telegram_id,photo_id):
         sql="UPDATE products_contract SET passport_photo=$1 WHERE telegram_id=$2"
         return await self.execute(sql,photo_id,telegram_id,execute=True)

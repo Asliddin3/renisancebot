@@ -10,6 +10,9 @@ from keyboards.inline.admin_keaborad import make_contract_keyboard,make_archive_
 from keyboards.default.start_keyboard import menu
 from datetime import datetime
 import pytz
+import os
+import pandas as pd
+
 timezone = pytz.timezone('Asia/Tashkent')
 
 
@@ -121,6 +124,17 @@ async def catch_admin_commands(message:types.Message):
                 else:
                     await message.answer_document(document=photo_id)
                 # await message.answer_photo(photo=contract[10])
+        elif text=="Excel yuklavolish":
+            contracts = await db.get_accepted_contracts()
+            df = pd.DataFrame(contracts, columns=['Shartnoma Idsi', 'F.I.SH',"Telefon raqami",
+            "Ikkinchi telefon","Fakultet nomi","Ta'lim sharkli","Ta'lim Tili","Address","Passport",
+            "JSHSHIR","DTM","Shartnoma berilgan sana"])
+            excel_file_path = 'talabalar.xlsx'  # Specify the file path where the Excel file will be saved
+            df.to_excel(excel_file_path, index=False)
+            with open(excel_file_path, 'rb') as file:
+                await bot.send_document(message.from_user.id, file)
+            os.remove(excel_file_path)
+
         elif text=="Elon qilish":
             state[1]="notification"
             state=";".join(state)
@@ -169,7 +183,9 @@ def prepare_contract_data(contract:list):
         f"<b>Ta'lim tili</b>:    {langDic[contract[6]]}\n" \
         f"<b>Address</b>:        {contract[7]}\n" \
         f"<b>Passport IDsi</b>:  {contract[8]}\n" \
-        f"<b>JSHSHIR</b>:        {contract[9]}\n"
+        f"<b>JSHSHIR</b>:        {contract[9]}\n"\
+        f"<b>DTM</b>:        {contract[11]}\n"
+
     return res
 
 
