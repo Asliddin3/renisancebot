@@ -203,12 +203,7 @@ async def catch_answers(call:CallbackQuery,callback_data:dict):
         state=":".join(state)
         await db.update_user_state(telegram_id=call.from_user.id,state=state)
     else:
-        # result=await db.get_user_result(call.from_user.id)
         state[0]="menu"
-        # await db.create_user_contract(telegram_id=call.from_user.id,
-        #                               fakultet_id=int(state[3]),result=result)
-        # await db.update_contract_field(contract_id=int(state[4]),field="state",
-        #                                value="registered",telegram_id=call.from_user.id)
         await call.message.delete()
         await db.update_contract_field(contract_id=int(state[4]), field="state", telegram_id=call.from_user.id,
                                        value="registered")
@@ -218,8 +213,6 @@ async def catch_answers(call:CallbackQuery,callback_data:dict):
         state[0] = "menu"
         state=":".join(state)
         await db.update_user_state(telegram_id=call.from_user.id, state=state)
-
-
 
 
 @dp.message_handler(content_types=ContentType.TEXT)
@@ -302,7 +295,6 @@ async def main_handler(message:Message):
             return
         phone=message.text.replace("+","")
         tel = await db.get_contract_by_telefone(phone)
-        print(tel)
         if tel is not None:
             await message.answer("Bu nomerga contract tuzilib bolingan")
             return
@@ -359,7 +351,7 @@ async def main_handler(message:Message):
         await message.answer(text="Talabaning passport yoki id kartasini rasmini jonating",reply_markup=backKeyboard)
     elif state[0]=="dtm":
         if message.text=="Ha":
-            await message.answer(text="DTM testan olgan ballingizni kiriting")
+            await message.answer(text="DTM testan olgan ballingizni kiriting",reply_markup=backKeyboard)
             state[0]="ball"
         elif message.text=="Yoq":
             state[0]="test"
