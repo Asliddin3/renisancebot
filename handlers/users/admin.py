@@ -91,9 +91,9 @@ async def catch_admin_commands(message:types.Message):
                 photo_ids=[]
                 document_ids=[]
                 if ptype=="photo":
-                    photo_ids[0]=passport_id
+                    photo_ids.append(passport_id)
                 else:
-                    document_ids[0]=passport_id
+                    document_ids.append(passport_id)
                 diplom=contract[15].split(":")
                 diplom_id, ptype = diplom[1], diplom[0]
                 if ptype=="photo":
