@@ -238,5 +238,5 @@ class Database:
         sql="SELECT id FROM products_contract WHERE phone=$1 AND state='new'"
         return await self.execute(sql,phone,fetchval=True)
     async def check_for_passport_exists(self,phone):
-        sql="SELECT COUNT(*) FROM products_contract WHERE passport=$1 AND state='registered'"
+        sql="SELECT COUNT(*) FROM products_contract WHERE passport=$1 AND state!='new'"
         return await self.execute(sql,phone,fetchval=True)
