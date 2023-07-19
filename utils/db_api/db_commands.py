@@ -130,8 +130,12 @@ class Database:
             "ON f.id=fakultet_id  WHERE state='registered'"
         return await self.execute(sql,fetch=True)
 
-
-
+    async def get_contract_by_id(self,id):
+        sql="SELECT products_contract.id,full_name,phone,extra_phone,f.name,f.time,f.lang,address,passport,jshshir,passport_photo," \
+            "dtm,result,created,contract_link,diplom " \
+            " FROM products_contract INNER JOIN products_fakultet AS f " \
+            "ON f.id=fakultet_id  WHERE state='registered' AND id=$1"
+        return await self.execute(sql,id,fetch=True)
 
     async def remove_contract_user_result(self,telegram_id):
         sql="UPDATE products_contract SET result=0 WHERE telegram_id=$1 AND state='new'"

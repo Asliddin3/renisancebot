@@ -12,6 +12,8 @@ main_admin=ReplyKeyboardMarkup(
             KeyboardButton(text="Elon qilish")
         ],[
             KeyboardButton(text="Excel yuklavolish"),
+            KeyboardButton(text="Shartnoma idsi boicha qidirish")
+        ],[
             KeyboardButton(text="Chiqish")
         ]
     ],

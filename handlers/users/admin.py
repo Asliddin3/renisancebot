@@ -152,6 +152,11 @@ async def catch_admin_commands(message:types.Message):
             state=";".join(state)
             await db.update_user_state(telegram_id=message.from_user.id,state=state)
             await message.answer(text="Kimlarga elon jonatmoqchisiz",reply_markup=notificationType)
+        elif text=="Shartnoma idsi boicha qidirish":
+            state[1]="student"
+            state=";".join(state)
+            await db.update_user_state(telegram_id=message.from_user.id,state=state)
+            await message.answer(text="Shartnoma idsi kiriting",reply_markup=back)
     elif state[1]=="notification":
         if message.text=="🔙 Ortga":
             state[1]=""
@@ -167,6 +172,41 @@ async def catch_admin_commands(message:types.Message):
             await message.answer("Hato amal kiritildi")
     elif state[1] in ["all","accepted","archive","registered"]:
         await message.answer("Bot nosoz ishlayapti")
+    elif state[1]=="student":
+        if message.text=="🔙 Ortga":
+            state[1]=""
+            state=";".join(state)
+            await db.update_user_state(telegram_id=message.from_user.id,state=state)
+            await message.answer(text="Admin menu",reply_markup=main_admin)
+            return
+        id=message.text
+        contract =await db.get_contract_by_id(int(id))
+        if len(contract)!=0:
+            contract=contract[0]
+            text=prepare_contract_data(contract)
+            passport = contract[10].split(":")
+            passport_id, ptype = passport[1], passport[0]
+            photo_ids = []
+            document_ids = []
+            if ptype == "photo":
+                photo_ids.append(passport_id)
+            else:
+                document_ids.append(passport_id)
+            diplom = contract[15].split(":")
+            diplom_id, ptype = diplom[1], diplom[0]
+            await message.answer(text=text)
+            if ptype == "photo":
+                photo_ids.append(diplom_id)
+            else:
+                document_ids.append(diplom_id)
+            if len(photo_ids) != 0:
+                await message.answer_media_group(media=[InputMediaPhoto(media=photo_id) for photo_id in photo_ids])
+            if len(document_ids) != 0:
+                await message.answer_media_group(
+                    media=[InputMediaDocument(media=photo_id) for photo_id in document_ids])
+        else:
+            await message.answer("Bu id li shartnoma topilmadi")
+        pass
 
 
 notTypes={

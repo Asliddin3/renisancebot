@@ -48,7 +48,7 @@ class Fakultet(models.Model):
     lang=models.CharField(verbose_name="Fakultet tili",max_length=12,default="uz",choices=Lang)
     time=models.CharField(verbose_name="Talim shakli",max_length=100,choices=Times)
     summa=models.IntegerField(verbose_name="Contract summasi")
-    summa_text=models.CharField(verbose_name="Contractni summasini text formati",max_length=100,default="",null=True)
+    summa_text=models.CharField(verbose_name="Contractni summasini text formati",max_length=255,default="",null=True)
     def __str__(self):
         return f"{self.id} - {self.name} - {self.lang} - {self.time} - {self.summa}"
 
