@@ -192,6 +192,7 @@ async def catch_admin_commands(message:types.Message):
                 photo_ids.append(passport_id)
             else:
                 document_ids.append(passport_id)
+            print(contract[15])
             diplom = contract[15].split(":")
             diplom_id, ptype = diplom[1], diplom[0]
             await message.answer(text=text)
