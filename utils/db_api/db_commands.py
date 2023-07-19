@@ -124,7 +124,7 @@ class Database:
         sql="SELECT telegram_id FROM products_contract WHERE state=$1"
         return await self.execute(sql,state,fetch=True)
     async def get_new_contracts(self):
-        sql="SELECT products_contract.id,full_name,phone,extra_phone,f.name,f.time,f.lang,address,passport,jshshir,passport_photo " \
+        sql="SELECT products_contract.id,full_name,phone,extra_phone,f.name,f.time,f.lang,address,passport,jshshir,passport_photo,diplom " \
             " FROM products_contract INNER JOIN products_fakultet AS f " \
             "ON f.id=fakultet_id  WHERE state='registered'"
         return await self.execute(sql,fetch=True)

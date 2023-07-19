@@ -1,7 +1,7 @@
 import asyncio
 
 from aiogram import types
-from aiogram.types import ContentType
+from aiogram.types import ContentType,InputMediaPhoto,InputMediaDocument
 from filters.admin_filter import AdminFilter,AdminContentFilter
 from data.config import ADMINS
 from loader import dp, db, bot
@@ -86,12 +86,24 @@ async def catch_admin_commands(message:types.Message):
                 markup=make_contract_keyboard(contract[0])
                 text=prepare_contract_data(contract)
                 await message.answer(text=text,reply_markup=markup)
-                photo=contract[10].split(":")
-                photo_id,ptype=photo[1],photo[0]
+                passport=contract[10].split(":")
+                passport_id,ptype=passport[1],passport[0]
+                photo_ids=[]
+                document_ids=[]
                 if ptype=="photo":
-                    await message.answer_photo(photo=photo_id)
+                    photo_ids[0]=passport_id
                 else:
-                    await message.answer_document(document=photo_id)
+                    document_ids[0]=passport_id
+                diplom=contract[11].split(":")
+                diplom_id, ptype = diplom[1], diplom[0]
+                if ptype=="photo":
+                    photo_ids.append(diplom_id)
+                else:
+                    document_ids.append(diplom_id)
+                if len(photo_ids)!=0:
+                    await message.answer_media_group(media=[InputMediaPhoto(media=photo_id) for photo_id in photo_ids])
+                if len(document_ids)!=0:
+                    await message.answer_media_group(media=[InputMediaDocument(media=photo_id) for photo_id in document_ids])
         elif text=="Arhivdagilar":
             contracts = await db.get_archived_contracts()
             if len(contracts)==0:
