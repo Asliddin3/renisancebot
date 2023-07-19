@@ -201,10 +201,11 @@ async def catch_admin_commands(message:types.Message):
             else:
                 document_ids.append(diplom_id)
             if len(photo_ids) != 0:
+                print(photo_ids)
                 await message.answer_media_group(media=[InputMediaPhoto(media=photo_id) for photo_id in photo_ids])
             if len(document_ids) != 0:
-                await message.answer_media_group(
-                    media=[InputMediaDocument(media=photo_id) for photo_id in document_ids])
+                for document_id in document_ids:
+                    await message.answer_document(document=document_id)
         else:
             await message.answer("Bu id li shartnoma topilmadi")
         pass
