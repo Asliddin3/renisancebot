@@ -65,7 +65,7 @@ class Contract(models.Model):
     id = models.AutoField(primary_key=True)
     telegram_id=models.BigIntegerField(verbose_name="Telegram id si",null=True)
     fakultet_id=models.IntegerField(verbose_name="fakultet idsi",default=0,null=False)
-    message_id=models.CharField(verbose_name="Contractni habar id si",max_length=1000,default="")
+    message_id=models.CharField(verbose_name="Contractni habar id si",max_length=1000,default="",null=True)
     full_name=models.CharField(verbose_name="Toliq ismi sharifi",default="",max_length=200,null=True)
     phone=models.CharField(verbose_name="Telefon raqam",max_length=100,default="",unique=True,null=True)
     extra_phone=models.CharField(verbose_name="Qoshimcha raqam",max_length=100,default="",null=True)
