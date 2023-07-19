@@ -87,3 +87,6 @@ class Contract(models.Model):
 #     buyer = models.ForeignKey(User)
 #     item_id = models.ForeignKey(Product, on_delete=models.CASCADE)
 #     phone_number = models.CharField(max_length=20, verbose_name="Telefon")
+
+# class Document(models.Model):
+#     file = models.FileField(upload_to='contract/')

@@ -15,7 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-
+from . import views
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('contract/<int:document_id>/', views.open_contract, name='open_contract'),
+    path('info/<int:document_id>/', views.open_info, name='open_info')
+
 ]

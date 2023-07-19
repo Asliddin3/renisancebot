@@ -29,6 +29,7 @@ ALLOWED_HOSTS = ['127.0.0.1','78.40.219.247','localhost']
 
 
 # Application definition
+# MEDIA_ROOT = '/root/univer-bot/renisancebot/documents'
 
 INSTALLED_APPS = [
     'django.contrib.admin',
