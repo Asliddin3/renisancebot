@@ -9,7 +9,7 @@ async def test():
 
     print("Users jadvalini yaratamiz...")
     await db.drop_users()
-    await db.create_table_users()
+    # await db.create_table_users()
     print("Yaratildi")
 
     print("Foydalanuvchilarni qo'shamiz")
