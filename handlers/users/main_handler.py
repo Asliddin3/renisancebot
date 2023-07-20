@@ -287,7 +287,10 @@ async def main_handler(message:Message):
             await message.answer("F.I.SH hato kiritildi iltimos qaytadan kiriting")
             return
         # await db.update_user_real_name(telegram_id=message.from_user.id,real_name=message.text)
-        name=message.text
+        name=message.text.split(" ")
+        for i in range(len(name)) :
+            name[i]=name[i].capitalize()
+        name=" ".join(name)
         row=await db.create_new_user_contract(telegram_id=message.from_user.id,fakultet_id=int(state[3]),full_name=name)
         state[4]=str(row[0])
         await message.answer("Talabaning telefon raqamini shu formata kiriting +998991112233",reply_markup=backKeyboard)
@@ -354,7 +357,11 @@ async def main_handler(message:Message):
         await message.answer(text="Yashash joyingizni kiriting passportdagi misol:"
                                   "Toshkent shahar Yakasaroy tumani Shota Rustaveli Kochasi 87 dom 99 honadon",reply_markup=backKeyboard)
     elif state[0]=="address":
-        await db.update_contract_field(contract_id=int(state[4]),field="address",telegram_id=message.from_user.id,value=message.text)
+        name = message.text.split(" ")
+        for i in range(len(name)):
+            name[i] = name[i].capitalize()
+        address = " ".join(name)
+        await db.update_contract_field(contract_id=int(state[4]),field="address",telegram_id=message.from_user.id,value=address)
         # await db.update_user_address(message.from_user.id,message.text)
         state[0]="photo"
         await message.answer(text="Talabaning passport yoki id kartasini rasmini jonating",reply_markup=backKeyboard)
