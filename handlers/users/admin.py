@@ -93,7 +93,7 @@ async def accept_student(message:types.Message,contract_id:int,created:datetime)
     data={
         "full_name":full_info[1],
         "id":str(full_info[0]),
-        "price":str(full_info[6]),
+        "price":f"{full_info[6]}",
         "price_text":full_info[7],
         "year":str(created.year),
         "day":str(created.day),
@@ -225,7 +225,6 @@ async def catch_admin_commands(message:types.Message):
             with open(excel_file_path, 'rb') as file:
                 await bot.send_document(message.from_user.id, file)
             os.remove(excel_file_path)
-
         elif text=="Elon qilish":
             state[1]="notification"
             state=";".join(state)
@@ -265,8 +264,6 @@ async def catch_admin_commands(message:types.Message):
             text=prepare_contract_data(contract)
             passport = contract[10].split(":")
             passport_id, ptype = passport[1], passport[0]
-            # photo_ids = []
-            # document_ids = []
             await message.answer(text=text)
 
             if ptype == "photo":
@@ -277,7 +274,6 @@ async def catch_admin_commands(message:types.Message):
                 # document_ids.append(passport_id)
             # print(contract[15])
             diplom = contract[15].split(":")
-            print("diplom",diplom)
             diplom_id, ptype = diplom[1], diplom[0]
             if ptype == "photo":
                 # photo_ids.append(diplom_id)
@@ -285,12 +281,7 @@ async def catch_admin_commands(message:types.Message):
             else:
                 # document_ids.append(diplom_id)
                 await message.answer_document(document=diplom_id)
-            # if len(photo_ids) != 0:
-            #     print(photo_ids)
-            #     await message.answer_media_group(media=[InputMediaPhoto(media=photo_id) for photo_id in photo_ids])
-            # if len(document_ids) != 0:
-            #     for document_id in document_ids:
-            #         await message.answer_document(document=document_id)
+
         else:
             await message.answer("Bu id li shartnoma topilmadi")
         pass
@@ -330,6 +321,10 @@ def prepare_contract_data(contract:list):
         res+=f"<b>Shartnoma jonatilgan sana</b>:        {contract[13]}\n"
         if len(contract)==15:
             res+=f"<a href='{contract[14]}'>Shartnoma linki</a>\n"
+        enpoint="http://79.40.219.247:8000"
+        res += f"<a href={enpoint}/info/{contract[0]}>Malumotnoma</a>\n"
+        res += f"<a href={enpoint}/contract/{contract[0]}>Shartnoma</a>\n"
+        res += f"<a href={enpoint}/document/{contract[0]}>Uchtomonli Shartnoma</a>\n"
     return res
 
 

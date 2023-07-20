@@ -223,7 +223,7 @@ async def main_handler(message:Message):
     if state[0]=="menu":
         if message.text=="Ro'yxatdan o'tish":
             state[0]="lang"
-            await message.answer(" ta'lim tilini tanlang.",reply_markup=lang)
+            await message.answer("Ta'lim tilini tanlang.",reply_markup=lang)
         elif message.text=="Biz haqimizda":
             await message.answer_video(video_id,
                                        caption=f"<a href=\"https://t.me/renuadmisson/15\">✅Universitet haqida</a>\n" \
