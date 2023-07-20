@@ -114,7 +114,7 @@ class Database:
             return await self.execute(update_sql, fakultet_id, full_name, telegram_id, fetchrow=True)
         else:
             # Insert a new record
-            insert_sql = "INSERT INTO products_contract (telegram_id, fakultet_id, full_name, state,resultdtm) VALUES ($1, $2, $3, 'new',0,,0) returning id"
+            insert_sql = "INSERT INTO products_contract (telegram_id, fakultet_id, full_name, state,result,dtm) VALUES ($1, $2, $3, 'new',0,0) returning id"
             return await self.execute(insert_sql, telegram_id, fakultet_id, full_name, fetchrow=True)
     async def update_contract_field(self,contract_id,field,value,telegram_id):
         sql = f"UPDATE products_contract SET {field}=$1 WHERE telegram_id=$2 AND state='new' AND id=$3"
