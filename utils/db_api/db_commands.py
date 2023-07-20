@@ -138,8 +138,8 @@ class Database:
         return await self.execute(sql,id,fetch=True)
 
     async def get_contract_full_info(self,contract_id):
-        sql = "SELECT c.id,full_name,phone,extra_phone,f.name,f.time,f.price," \
-              "f.price_text,f.lang,address,passport,jshshir,created" \
+        sql = "SELECT c.id,full_name,phone,extra_phone,f.name,f.time,f.summa," \
+              "f.summa_text,f.lang,address,passport,jshshir,created" \
               " FROM products_contract AS c INNER JOIN products_fakultet AS f " \
               "ON f.id=fakultet_id  WHERE products_contract.id=$1"
         return await self.execute(sql,contract_id,fetchrow=True)
