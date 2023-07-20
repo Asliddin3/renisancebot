@@ -427,7 +427,7 @@ async def main_handler(message:Message):
             await accept_student(message=message, contract_id=int(contract_id), created=current_time)
             await db.update_contract_state(id=int(contract_id), state="accepted")
             await db.update_contract_created_time(id=int(contract_id), created=current_time.date())
-            malumotnoma = InputFile(f"/root/univer-bot/renisancebot/documents/{contract_id}/info.pdf")
+            malumotnoma = InputFile(f"/root/univer-bot/renisancebot/documents/{contract_id}/malumotnoma.pdf")
             shartnoma = InputFile(f"/root/univer-bot/renisancebot/documents/{contract_id}/shartnoma.pdf")
             uchtamonlama = InputFile(f"/root/univer-bot/renisancebot/documents/{contract_id}/uchtamonlama.pdf")
             await message.answer( text="✅Tabriklaymiz siz Renaissance Universtyga talabalikka qabul qilindingiz !!!",reply_markup=menu)
