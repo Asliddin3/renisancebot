@@ -277,7 +277,7 @@ async def main_handler(message:Message):
             await message.answer(
                 text="Universtetimizga quyidagi lakatsiya orqali yoki 131/58/47/62 yoʻnalishli avtobuslarning oxirgi bekatiga tushib kelishingiz mumkin")
             await message.answer(
-                text="RENAISSANCE UNIVERSTYda 500 ta grant oʻrinlari mavjud boʻlib 1 semestrni aʼlo bahoga tamomlagan talabalar oʻrtasida qoʻshimcha saralash yoʻli bilan eng yuqori bal olganlarga 2 semestrdan taqdim etiladi")
+                text="RENAISSANCE UNIVERSITYda 500 ta grant oʻrinlari mavjud boʻlib 1 semestrni aʼlo bahoga tamomlagan talabalar oʻrtasida qoʻshimcha saralash yoʻli bilan eng yuqori bal olganlarga 2 semestrdan taqdim etiladi")
             await message.answer(text="Murojat uchun telefonlar:\n" \
                                       "+998947405220  Komila\n" \
                                       "+998947406220  Sarvinoz\n" \
@@ -322,7 +322,7 @@ async def main_handler(message:Message):
         await message.answer(
             text="Universtetimizga quyidagi lakatsiya orqali yoki 131/58/47/62 yoʻnalishli avtobuslarning oxirgi bekatiga tushib kelishingiz mumkin")
         await message.answer(
-            text="RENAISSANCE UNIVERSTYda 500 ta grant oʻrinlari mavjud boʻlib 1 semestrni aʼlo bahoga tamomlagan talabalar oʻrtasida qoʻshimcha saralash yoʻli bilan eng yuqori bal olganlarga 2 semestrdan taqdim etiladi")
+            text="RENAISSANCE UNIVERSITYda 500 ta grant oʻrinlari mavjud boʻlib 1 semestrni aʼlo bahoga tamomlagan talabalar oʻrtasida qoʻshimcha saralash yoʻli bilan eng yuqori bal olganlarga 2 semestrdan taqdim etiladi")
         await message.answer(text="Murojat uchun telefonlar:\n" \
                                   "+998947405220  Komila\n" \
                                   "+998947406220  Sarvinoz\n" \
