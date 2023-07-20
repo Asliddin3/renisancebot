@@ -322,9 +322,9 @@ def prepare_contract_data(contract:list):
         if len(contract)==15:
             res+=f"<a href='{contract[14]}'>Shartnoma linki</a>\n"
         enpoint="http://79.40.219.247:8000"
-        res += f"<a href={enpoint}/info/{contract[0]}>Malumotnoma</a>\n"
-        res += f"<a href={enpoint}/contract/{contract[0]}>Shartnoma</a>\n"
-        res += f"<a href={enpoint}/document/{contract[0]}>Uchtomonli Shartnoma</a>\n"
+        res += f"<a href='{enpoint}/info/{contract[0]}'>Malumotnoma</a>\n"
+        res += f"<a href='{enpoint}/contract/{contract[0]}'>Shartnoma</a>\n"
+        res += f"<a href='{enpoint}/document/{contract[0]}'>Uchtomonli Shartnoma</a>\n"
     return res
 
 
