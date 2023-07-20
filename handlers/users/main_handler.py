@@ -388,11 +388,12 @@ async def main_handler(message:Message):
             malumotnoma = InputFile(f"/root/univer-bot/renisancebot/documents/{contract_id}/info.docx")
             shartnoma = InputFile(f"/root/univer-bot/renisancebot/documents/{contract_id}/shartnoma.docx")
             uchshartnoma = InputFile(f"/root/univer-bot/renisancebot/documents/{contract_id}/uchshartnoma.docx")
-            await message.answer( text="Tabirklaymiz siz kabul kilindigiz.Sizning shartnomangiz")
+            await message.answer( text="Tabirklaymiz siz kabul kilindigiz.Sizning shartnomangiz",reply_markup=menu)
             await message.answer_document(document=malumotnoma, caption="Malumotnoma")
             await message.answer_document( document=shartnoma, caption="Shartnoma")
             await message.answer_document( document=uchshartnoma, caption="Uch tomonli shartnoma")
             # await call.answer("Shartnoma jonatildi")
+            return
         else:
             await message.answer("Hato amal kiritildi")
             return
