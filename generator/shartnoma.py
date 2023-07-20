@@ -240,18 +240,18 @@ def update_student2(doc, student_data):
         run.font.size = Pt(10)  # Set the font size to 10 for the other runs
 
 
-document = Document('shartnoma.docx')
-
-add_qr(document)
-add_hyperlink(document.add_paragraph())
-update_price(document, " (yigirma million besh yuz ellik ming)", "20550000")
-update_name(document, "Asliddin Dehqonov")
-update_doc_id(document, "5123")
-update_date(document, "2023", "20", "oktyabr")
-update_student(document, student_info)
-update_student2(document, student_info)
-update_contract(document, contract_info)
-document.save('output.docx')
+# document = Document('shartnoma.docx')
+#
+# add_qr(document)
+# add_hyperlink(document.add_paragraph())
+# update_price(document, " (yigirma million besh yuz ellik ming)", "20550000")
+# update_name(document, "Asliddin Dehqonov")
+# update_doc_id(document, "5123")
+# update_date(document, "2023", "20", "oktyabr")
+# update_student(document, student_info)
+# update_student2(document, student_info)
+# update_contract(document, contract_info)
+# document.save('output.docx')
 
 def create_contract(data):
     document=Document("shartnoma.docx")
