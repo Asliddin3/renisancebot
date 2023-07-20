@@ -7,7 +7,7 @@ import re
 from datetime import datetime
 from handlers.users.start import photo_id,jshshr_id,video_id
 from generator import create_contract,create_info,create_uchshartnoma
-
+import pytz
 """
 States
 state:lan:time:fakultet:
@@ -375,8 +375,11 @@ async def main_handler(message:Message):
             await db.update_contract_field(contract_id=int(state[4]),field="dtm",telegram_id=message.from_user.id,value=float(message.text))
             await db.update_contract_field(contract_id=int(state[4]),field="state",telegram_id=message.from_user.id,value="registered")
             state[0]="menu"
+            state=":".join(state)
             await db.update_user_state(telegram_id=message.from_user.id,state=state)
             contract_id=int(state[4])
+            timezone = pytz.timezone('Asia/Tashkent')
+
             current_time = datetime.now(timezone)
 
             telegram_id=await db.get_user_telegram_id_by_contract(contract_id=int(state[4]))
