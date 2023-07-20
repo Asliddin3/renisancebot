@@ -99,6 +99,7 @@ def update_price(doc, price, price_number):
 
 
 def update_student(doc, student_data):
+    print("")
     asd = 'Yashash manzili:______________________________\n____________________________________________'
     replacements = {
         "F.I.Sh.:______________________________________": student_data["name"],
@@ -106,7 +107,7 @@ def update_student(doc, student_data):
         "Pasport ma’lumotlari:__________________________": student_data["passport"],
         "JSHSHIR:  ___________________________________": student_info["jshshir"],
         "Telefon raqami: ______________________________": student_data["number"],
-        "Talaba __________ ____________________": "Talaba(imzo) __________ {}".format(student_data["name"])
+        "Talaba _______ _____________________________": "Talaba(imzo) __________{}".format(student_data["name"])
 
         # "Talaba _______   _____________________________": "Talaba(imzo) ________"
     }
