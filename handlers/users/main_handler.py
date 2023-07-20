@@ -125,7 +125,8 @@ async def catch_contact(message:Message):
     state=state.split(":")
     if state[0]=="phone":
         state[0]="extra_phone"
-        phone=message.text.replace("+","")
+        # phone=message.text.replace("+","")
+        print(message.text)
         state=":".join(state)
         await db.update_user_state(telegram_id=message.from_user.id,state=state)
         await db.update_contract_field(contract_id=int(state[4]),field="phone",value=phone)
