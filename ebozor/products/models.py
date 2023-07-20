@@ -32,7 +32,7 @@ Times = (
 Lang = (
         # ('en', 'English',),
         ('ru', 'Russian',),
-        ("uz","Uzbek")
+        ("uz","O'zbek")
     )
 
 class Test(models.Model):

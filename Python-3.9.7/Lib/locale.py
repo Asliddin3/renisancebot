@@ -1668,8 +1668,8 @@ windows_locale = {
     0x042e: "wen_DE",# Upper Sorbian - Germany
     0x0420: "ur_PK", # Urdu
     0x0820: "ur_IN", # Urdu - India
-    0x0443: "uz_UZ", # Uzbek - Latin
-    0x0843: "uz_UZ", # Uzbek - Cyrillic
+    0x0443: "uz_UZ", # O'zbek - Latin
+    0x0843: "uz_UZ", # O'zbek - Cyrillic
     0x042a: "vi_VN", # Vietnamese
     0x0452: "cy_GB", # Welsh
     0x0488: "wo_SN", # Wolof - Senegal
