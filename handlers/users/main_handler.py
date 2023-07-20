@@ -424,7 +424,7 @@ async def accept_student(message:Message,contract_id:int,created:datetime):
     info_data={
         "id":full_info[0],
         "faculty":full_info[4],
-        "learn_type":Times[full_info[5]],
+        "learn_type":CTimes[full_info[5]],
         "name":full_info[1],
         "date":created.strftime("%d.%m.%Y")
     }
@@ -460,3 +460,19 @@ async def accept_student(message:Message,contract_id:int,created:datetime):
     }
     create_contract(data)
     create_uchshartnoma(data)
+
+uzbek_month_names = [
+    "Yanvar", "Fevral", "Mart", "Aprel", "May", "Iyun", "Iyul", "Avgust", "Sentabr",
+    "Oktabr", "Noyabr", "Dekabr"
+]
+CTimes = {
+        'daytime':"Kunduzgi",
+        "evening":'Kechgi' ,
+        "distance":"Sirtqi"
+}
+
+Lang={
+'en': 'English',
+'ru': 'Russian',
+"uz":"Uzbek"
+}
