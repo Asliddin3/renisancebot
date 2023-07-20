@@ -12,7 +12,7 @@ from datetime import datetime
 import pytz
 import os
 import pandas as pd
-from generator import create_uchshartnoma,create_info,create_contract
+from generator import create_uchtamonlama,create_info,create_contract
 timezone = pytz.timezone('Asia/Tashkent')
 
 # @dp.message_handler(text="/exit",user_id=ADMINS)
@@ -40,11 +40,10 @@ async def catch_admin_callback_data(call:types.CallbackQuery,callback_data:dict)
         await bot.send_message(chat_id=telegram_id,text="✅Tabriklaymiz siz Renaissance Universtyga talabalikka qabul qilindingiz !!!")
         malumotnoma=InputFile(f"/root/univer-bot/renisancebot/documents/{contract_id}/info.pdf")
         shartnoma=InputFile(f"/root/univer-bot/renisancebot/documents/{contract_id}/shartnoma.pdf")
-        uchshartnoma=InputFile(f"/root/univer-bot/renisancebot/documents/{contract_id}/uchshartnoma.pdf")
-        await bot.send_message(chat_id=telegram_id,text="Tabirklaymiz siz kabul kilindigiz.Sizning shartnomangiz")
+        uchtamonlama=InputFile(f"/root/univer-bot/renisancebot/documents/{contract_id}/uchtamonlama.pdf")
         await bot.send_document(chat_id=telegram_id,document=malumotnoma,caption="Malumotnoma")
         await bot.send_document(chat_id=telegram_id,document=shartnoma,caption="Shartnoma")
-        await bot.send_document(chat_id=telegram_id,document=uchshartnoma,caption="Uch tomonli")
+        await bot.send_document(chat_id=telegram_id,document=uchtamonlama,caption="Uch tomonli")
         await call.answer("Shartnoma jonatildi")
 
     elif action=="archive":
@@ -122,7 +121,7 @@ async def accept_student(message:types.Message,contract_id:int,created:datetime)
         }
     }
     create_contract(data)
-    create_uchshartnoma(data)
+    create_uchtamonlama(data)
 
 @dp.message_handler(AdminContentFilter(),content_types=ContentType.ANY)
 async def catch_admin_notification(message:types.Message):

@@ -251,8 +251,8 @@ def create_contract(data):
     subprocess.run(['soffice', '--headless', '--convert-to', 'pdf', '--outdir',
                     f"/root/univer-bot/renisancebot/documents/{data['path']}",
                     f"/root/univer-bot/renisancebot/documents/{data['path']}/shartnoma.docx"])
-    # convert(f"/root/univer-bot/renisancebot/documents/{data['id']}/uchshartnoma.docx",
-    #         f"/root/univer-bot/renisancebot/documents/{data['id']}/uchshartnoma.pdf")
+    # convert(f"/root/univer-bot/renisancebot/documents/{data['id']}/uchtamonlama.docx",
+    #         f"/root/univer-bot/renisancebot/documents/{data['id']}/uchtamonlama.pdf")
     os.remove(f"/root/univer-bot/renisancebot/documents/{data['path']}/shartnoma.docx")
 
 
