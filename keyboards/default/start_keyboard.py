@@ -16,7 +16,7 @@ lang=ReplyKeyboardMarkup(
             KeyboardButton(text="Ruscha")
         ],
         [
-            KeyboardButton(text="Ingliz"),
+            # KeyboardButton(text="Ingliz"),
             KeyboardButton(text="🔙 Ortga")
         ]
     ],resize_keyboard=True
