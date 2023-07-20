@@ -46,10 +46,12 @@ def update_contract(doc, contract_data):
 
 def update_student_name(doc, name):
     placeholder = "bir tomondan, ____________________ ______________________________________"
+    splitPlace=", ____________________ ______________________________________"
+
     for paragraph in doc.paragraphs:
         if placeholder in paragraph.text:
             # Split the paragraph into parts
-            parts = paragraph.text.split(placeholder)
+            parts = paragraph.text.split(splitPlace)
 
             # Clear the paragraph
             paragraph.clear()
@@ -75,12 +77,12 @@ def update_student_name(doc, name):
 
 def update_sponsor_name(doc, name):
     placeholder = "ikkinchi tomondan, _________________________ ________________________________"
-    splitPlace="_________________________ ________________________________"
+
     for paragraph in doc.paragraphs:
         if placeholder in paragraph.text:
             # Split the paragraph into parts
 
-            parts = paragraph.text.split(splitPlace)
+            parts = paragraph.text.split(placeholder)
 
             # Clear the paragraph
             paragraph.clear()
