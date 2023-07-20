@@ -68,7 +68,7 @@ info = {
 # }
 Lang={
 'en': 'English',
-'ru': 'Russian',
+'ru': 'Rus tili',
 "uz":"O'zbek"
 }
 

@@ -71,6 +71,18 @@ backKeyboard=ReplyKeyboardMarkup(
     ],resize_keyboard=True,
 )
 
+teslKeyboard=ReplyKeyboardMarkup(
+    keyboard=[
+        [
+          KeyboardButton(text="Raqam jo'natish",request_contact=True)
+        ],
+        [
+            KeyboardButton(text="🔙 Ortga"),
+            KeyboardButton(text="🏠 Bosh menu")
+        ]
+    ],resize_keyboard=True,
+)
+
 def make_fakultet_keyboard(fakultets: list[str]):
     markup = ReplyKeyboardMarkup(resize_keyboard=True)
     row = []

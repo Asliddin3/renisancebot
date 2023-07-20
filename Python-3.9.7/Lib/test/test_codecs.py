@@ -1245,7 +1245,7 @@ punycode_testcases = [
      b"989aomsvi5e83db1d2a355cv1e0vak1dwrv93d5xbh15a0dt30a5j"
      b"psd879ccm6fea98c"),
 
-    # (I) Russian (Cyrillic):
+    # (I) Rus tili (Cyrillic):
     ("\u043F\u043E\u0447\u0435\u043C\u0443\u0436\u0435\u043E"
      "\u043D\u0438\u043D\u0435\u0433\u043E\u0432\u043E\u0440"
      "\u044F\u0442\u043F\u043E\u0440\u0443\u0441\u0441\u043A"
