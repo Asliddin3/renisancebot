@@ -140,8 +140,7 @@ def update_student(doc, student_data):
         "Pasport ma’lumotlari:_________________": student_data["passport"],
         "JSHSHIR:  __________________________": student_info["jshshir"],
         "Telefon raqami:_______________________": student_data["number"],
-        "Talaba __________ ____________________": "Talaba(imzo) __________ "
-        # "Talaba __________ ____________________": "Talaba(imzo) __________ ".format(student_data["name"]),
+        "Talaba __________ ____________________": "Talaba(imzo) __________ ".format(student_data["name"])
     }
     table = doc.tables[1]
     cell = table.cell(0, 2)
