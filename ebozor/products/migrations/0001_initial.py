@@ -40,7 +40,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(primary_key=True, serialize=False)),
                 ('name', models.CharField(max_length=150, verbose_name='Fakultet nomi')),
-                ('lang', models.CharField(choices=[('ru', 'Russian'), ('uz', 'Uzbek')], default='uz', max_length=12, verbose_name='Fakultet tili')),
+                ('lang', models.CharField(choices=[('ru', 'Russian'), ('uz', 'O'zbek')], default='uz', max_length=12, verbose_name='Fakultet tili')),
                 ('time', models.CharField(choices=[('daytime', 'Kunduzgi'), ('evening', 'Kechki'), ('distance', 'Sirtqi')], max_length=100, verbose_name='Talim shakli')),
                 ('summa', models.IntegerField(verbose_name='Contract summasi')),
             ],

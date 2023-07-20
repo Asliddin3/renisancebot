@@ -69,7 +69,7 @@ info = {
 Lang={
 'en': 'English',
 'ru': 'Russian',
-"uz":"Uzbek"
+"uz":"O'zbek"
 }
 
 async def accept_student(message:types.Message,contract_id:int,created:datetime):

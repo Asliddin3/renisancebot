@@ -495,5 +495,5 @@ CTimes = {
 Lang={
 'en': 'English',
 'ru': 'Russian',
-"uz":"Uzbek"
+"uz":"O'zbek"
 }
