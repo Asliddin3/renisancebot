@@ -59,8 +59,8 @@ def create_info(data):
     # doc.save(f"../documents/{data['id']}/info.docx")
     doc.save(f"/root/univer-bot/renisancebot/documents/{data['path']}/info.docx")
     subprocess.run(['soffice', '--headless', '--convert-to', 'pdf', '--outdir',
-                    f"/root/univer-bot/renisancebot/documents/{data['path']}/shartnoma.pdf",
-                    f"/root/univer-bot/renisancebot/documents/{data['path']}/shartnoma.docx"])
+                    f"/root/univer-bot/renisancebot/documents/{data['path']}/info.pdf",
+                    f"/root/univer-bot/renisancebot/documents/{data['path']}/info.docx"])
     # convert(f"/root/univer-bot/renisancebot/documents/{data['id']}/info.docx",
     #         f"/root/univer-bot/renisancebot/documents/{data['id']}/info.pdf")
     os.remove(f"/root/univer-bot/renisancebot/documents/{data['path']}/info.docx")
