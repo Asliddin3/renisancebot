@@ -97,31 +97,31 @@ def update_price(doc, price, price_number):
 
 
 def update_student(doc, student_data):
-    address = 'Yashash manzili:______________________ _____________________________________'
+    asd = 'Yashash manzili:______________________________\n____________________________________________'
     replacements = {
-        "F.I.Sh.: ______________________________ _____________________________________": student_data["name"],
-        address: student_data["address"],
-        "Pasport ma’lumotlari:_________________": student_data["passport"],
-        "JSHSHIR:  __________________________": student_info["jshshir"],
-        "Telefon raqami:_______________________": student_data["number"],
-        "Talaba __________ ____________________": "Talaba __________ {}".format(student_data["name"]),
+        "F.I.Sh.:______________________________________": student_data["name"],
+        asd: student_data["address"],
+        "Pasport ma’lumotlari:__________________________": student_data["passport"],
+        "JSHSHIR:  ___________________________________": student_info["jshshir"],
+        "Telefon raqami: ______________________________": student_data["number"],
+        "Talaba _______   _____________________________": "Talaba __________ {}".format(student_data["name"])
     }
     table = doc.tables[1]
-    cell = table.cell(0, 2)
-
+    cell = table.cell(0, 1)
     original_text = cell.text
     cell.text = ''
-
+    paragraph = cell.paragraphs[0]
+    run = paragraph.add_run("Talaba")
+    run.bold = True
     for key, value in replacements.items():
         if key in original_text:
             original_text = original_text.replace(key, value)
 
-    paragraph = cell.paragraphs[0]
-    run = paragraph.add_run(original_text)
+    paragraph.add_run(original_text[7:])
 
-    font = run.font
-    font.bold = True
-    font.size = Pt(9)
+    for run in paragraph.runs:
+        font = run.font
+        font.size = Pt(10)
 
 
 contract_info = {
