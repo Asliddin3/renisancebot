@@ -278,6 +278,6 @@ def create_uchshartnoma(data):
 
     document.save(f"/root/univer-bot/renisancebot/documents/{data['path']}/uchshartnoma.docx")
     subprocess.run(['soffice', '--headless', '--convert-to', 'pdf', '--outdir', f"/root/univer-bot/renisancebot/documents/"
-                                f"{data['path']}/uchshartnoma.pdf",f"/root/univer-bot/renisancebot/documents/{data['path']}/uchshartnoma.docx"])
+                                f"{data['path']}/",f"/root/univer-bot/renisancebot/documents/{data['path']}/uchshartnoma.docx"])
     os.remove(f"/root/univer-bot/renisancebot/documents/{data['path']}/uchshartnoma.docx")
 

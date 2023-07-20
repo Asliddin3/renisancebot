@@ -246,7 +246,7 @@ def create_contract(data):
     # document.save(f"/root/univer-bot/renisancebot/documents/{data['id']}/shartnoma.docx")
     document.save(f"/root/univer-bot/renisancebot/documents/{data['path']}/shartnoma.docx")
     subprocess.run(['soffice', '--headless', '--convert-to', 'pdf', '--outdir',
-                    f"/root/univer-bot/renisancebot/documents/{data['path']}/shartnoma.pdf",
+                    f"/root/univer-bot/renisancebot/documents/{data['path']}/",
                     f"/root/univer-bot/renisancebot/documents/{data['path']}/shartnoma.docx"])
     # convert(f"/root/univer-bot/renisancebot/documents/{data['id']}/uchshartnoma.docx",
     #         f"/root/univer-bot/renisancebot/documents/{data['id']}/uchshartnoma.pdf")
