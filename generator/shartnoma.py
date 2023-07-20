@@ -97,31 +97,31 @@ def update_price(doc, price, price_number):
 
 
 def update_student(doc, student_data):
-    asd = 'Yashash manzili:______________________________\n____________________________________________'
+    address = 'Yashash manzili:______________________ _____________________________________'
     replacements = {
-        "F.I.Sh.:______________________________________": student_data["name"],
-        asd: student_data["address"],
-        "Pasport ma’lumotlari:__________________________": student_data["passport"],
-        "JSHSHIR:  ___________________________________": student_info["jshshir"],
-        "Telefon raqami: ______________________________": student_data["number"],
-        "Talaba _______   _____________________________": "Talaba __________ {}".format(student_data["name"])
+        "F.I.Sh.: ______________________________ _____________________________________": student_data["name"],
+        address: student_data["address"],
+        "Pasport ma’lumotlari:_________________": student_data["passport"],
+        "JSHSHIR:  __________________________": student_info["jshshir"],
+        "Telefon raqami:_______________________": student_data["number"],
+        "Talaba __________ ____________________": "Talaba __________ {}".format(student_data["name"]),
     }
     table = doc.tables[1]
-    cell = table.cell(0, 1)
+    cell = table.cell(0, 2)
+
     original_text = cell.text
     cell.text = ''
-    paragraph = cell.paragraphs[0]
-    run = paragraph.add_run("Talaba")
-    run.bold = True
+
     for key, value in replacements.items():
         if key in original_text:
             original_text = original_text.replace(key, value)
 
-    paragraph.add_run(original_text[7:])
+    paragraph = cell.paragraphs[0]
+    run = paragraph.add_run(original_text)
 
-    for run in paragraph.runs:
-        font = run.font
-        font.size = Pt(10)
+    font = run.font
+    font.bold = True
+    font.size = Pt(9)
 
 
 contract_info = {
@@ -169,31 +169,6 @@ def add_qr(doc, link="https://t.me/renuadmisson"):
     paragraph = doc.add_paragraph()
     run = paragraph.add_run()
     run.add_picture('qrcode.png', width=Cm(3), height=Cm(3))
-
-
-# def make_bold(doc):
-#     string_to_bold = "Asliddin Dehqonov"
-#     for old_paragraph in doc.paragraphs:
-#         if old_paragraph.text.find(string_to_bold) >= 0:
-#             # Insert an empty paragraph before the old one
-#             new_paragraph = old_paragraph.insert_paragraph_before()
-#
-#             # Get the text from the old paragraph
-#             paragraph_text = old_paragraph.text
-#
-#             # Determine sections of text before and after the string to bold
-#             index = paragraph_text.index(string_to_bold)
-#             before = paragraph_text[0:index]
-#             after = paragraph_text[index + len(string_to_bold):]
-#
-#             # Reconstruct the paragraph as three runs
-#             new_paragraph.add_run(before)
-#             run = new_paragraph.add_run(string_to_bold)
-#             run.bold = True
-#             new_paragraph.add_run(after)
-#
-#             # Clear out the old paragraph
-#             old_paragraph.clear()
 
 
 def update_student2(doc, student_data):
@@ -262,7 +237,7 @@ def create_contract(data):
     update_doc_id(document, data["id"])
     update_date(document,data["year"], data["day"],data["month"])
     update_student(document, data["student_info"])
-    update_student2(document, data["student_info"])
+    # update_student2(document, data["student_info"])
     update_contract(document, data["contract_info"])
     add_qr(document,f'http://78.40.219.247:8000/contract/{data["id"]}/')
     # document.save(f'../documents/{data["id"]}/shartnoma.docx')
