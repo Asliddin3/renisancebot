@@ -43,10 +43,11 @@ def update_contract(doc, contract_data):
 
 def update_name(doc, name):
     placeholder = "bir tomondan, ____________________________________________"
+    splitPlace=" ____________________________________________"
     for paragraph in doc.paragraphs:
         if placeholder in paragraph.text:
             # Split the paragraph into parts
-            parts = paragraph.text.split(placeholder)
+            parts = paragraph.text.split(splitPlace)
 
             # Clear the paragraph
             paragraph.clear()
