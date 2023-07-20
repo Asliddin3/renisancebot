@@ -127,7 +127,7 @@ class Database:
         sql="SELECT products_contract.id,full_name,phone,extra_phone,f.name,f.time,f.lang,address,passport,jshshir,passport_photo," \
             "dtm,result,created,result,diplom " \
             " FROM products_contract INNER JOIN products_fakultet AS f " \
-            "ON f.id=fakultet_id  WHERE state='registered'"
+            "ON f.id=fakultet_id  WHERE state='registered' ORDER BY id"
         return await self.execute(sql,fetch=True)
 
     async def get_contract_by_id(self,id):
