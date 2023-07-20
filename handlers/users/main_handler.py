@@ -450,6 +450,7 @@ async def accept_student(message:Message,contract_id:int,created:datetime):
     create_info(info_data)
     finishYear=2027
     year=4
+    print("time",full_info[8])
     if full_info[8]=="distance":
         finishYear=2028
         year=5
