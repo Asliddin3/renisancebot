@@ -241,16 +241,16 @@ def create_contract(data):
     update_student(document, data["student_info"])
     # update_student2(document, data["student_info"])
     update_contract(document, data["contract_info"])
-    add_qr(document,f'http://78.40.219.247:8000/contract/{data["id"]}/')
+    add_qr(document,f'http://78.40.219.247:8000/contract/{data["path"]}/')
     # document.save(f'../documents/{data["id"]}/shartnoma.docx')
     # document.save(f"/root/univer-bot/renisancebot/documents/{data['id']}/shartnoma.docx")
-    document.save(f"/root/univer-bot/renisancebot/documents/{data['id']}/shartnoma.docx")
+    document.save(f"/root/univer-bot/renisancebot/documents/{data['path']}/shartnoma.docx")
     subprocess.run(['soffice', '--headless', '--convert-to', 'pdf', '--outdir',
-                    f"/root/univer-bot/renisancebot/documents/{data['id']}/shartnoma.pdf",
-                    f"/root/univer-bot/renisancebot/documents/{data['id']}/shartnoma.docx"])
+                    f"/root/univer-bot/renisancebot/documents/{data['path']}/shartnoma.pdf",
+                    f"/root/univer-bot/renisancebot/documents/{data['path']}/shartnoma.docx"])
     # convert(f"/root/univer-bot/renisancebot/documents/{data['id']}/uchshartnoma.docx",
     #         f"/root/univer-bot/renisancebot/documents/{data['id']}/uchshartnoma.pdf")
-    os.remove(f"/root/univer-bot/renisancebot/documents/{data['id']}/shartnoma.docx")
+    os.remove(f"/root/univer-bot/renisancebot/documents/{data['path']}/shartnoma.docx")
 
 
 

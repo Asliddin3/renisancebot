@@ -77,8 +77,11 @@ async def accept_student(message:types.Message,contract_id:int,created:datetime)
     if full_info is None:
         await message.answer("Shartnoma topilmadi")
         return
+    id=2000+full_info[0]
+
     info_data={
-        "id":full_info[0],
+        "id":f"01-04/{id}",
+        "path":full_info[0],
         "faculty":full_info[4],
         "learn_type":Times[full_info[5]],
         "name":full_info[1],
@@ -90,11 +93,10 @@ async def accept_student(message:types.Message,contract_id:int,created:datetime)
     if full_info[8]=="distance":
         finishYear=2028
         year=5
-    print(full_info)
-    id=2000+full_info[0]
     data={
         "full_name":full_info[1],
         "id":f"01-04/{id}",
+        "path":full_info[0],
         "price":f"{full_info[6]} ",
         "price_text":f"({full_info[7]})",
         "year":str(created.year),

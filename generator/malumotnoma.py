@@ -53,14 +53,14 @@ def create_info(data):
     docx_file_path = "/root/univer-bot/renisancebot/generator/malumotnoma.docx"
     doc = Document(docx_file_path)
     update_payment_info(doc,data)
-    add_qr(doc,link=f'http://78.40.219.247:8000/info/{data["id"]}/')
-    directory_path = f"/root/univer-bot/renisancebot/documents/{data['id']}"
+    add_qr(doc,link=f'http://78.40.219.247:8000/info/{data["path"]}/')
+    directory_path = f"/root/univer-bot/renisancebot/documents/{data['path']}"
     os.makedirs(directory_path, exist_ok=True)
     # doc.save(f"../documents/{data['id']}/info.docx")
-    doc.save(f"/root/univer-bot/renisancebot/documents/{data['id']}/info.docx")
+    doc.save(f"/root/univer-bot/renisancebot/documents/{data['path']}/info.docx")
     subprocess.run(['soffice', '--headless', '--convert-to', 'pdf', '--outdir',
-                    f"/root/univer-bot/renisancebot/documents/{data['id']}/shartnoma.pdf",
-                    f"/root/univer-bot/renisancebot/documents/{data['id']}/shartnoma.docx"])
+                    f"/root/univer-bot/renisancebot/documents/{data['path']}/shartnoma.pdf",
+                    f"/root/univer-bot/renisancebot/documents/{data['path']}/shartnoma.docx"])
     # convert(f"/root/univer-bot/renisancebot/documents/{data['id']}/info.docx",
     #         f"/root/univer-bot/renisancebot/documents/{data['id']}/info.pdf")
-    os.remove(f"/root/univer-bot/renisancebot/documents/{data['id']}/info.docx")
+    os.remove(f"/root/univer-bot/renisancebot/documents/{data['path']}/info.docx")
