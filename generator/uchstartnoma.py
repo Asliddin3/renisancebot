@@ -1,3 +1,5 @@
+import os
+
 from docx import Document
 from docx.shared import Pt
 import docx
@@ -5,6 +7,7 @@ import qrcode
 from docx.shared import Cm
 from python_docx_replace import docx_replace
 
+from docx2pdf import convert
 
 def update_doc_id(doc, id):
     for paragraph in doc.paragraphs:
@@ -272,4 +275,7 @@ def create_uchshartnoma(data):
     add_qr(document,f'http://78.40.219.247:8000/document/{data["id"]}/')
     # document.save(f"../documents/{data['id']}/uchshartnoma.docx")
     document.save(f"/root/univer-bot/renisancebot/documents/{data['id']}/uchshartnoma.docx")
+    convert(f"/root/univer-bot/renisancebot/documents/{data['id']}/uchshartnoma.docx",
+            f"/root/univer-bot/renisancebot/documents/{data['id']}/uchshartnoma.pdf")
+    os.remove(f"/root/univer-bot/renisancebot/documents/{data['id']}/uchshartnoma.docx")
 

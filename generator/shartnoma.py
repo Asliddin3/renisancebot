@@ -3,6 +3,8 @@ from docx.shared import Pt
 import docx
 import qrcode
 from docx.shared import Cm
+import os
+from docx2pdf import convert
 
 
 def update_doc_id(doc, id):
@@ -241,8 +243,11 @@ def create_contract(data):
     update_contract(document, data["contract_info"])
     add_qr(document,f'http://78.40.219.247:8000/contract/{data["id"]}/')
     # document.save(f'../documents/{data["id"]}/shartnoma.docx')
+    # document.save(f"/root/univer-bot/renisancebot/documents/{data['id']}/shartnoma.docx")
     document.save(f"/root/univer-bot/renisancebot/documents/{data['id']}/shartnoma.docx")
-
+    convert(f"/root/univer-bot/renisancebot/documents/{data['id']}/uchshartnoma.docx",
+            f"/root/univer-bot/renisancebot/documents/{data['id']}/uchshartnoma.pdf")
+    os.remove(f"/root/univer-bot/renisancebot/documents/{data['id']}/shartnoma.docx")
 
 
 

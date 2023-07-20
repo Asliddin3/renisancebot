@@ -3,7 +3,7 @@ from docx.shared import Pt
 import os
 import qrcode
 from docx.shared import Cm
-
+from docx2pdf import convert
 info = {
     "name": "Asliddin Dehqonov ",
     "faculty": "moliya",
@@ -57,3 +57,6 @@ def create_info(data):
     os.makedirs(directory_path, exist_ok=True)
     # doc.save(f"../documents/{data['id']}/info.docx")
     doc.save(f"/root/univer-bot/renisancebot/documents/{data['id']}/info.docx")
+    convert(f"/root/univer-bot/renisancebot/documents/{data['id']}/info.docx",
+            f"/root/univer-bot/renisancebot/documents/{data['id']}/info.pdf")
+    os.remove(f"/root/univer-bot/renisancebot/documents/{data['id']}/info.docx")

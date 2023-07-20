@@ -385,9 +385,9 @@ async def main_handler(message:Message):
             await accept_student(message=message, contract_id=int(contract_id), created=current_time)
             await db.update_contract_state(id=int(contract_id), state="accepted")
             await db.update_contract_created_time(id=int(contract_id), created=current_time.date())
-            malumotnoma = InputFile(f"/root/univer-bot/renisancebot/documents/{contract_id}/info.docx")
-            shartnoma = InputFile(f"/root/univer-bot/renisancebot/documents/{contract_id}/shartnoma.docx")
-            uchshartnoma = InputFile(f"/root/univer-bot/renisancebot/documents/{contract_id}/uchshartnoma.docx")
+            malumotnoma = InputFile(f"/root/univer-bot/renisancebot/documents/{contract_id}/info.pdf")
+            shartnoma = InputFile(f"/root/univer-bot/renisancebot/documents/{contract_id}/shartnoma.pdf")
+            uchshartnoma = InputFile(f"/root/univer-bot/renisancebot/documents/{contract_id}/uchshartnoma.pdf")
             await message.answer( text="Tabirklaymiz siz kabul kilindigiz.Sizning shartnomangiz",reply_markup=menu)
             await message.answer_document(document=malumotnoma, caption="Malumotnoma")
             await message.answer_document( document=shartnoma, caption="Shartnoma")
@@ -435,10 +435,11 @@ async def accept_student(message:Message,contract_id:int,created:datetime):
     if full_info[8]=="distance":
         finishYear=2028
         year=5
-    print(full_info)
+    id=2000+full_info[0]
+
     data={
         "full_name":full_info[1],
-        "id":str(full_info[0]),
+        "id": f"01-04/{id}",
         "price":f"{full_info[6]} ",
         "price_text":f"({full_info[7]})",
         "year":str(created.year),

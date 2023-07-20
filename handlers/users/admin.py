@@ -37,9 +37,9 @@ async def catch_admin_callback_data(call:types.CallbackQuery,callback_data:dict)
         await accept_student(message=call.message,contract_id=int(contract_id),created=current_time)
         await db.update_contract_state(id=int(contract_id),state="accepted")
         await db.update_contract_created_time(id=int(contract_id),created=current_time.date())
-        malumotnoma=InputFile(f"/root/univer-bot/renisancebot/documents/{contract_id}/info.docx")
-        shartnoma=InputFile(f"/root/univer-bot/renisancebot/documents/{contract_id}/shartnoma.docx")
-        uchshartnoma=InputFile(f"/root/univer-bot/renisancebot/documents/{contract_id}/uchshartnoma.docx")
+        malumotnoma=InputFile(f"/root/univer-bot/renisancebot/documents/{contract_id}/info.pdf")
+        shartnoma=InputFile(f"/root/univer-bot/renisancebot/documents/{contract_id}/shartnoma.pdf")
+        uchshartnoma=InputFile(f"/root/univer-bot/renisancebot/documents/{contract_id}/uchshartnoma.pdf")
         await bot.send_message(chat_id=telegram_id,text="Tabirklaymiz siz kabul kilindigiz.Sizning shartnomangiz")
         await bot.send_document(chat_id=telegram_id,document=malumotnoma,caption="Malumotnoma")
         await bot.send_document(chat_id=telegram_id,document=shartnoma,caption="Shartnoma")
@@ -91,9 +91,10 @@ async def accept_student(message:types.Message,contract_id:int,created:datetime)
         finishYear=2028
         year=5
     print(full_info)
+    id=2000+full_info[0]
     data={
         "full_name":full_info[1],
-        "id":str(full_info[0]),
+        "id":f"01-04/{id}",
         "price":f"{full_info[6]} ",
         "price_text":f"({full_info[7]})",
         "year":str(created.year),
@@ -134,7 +135,7 @@ async def catch_admin_notification(message:types.Message):
     sendMap={}
     for user in users:
         user_id = user[0]
-        if sendMap[user_id]:
+        if sendMap.get(user_id):
             continue
         if len(message.photo) != 0:
             await bot.send_photo(chat_id=user_id, caption=message.caption,
