@@ -77,7 +77,7 @@ async def accept_student(message:types.Message,contract_id:int,created:datetime)
         "faculty":full_info[4],
         "learn_type":Times[full_info[5]],
         "name":full_info[1],
-        "date":created.date()
+        "date":created.strftime("%d.%m.%Y")
     }
     create_info(info_data)
     finishYear=2027
