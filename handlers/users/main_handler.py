@@ -1,3 +1,5 @@
+import asyncpg
+
 from loader import dp,db
 from aiogram.types import ContentType,Message,CallbackQuery,ReplyKeyboardRemove,InputFile
 from keyboards.default.start_keyboard import lang,format,menu,make_fakultet_keyboard,backKeyboard,testKey,dtmKey
@@ -302,9 +304,14 @@ async def main_handler(message:Message):
             return
         # id=await db.check_for_phone_exists(phone)
 
-        await message.answer("Qoshimcha telefon raqamni shu formata kiriting  +998901112233",reply_markup=backKeyboard)
         state[0]="extra_phone"
-        await db.update_contract_field(contract_id=int(state[4]),field="phone",telegram_id=message.from_user.id,value=phone)
+        try:
+            await db.update_contract_field(contract_id=int(state[4]),field="phone",telegram_id=message.from_user.id,value=phone)
+        except asyncpg.exceptions.UniqueViolationError:
+            await message.answer("Bu telefon ro'yhatan otilgan iltimos boshqa nomer kiriting")
+            return
+        await message.answer("Qoshimcha telefon raqamni shu formata kiriting  +998901112233",reply_markup=backKeyboard)
+
         # await db.update_user_phone(message.from_user.id,phone)
     elif state[0]=="extra_phone":
         phone_number_pattern = re.compile(r'^\+998\d{9}$')
