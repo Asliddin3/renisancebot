@@ -6,6 +6,7 @@ import docx
 import qrcode
 from docx.shared import Cm
 from python_docx_replace import docx_replace
+import subprocess
 
 from docx2pdf import convert
 
@@ -274,8 +275,8 @@ def create_uchshartnoma(data):
     add_hyperlink(document.add_paragraph())
     add_qr(document,f'http://78.40.219.247:8000/document/{data["id"]}/')
     # document.save(f"../documents/{data['id']}/uchshartnoma.docx")
+
     document.save(f"/root/univer-bot/renisancebot/documents/{data['id']}/uchshartnoma.docx")
-    convert(f"/root/univer-bot/renisancebot/documents/{data['id']}/uchshartnoma.docx",
-            f"/root/univer-bot/renisancebot/documents/{data['id']}/uchshartnoma.pdf")
+    subprocess.run(['soffice', '--headless', '--convert-to', 'pdf', '--outdir', f"/root/univer-bot/renisancebot/documents/{data['id']}/uchshartnoma.pdf",f"/root/univer-bot/renisancebot/documents/{data['id']}/uchshartnoma.docx"])
     os.remove(f"/root/univer-bot/renisancebot/documents/{data['id']}/uchshartnoma.docx")
 

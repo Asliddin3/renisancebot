@@ -5,7 +5,7 @@ import qrcode
 from docx.shared import Cm
 import os
 from docx2pdf import convert
-
+import subprocess
 
 def update_doc_id(doc, id):
     for paragraph in doc.paragraphs:
@@ -245,8 +245,11 @@ def create_contract(data):
     # document.save(f'../documents/{data["id"]}/shartnoma.docx')
     # document.save(f"/root/univer-bot/renisancebot/documents/{data['id']}/shartnoma.docx")
     document.save(f"/root/univer-bot/renisancebot/documents/{data['id']}/shartnoma.docx")
-    convert(f"/root/univer-bot/renisancebot/documents/{data['id']}/uchshartnoma.docx",
-            f"/root/univer-bot/renisancebot/documents/{data['id']}/uchshartnoma.pdf")
+    subprocess.run(['soffice', '--headless', '--convert-to', 'pdf', '--outdir',
+                    f"/root/univer-bot/renisancebot/documents/{data['id']}/shartnoma.pdf",
+                    f"/root/univer-bot/renisancebot/documents/{data['id']}/shartnoma.docx"])
+    # convert(f"/root/univer-bot/renisancebot/documents/{data['id']}/uchshartnoma.docx",
+    #         f"/root/univer-bot/renisancebot/documents/{data['id']}/uchshartnoma.pdf")
     os.remove(f"/root/univer-bot/renisancebot/documents/{data['id']}/shartnoma.docx")
 
 
