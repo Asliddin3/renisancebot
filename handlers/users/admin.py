@@ -62,7 +62,7 @@ async def accept_student(message:types.Message,contract_id:int,created:datetime)
         await message.answer("Shartnoma topilmadi")
         return
     info_data={
-        "id":full_info[1],
+        "id":full_info[0],
         "faculty":full_info[4],
         "learn_type":Times[full_info[5]],
         "name":full_info[1]
