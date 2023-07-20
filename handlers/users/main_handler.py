@@ -1,6 +1,7 @@
 import asyncpg
 
-from loader import dp,db
+from loader import dp,db,bot
+
 from aiogram.types import ContentType,Message,CallbackQuery,ReplyKeyboardRemove,InputFile
 from keyboards.default.start_keyboard import lang,format,menu,make_fakultet_keyboard,backKeyboard,testKey,dtmKey,teslKeyboard
 from keyboards.inline.menu_keyboards import make_test_keyboard,test
@@ -10,6 +11,7 @@ from datetime import datetime
 from handlers.users.start import photo_id,jshshr_id,video_id
 from generator import create_contract,create_info,create_uchtamonlama
 import pytz
+import asyncio
 """
 States
 state:lan:time:fakultet:
@@ -272,6 +274,19 @@ async def main_handler(message:Message):
                                                "1 mlrdlik grant", reply_markup=menu)
             await message.answer_photo(photo=photo_id)
             await message.answer_location(longitude=69.210325,latitude=41.19043)
+            await message.answer(
+                text="Universtetimizga quyidagi lakatsiya orqali yoki 131/58/47/62 yoʻnalishli avtobuslarning oxirgi bekatiga tushib kelishingiz mumkin")
+            await message.answer(
+                text="RENAISSANCE UNIVERSTYda 500 ta grant oʻrinlari mavjud boʻlib 1 semestrni aʼlo bahoga tamomlagan talabalar oʻrtasida qoʻshimcha saralash yoʻli bilan eng yuqori bal olganlarga 2 semestrdan taqdim etiladi")
+            await message.answer(text="Murojat uchun telefonlar:\n" \
+                                      "+998947405220  Komila\n" \
+                                      "+998947406220  Sarvinoz\n" \
+                                      "+998947407220  Diyora\n" \
+                                      "+998911357797  Sarvinoz\n" \
+                                      "@renuqabul2023\n" \
+                                      "@Renuadmin2\n" \
+                                      "@Renaissance7220\n" \
+                                      "@Renuadmin3")
     elif message.text=="🔙 Ortga":
         if state[0]=="full_name":
             state[0] = "fakultet"
@@ -289,6 +304,34 @@ async def main_handler(message:Message):
         state[0]="menu"
         await message.answer(text="Assalomu alaykum, Xush kelibsiz. Universitetga ro'yxatdan o'tish uchun `Ro'yxatdan o'tish` tugmasini bosing",
                              reply_markup=menu)
+        await message.answer_video(video_id,
+                                   caption=f"<a href=\"https://t.me/renuadmisson/15\">✅Universitet haqida</a>\n" \
+                                           f"<a href=\"https://t.me/renuadmisson/8\">✅Taʼlim yoʻnalishlari</a>\n" \
+                                           f"<a href=\"https://t.me/renuadmisson/57\">✅Kantrakt miqdori</a>\n" \
+                                           f"<a href=\"https://t.me/renuadmisson/18\">✅Imtiyzolar</a>\n" \
+                                           f"<a href=\"https://t.me/renuadmisson/16\">✅Nega ayan biz</a>\n" \
+                                           f"<a href=\"https://t.me/renuadmisson/28\">✅Qabul 2023</a>\n" \
+                                           f"<a href=\"https://t.me/renuadmisson/23\">✅Univertetga qanday boriladi ?</a>\n" \
+                                           f"<a href=\"https://t.me/renuadmisson/26\">✅Kantakt maʼlumotlar</a>\n" \
+                                           f"<a href=\"https://t.me/renuadmisson/25\">✅Lakatsiya</a>\n" \
+                                           f"<a href=\"https://t.me/renuadmisson/27\">✅Hujjat topshirish</a>\n" \
+                                           f"<a href=\"https://t.me/renuadmisson/10?single\">✅Litsenziya</a>\n" \
+                                           "1 mlrdlik grant", reply_markup=menu)
+        await message.answer_photo(photo=photo_id)
+        await message.answer_location(longitude=69.210325, latitude=41.19043)
+        await message.answer(
+            text="Universtetimizga quyidagi lakatsiya orqali yoki 131/58/47/62 yoʻnalishli avtobuslarning oxirgi bekatiga tushib kelishingiz mumkin")
+        await message.answer(
+            text="RENAISSANCE UNIVERSTYda 500 ta grant oʻrinlari mavjud boʻlib 1 semestrni aʼlo bahoga tamomlagan talabalar oʻrtasida qoʻshimcha saralash yoʻli bilan eng yuqori bal olganlarga 2 semestrdan taqdim etiladi")
+        await message.answer(text="Murojat uchun telefonlar:\n" \
+                                  "+998947405220  Komila\n" \
+                                  "+998947406220  Sarvinoz\n" \
+                                  "+998947407220  Diyora\n" \
+                                  "+998911357797  Sarvinoz\n" \
+                                  "@renuqabul2023\n" \
+                                  "@Renuadmin2\n" \
+                                  "@Renaissance7220\n" \
+                                  "@Renuadmin3")
     elif message.text in ["O'zbek","Ruscha","Ingliz"] and state[0]=="lang":
         state[0]="format"
         state[1]=langDic[message.text]
@@ -447,6 +490,7 @@ async def main_handler(message:Message):
         if question==None:
             await message.answer("Testlar hali qoshilmadi")
             return
+        asyncio.create_task(remove_message(chat_id=message.from_user.id,message_id=message.message_id,delay_minute=60))
         await message.answer(text="Test boshlandi",reply_markup=ReplyKeyboardRemove())
         await message.answer(text=question,reply_markup=keyboard)
         state[0]="exam"
@@ -458,6 +502,9 @@ async def main_handler(message:Message):
     state=":".join(state)
     await db.update_user_state(message.from_user.id,state)
 
+async def remove_message(chat_id, message_id, delay_minute):
+    await asyncio.sleep(delay_minute*60)
+    await bot.delete_message(chat_id, message_id)
 
 async def accept_student(message:Message,contract_id:int,created:datetime):
     full_info=await db.get_contract_full_info(contract_id)
