@@ -19,9 +19,9 @@ def open_info(request, document_id):
 
 def open_uchtomonli(request, document_id):
     # document = get_object_or_404(Document, id=document_id)
-    file_path = f'/root/univer-bot/renisancebot/documents/{document_id}/uchshartnoma.doc'
+    file_path = f'/root/univer-bot/renisancebot/documents/{document_id}/uchshartnoma.docx'
     with open(file_path, 'rb') as file:
-        response = HttpResponse(file.read(), content_type='application/doc')
-        response['Content-Disposition'] = 'inline; filename="uchshartnoma.doc"'
+        response = HttpResponse(file.read(), content_type='application/docx')
+        response['Content-Disposition'] = 'inline; filename="uchshartnoma.docx"'
         return response
 

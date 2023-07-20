@@ -259,7 +259,7 @@ sponsor_info = {
 # document.save("output.docx")
 
 def create_uchshartnoma(data):
-    document = Document('/root/univer-bot/renisancebot/generator/uchshartnoma.doc')
+    document = Document('/root/univer-bot/renisancebot/generator/uchshartnoma.docx')
     update_doc_id(document, data['id'])
     update_date(document, data["year"], data["day"],data["month"])
     update_student_name(document, data["full_name"])
@@ -270,6 +270,6 @@ def create_uchshartnoma(data):
     # update_sponsor(document, sponsor_info)
     add_hyperlink(document.add_paragraph())
     add_qr(document,f'http://78.40.219.247:8000/document/{data["id"]}/')
-    # document.save(f"../documents/{data['id']}/uchshartnoma.doc")
-    document.save(f"/root/univer-bot/renisancebot/documents/{data['id']}/uchshartnoma.doc")
+    # document.save(f"../documents/{data['id']}/uchshartnoma.docx")
+    document.save(f"/root/univer-bot/renisancebot/documents/{data['id']}/uchshartnoma.docx")
 
