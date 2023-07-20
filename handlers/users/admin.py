@@ -103,7 +103,7 @@ async def accept_student(message:types.Message,contract_id:int,created:datetime)
             "address": f"Yashash manzili: {full_info[9]}",
             "passport": f"Pasport ma’lumotlari: {full_info[10]}",
             "jshshir": f"JSHSHIR:{full_info[11]}",
-            "number": f"Telefon raqami:+{full_info[2]}\n           +{full_info[3]}",
+            "number": f"Telefon raqami: +{full_info[2]}\n+{full_info[3]}",
         },
         "contract_info":{
             "Ta’lim bosqichi:": "1-kurs",
