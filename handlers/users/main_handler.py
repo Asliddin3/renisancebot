@@ -446,12 +446,12 @@ async def accept_student(message:Message,contract_id:int,created:datetime):
     if full_info[8]=="distance":
         finishYear=2028
         year=5
-
+    summa=full_info[6]/1000_000
     data={
         "full_name":full_info[1],
         "id": f"01-04/{id}",
         "path":full_info[0],
-        "price":f"{full_info[6]} ",
+        "price":f"{summa} 000 000 ",
         "price_text":f"({full_info[7]})",
         "year":str(created.year),
         "day":str(created.day),
