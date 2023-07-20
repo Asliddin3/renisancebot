@@ -375,14 +375,13 @@ async def main_handler(message:Message):
             await db.update_contract_field(contract_id=int(state[4]),field="dtm",telegram_id=message.from_user.id,value=float(message.text))
             await db.update_contract_field(contract_id=int(state[4]),field="state",telegram_id=message.from_user.id,value="registered")
             state[0]="menu"
+            contract_id=int(state[4])
             state=":".join(state)
             await db.update_user_state(telegram_id=message.from_user.id,state=state)
-            contract_id=int(state[4])
             timezone = pytz.timezone('Asia/Tashkent')
 
             current_time = datetime.now(timezone)
 
-            telegram_id=await db.get_user_telegram_id_by_contract(contract_id=int(state[4]))
             await accept_student(message=message, contract_id=int(contract_id), created=current_time)
             await db.update_contract_state(id=int(contract_id), state="accepted")
             await db.update_contract_created_time(id=int(contract_id), created=current_time.date())
