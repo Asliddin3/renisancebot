@@ -71,6 +71,7 @@ Lang={
 'ru': 'Russian',
 "uz":"Uzbek"
 }
+
 async def accept_student(message:types.Message,contract_id:int,created:datetime):
     full_info=await db.get_contract_full_info(contract_id)
     if full_info is None:
@@ -115,7 +116,6 @@ async def accept_student(message:types.Message,contract_id:int,created:datetime)
     }
     create_contract(data)
     create_uchshartnoma(data)
-    pass
 
 @dp.message_handler(AdminContentFilter(),content_types=ContentType.ANY)
 async def catch_admin_notification(message:types.Message):
@@ -323,8 +323,6 @@ def prepare_contract_data(contract:list):
         f"<b>Test natijasi</b>:        {contract[12]}\n"
     if len(contract)>=14:
         res+=f"<b>Shartnoma jonatilgan sana</b>:        {contract[13]}\n"
-        if len(contract)==15:
-            res+=f"<a href='{contract[14]}'>Shartnoma linki</a>\n"
         enpoint="http://78.40.219.247:8000"
         res += f"<a href='{enpoint}/info/{contract[0]}'>Malumotnoma</a>\n"
         res += f"<a href='{enpoint}/contract/{contract[0]}'>Shartnoma</a>\n"
