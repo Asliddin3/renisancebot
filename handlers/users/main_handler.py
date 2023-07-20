@@ -414,7 +414,7 @@ async def main_handler(message:Message):
     await db.update_user_state(message.from_user.id,state)
 
 
-async def accept_student(message:types.Message,contract_id:int,created:datetime):
+async def accept_student(message:Message,contract_id:int,created:datetime):
     full_info=await db.get_contract_full_info(contract_id)
     if full_info is None:
         await message.answer("Shartnoma topilmadi")
