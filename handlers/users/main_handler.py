@@ -491,7 +491,7 @@ async def accept_student(message:Message,contract_id:int,created:datetime):
         },
         "contract_info":{
             "Ta’lim bosqichi:": "Bakalavr",
-            "Ta’lim shakli:": Times[full_info[5]],
+            "Ta’lim shakli:": CTimes[full_info[5]],
             "O‘qish muddati:":f"{year}-yil({finishYear})",
             "O‘quv kursi:": "1-bosqich",
             "Ta’lim yo‘nalishi:":  f"{full_info[4]}\n{langDic[full_info[8]]}"
