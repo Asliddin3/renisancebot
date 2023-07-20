@@ -451,7 +451,7 @@ async def accept_student(message:Message,contract_id:int,created:datetime):
     finishYear=2027
     year=4
     print("time",full_info[8])
-    if full_info[8]=="distance":
+    if full_info[5]=="distance":
         finishYear=2028
         year=5
     summa=full_info[6]/1000_000
