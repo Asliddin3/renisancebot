@@ -46,7 +46,7 @@ def update_contract(doc, contract_data):
 
 def update_student_name(doc, name):
     placeholder = "bir tomondan, ____________________ ______________________________________"
-    splitPlace=", ____________________ ______________________________________"
+    splitPlace="____________________ ______________________________________"
 
     for paragraph in doc.paragraphs:
         if placeholder in paragraph.text:
