@@ -11,7 +11,7 @@ from keyboards.default.start_keyboard import menu
 from datetime import datetime
 import pytz
 import os
-import pandas
+import pandas as pd
 from generator import create_uchshartnoma,create_info,create_contract
 timezone = pytz.timezone('Asia/Tashkent')
 
@@ -46,11 +46,11 @@ info = {
 }
 
 
-Times={
-    'daytime':'Kunduzgi',
-'evening':'Kechki',
-"distance":"Sirtqi"
-}
+# Times={
+#     'daytime':'Kunduzgi',
+# 'evening':'Kechki',
+# "distance":"Sirtqi"
+# }
 Lang={
 'en': 'English',
 'ru': 'Russian',
@@ -248,26 +248,30 @@ async def catch_admin_commands(message:types.Message):
             text=prepare_contract_data(contract)
             passport = contract[10].split(":")
             passport_id, ptype = passport[1], passport[0]
-            photo_ids = []
-            document_ids = []
+            # photo_ids = []
+            # document_ids = []
             if ptype == "photo":
-                photo_ids.append(passport_id)
+                # photo_ids.append(passport_id)
+                await message.answer_photo(photo=passport_id)
             else:
-                document_ids.append(passport_id)
-            print(contract[15])
+                await message.answer_document(document=passport_id)
+                # document_ids.append(passport_id)
+            # print(contract[15])
             diplom = contract[15].split(":")
             diplom_id, ptype = diplom[1], diplom[0]
             await message.answer(text=text)
             if ptype == "photo":
-                photo_ids.append(diplom_id)
+                # photo_ids.append(diplom_id)
+                await message.answer_photo(photo=diplom_id)
             else:
-                document_ids.append(diplom_id)
-            if len(photo_ids) != 0:
-                print(photo_ids)
-                await message.answer_media_group(media=[InputMediaPhoto(media=photo_id) for photo_id in photo_ids])
-            if len(document_ids) != 0:
-                for document_id in document_ids:
-                    await message.answer_document(document=document_id)
+                # document_ids.append(diplom_id)
+                await message.answer_document(document=diplom_id)
+            # if len(photo_ids) != 0:
+            #     print(photo_ids)
+            #     await message.answer_media_group(media=[InputMediaPhoto(media=photo_id) for photo_id in photo_ids])
+            # if len(document_ids) != 0:
+            #     for document_id in document_ids:
+            #         await message.answer_document(document=document_id)
         else:
             await message.answer("Bu id li shartnoma topilmadi")
         pass
@@ -287,6 +291,7 @@ Times = {
 langDic={
     "uz":"O'zbek",
     "ru":"Ruscha",
+    "en":"Ingliz"
 }
 
 def prepare_contract_data(contract:list):
