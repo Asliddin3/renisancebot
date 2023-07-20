@@ -262,7 +262,7 @@ def create_contract(data):
     update_doc_id(document, data["id"])
     update_date(document,data["year"], data["day"],data["month"])
     update_student(document, data["student_info"])
-    update_student2(document, data["student_info"])
+    # update_student2(document, data["student_info"])
     update_contract(document, data["contract_info"])
     add_qr(document,f'http://78.40.219.247:8000/contract/{data["id"]}/')
     # document.save(f'../documents/{data["id"]}/shartnoma.docx')
