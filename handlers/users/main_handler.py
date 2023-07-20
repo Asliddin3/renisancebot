@@ -438,8 +438,8 @@ async def accept_student(message:Message,contract_id:int,created:datetime):
     data={
         "full_name":full_info[1],
         "id":str(full_info[0]),
-        "price":f"{full_info[6]}",
-        "price_text":full_info[7],
+        "price":f"{full_info[6]} ",
+        "price_text":f"({full_info[7]})",
         "year":str(created.year),
         "day":str(created.day),
         "month":uzbek_month_names[created.month-1],
