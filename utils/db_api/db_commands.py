@@ -144,6 +144,10 @@ class Database:
               "ON f.id=c.fakultet_id  WHERE c.id=$1"
         return await self.execute(sql,contract_id,fetchrow=True)
 
+    async def get_user_telegram_id_by_contract(self,contract_id):
+        sql="SELECT telegram_id FROM products_contract WHERE id=$1"
+        return await self.execute(sql,contract_id,fetchval=True)
+
     async def remove_contract_user_result(self,telegram_id):
         sql="UPDATE products_contract SET result=0 WHERE telegram_id=$1 AND state='new'"
         return await self.execute(sql,telegram_id,execute=True)
