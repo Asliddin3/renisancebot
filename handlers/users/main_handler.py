@@ -363,7 +363,7 @@ async def main_handler(message:Message):
     elif state[0] == "ball":
         if message.text.isdecimal() or message.text.isdigit():
             ball=float(message.text)
-            if ball<=50:
+            if ball<30:
                 state[0]="test"
                 state=":".join(state)
                 await db.update_user_state(telegram_id=message.from_user.id,state=state)

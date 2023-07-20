@@ -89,6 +89,7 @@ async def accept_student(message:types.Message,contract_id:int,created:datetime)
     if full_info[8]=="distance":
         finishYear=2028
         year=5
+    print(full_info)
     data={
         "full_name":full_info[1],
         "id":str(full_info[0]),
