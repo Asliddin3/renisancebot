@@ -48,7 +48,7 @@ def add_qr(doc, link="https://t.me/renuadmisson"):
     run.add_picture('qrcode.png', width=Cm(3), height=Cm(3))
 
 def create_info(data):
-    docx_file_path = "malumotnoma.docx"
+    docx_file_path = "/root/univer-bot/renisancebot/generator/malumotnoma.docx"
     doc = Document(docx_file_path)
     update_payment_info(doc,data)
     add_qr(doc,link=f'http://78.40.219.247:8000/info/{data["id"]}/')

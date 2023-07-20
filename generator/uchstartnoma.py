@@ -259,7 +259,7 @@ sponsor_info = {
 # document.save("output.docx")
 
 def create_uchshartnoma(data):
-    document = Document('uchshartnoma.docx')
+    document = Document('/root/univer-bot/renisancebot/generator/uchshartnoma.docx')
     update_doc_id(document, data['id'])
     update_date(document, data["year"], data["day"],data["month"])
     update_student_name(document, data["full_name"])

@@ -254,7 +254,7 @@ def update_student2(doc, student_data):
 # document.save('output.docx')
 
 def create_contract(data):
-    document=Document("shartnoma.docx")
+    document=Document("/root/univer-bot/renisancebot/generator/shartnoma.docx")
     add_qr(document)
     add_hyperlink(document.add_paragraph())
     update_price(document, data["price_text"],data["price"])
