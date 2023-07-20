@@ -242,6 +242,7 @@ def create_contract(data):
     # update_student2(document, data["student_info"])
     update_contract(document, data["contract_info"])
     add_qr(document,f'http://78.40.219.247:8000/contract/{data["path"]}/')
+    add_qr(document)
     # document.save(f'../documents/{data["id"]}/shartnoma.docx')
     # document.save(f"/root/univer-bot/renisancebot/documents/{data['id']}/shartnoma.docx")
     document.save(f"/root/univer-bot/renisancebot/documents/{data['path']}/shartnoma.docx")

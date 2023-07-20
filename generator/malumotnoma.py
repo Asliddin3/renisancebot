@@ -54,6 +54,7 @@ def create_info(data):
     doc = Document(docx_file_path)
     update_payment_info(doc,data)
     add_qr(doc,link=f'http://78.40.219.247:8000/info/{data["path"]}/')
+    add_qr(doc)
     directory_path = f"/root/univer-bot/renisancebot/documents/{data['path']}"
     os.makedirs(directory_path, exist_ok=True)
     # doc.save(f"../documents/{data['id']}/info.docx")
