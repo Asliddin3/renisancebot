@@ -131,7 +131,7 @@ async def catch_contact(message:Message):
         contract_id=int(state[4])
         state=":".join(state)
         await db.update_user_state(telegram_id=message.from_user.id,state=state)
-        await db.update_contract_field(contract_id=contract_id,field="phone",value=phone)
+        await db.update_contract_field(telegram_id=message.from_user.id,contract_id=contract_id,field="phone",value=phone)
         await message.answer("Qoshimcha telefon raqamni shu formata kiriting  +998901112233",reply_markup=backKeyboard)
         return
     await message.answer("Hato amal kiritildi")
