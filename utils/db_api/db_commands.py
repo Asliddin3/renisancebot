@@ -137,6 +137,13 @@ class Database:
             "ON f.id=fakultet_id  WHERE state !='new' AND products_contract.id=$1"
         return await self.execute(sql,id,fetch=True)
 
+    async def get_contract_full_info(self,contract_id):
+        sql = "SELECT c.id,full_name,phone,extra_phone,f.name,f.time,f.price," \
+              "f.price_text,f.lang,address,passport,jshshir,created" \
+              " FROM products_contract AS c INNER JOIN products_fakultet AS f " \
+              "ON f.id=fakultet_id  WHERE products_contract.id=$1"
+        return await self.execute(sql,contract_id,fetchrow=True)
+
     async def remove_contract_user_result(self,telegram_id):
         sql="UPDATE products_contract SET result=0 WHERE telegram_id=$1 AND state='new'"
         return await self.execute(sql,telegram_id,execute=True)

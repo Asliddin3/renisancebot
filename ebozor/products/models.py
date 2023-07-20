@@ -30,7 +30,7 @@ Times = (
 
 
 Lang = (
-        # ('en', 'English',),
+        ('en', 'English',),
         ('ru', 'Russian',),
         ("uz","Uzbek")
     )

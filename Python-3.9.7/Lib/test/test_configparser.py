@@ -1149,7 +1149,7 @@ class RawConfigParserTestSambaConf(CfgParserTestCaseClass, unittest.TestCase):
         parsed_files = cf.read([smbconf, "nonexistent-file"], encoding='utf-8')
         self.assertEqual(parsed_files, [smbconf])
         sections = ['global', 'homes', 'printers',
-                    'print$', 'pdf-generator', 'tmp', 'Agustin']
+                    'print$', 'generator', 'tmp', 'Agustin']
         self.assertEqual(cf.sections(), sections)
         self.assertEqual(cf.get("global", "workgroup"), "MDKGROUP")
         self.assertEqual(cf.getint("global", "max log size"), 50)

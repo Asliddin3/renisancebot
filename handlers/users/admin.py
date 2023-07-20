@@ -11,8 +11,8 @@ from keyboards.default.start_keyboard import menu
 from datetime import datetime
 import pytz
 import os
-import pandas as pd
-
+import pandas
+from generator import create_uchshartnoma,create_info,create_contract
 timezone = pytz.timezone('Asia/Tashkent')
 
 
@@ -29,6 +29,7 @@ async def catch_admin_callback_data(call:types.CallbackQuery,callback_data:dict)
         current_time = datetime.now(timezone)
         await db.update_contract_state(id=int(contract_id),state="accepted")
         await db.update_contract_created_time(id=int(contract_id),created=current_time.date())
+        await accept_student(message=call.message,contract_id=int(contract_id),created=current_time)
         await call.answer("Shartnoma jonatildi")
     elif action=="archive":
         await db.update_contract_state(id=int(contract_id),state="archive")
@@ -37,6 +38,67 @@ async def catch_admin_callback_data(call:types.CallbackQuery,callback_data:dict)
         await db.delete_contract(id=int(contract_id))
         await call.answer("Bazadan ochirildi")
 
+info = {
+    "name": "Asliddin Dehqonov ",
+    "faculty": "moliya",
+    "learn_type": "sirtqi",
+    "id": "12421",
+}
+
+
+Times={
+    'daytime':'Kunduzgi',
+'evening':'Kechki',
+"distance":"Sirtqi"
+}
+Lang={
+'en': 'English',
+'ru': 'Russian',
+"uz":"Uzbek"
+}
+async def accept_student(message:types.Message,contract_id:int,created:datetime):
+    full_info=await db.get_contract_full_info(contract_id)
+    if full_info is None:
+        await message.answer("Shartnoma topilmadi")
+        return
+    info_data={
+        "id":full_info[1],
+        "faculty":full_info[4],
+        "learn_type":Times[full_info[5]],
+        "name":full_info[1]
+    }
+    create_info(info_data)
+    finishYear=2027
+    year=4
+    if full_info[8]=="distance":
+        finishYear=2028
+        year=5
+    data={
+        "full_name":full_info[1],
+        "id":full_info[0],
+        "price":full_info[6],
+        "price_text":full_info[7],
+        "year":created.year,
+        "day":created.day,
+        "month":created.month,
+        "student_info":{
+            "name": f"F.I.Sh.: {full_info[1]}",
+            "address": full_info[9],
+            "passport": f"Pasport ma’lumotlari: {full_info[10]}",
+            "jshshir": f"JSHSHIR:  {full_info[11]}",
+            "number": f"Telefon raqami: +{full_info[2]}\n+{full_info[3]}",
+        },
+        "contract_info":{
+            "Ta’lim bosqichi:": "1-kurs",
+            "Ta’lim shakli:": Lang[full_info[8]],
+            "O‘qish muddati:":f"{year}-yil({finishYear})",
+            "O‘quv kursi:": "1-bosqich, 1-semestrdan",
+            "Ta’lim yo‘nalishi: ": full_info[4]
+        }
+    }
+    create_contract(data)
+    create_uchshartnoma(data)
+    pass
 
 @dp.message_handler(AdminContentFilter(),content_types=ContentType.ANY)
 async def catch_admin_notification(message:types.Message):

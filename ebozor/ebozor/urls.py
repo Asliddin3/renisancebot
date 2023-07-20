@@ -19,6 +19,6 @@ from . import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('contract/<int:document_id>/', views.open_contract, name='open_contract'),
-    path('info/<int:document_id>/', views.open_info, name='open_info')
-
+    path('info/<int:document_id>/', views.open_info, name='open_info'),
+    path('document/<int:document_id>/', views.open_uchtomonli, name='open_uchtomonli')
 ]
