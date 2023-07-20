@@ -15,11 +15,14 @@ import pandas as pd
 from generator import create_uchshartnoma,create_info,create_contract
 timezone = pytz.timezone('Asia/Tashkent')
 
-
 # @dp.message_handler(text="/exit",user_id=ADMINS)
 # async def exit_admin_panel(message:types.Message):
 #     await db.update_user_state(telegram_id=message.from_user.id,state="menu::::")
 #     await message.answer(text="Bosh menu",reply_markup=menu)
+uzbek_month_names = [
+    "Yanvar", "Fevral", "Mart", "Aprel", "May", "Iyun", "Iyul", "Avgust", "Sentabr",
+    "Oktabr", "Noyabr", "Dekabr"
+]
 
 @dp.callback_query_handler(application.filter(),AdminFilter(),user_id=ADMINS)
 async def catch_admin_callback_data(call:types.CallbackQuery,callback_data:dict):
@@ -73,7 +76,8 @@ async def accept_student(message:types.Message,contract_id:int,created:datetime)
         "id":full_info[0],
         "faculty":full_info[4],
         "learn_type":Times[full_info[5]],
-        "name":full_info[1]
+        "name":full_info[1],
+        "date":created.date()
     }
     create_info(info_data)
     finishYear=2027
@@ -88,7 +92,7 @@ async def accept_student(message:types.Message,contract_id:int,created:datetime)
         "price_text":full_info[7],
         "year":str(created.year),
         "day":str(created.day),
-        "month":str(created.month),
+        "month":uzbek_month_names[created.month-1],
         "student_info":{
             "name": f"F.I.Sh.: {full_info[1]}",
             "address": full_info[9],

@@ -16,7 +16,8 @@ def update_payment_info(doc, infos):
         "Abituriyent ______________________": f'Abituriyent {infos["name"]}',
         "muassasasining __________": f'muassasasining {infos["faculty"]} ',
         "________ ta\'lim": f'{infos["learn_type"]} ta\'lim',
-        "No ____________": f'No {infos["id"]}'
+        "No ____________": f'No {infos["id"]}',
+        "17.07.2023": infos["date"]
     }
     for paragraph in doc.paragraphs:
         for key, value in replacements.items():
