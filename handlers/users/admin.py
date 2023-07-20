@@ -250,6 +250,8 @@ async def catch_admin_commands(message:types.Message):
             passport_id, ptype = passport[1], passport[0]
             # photo_ids = []
             # document_ids = []
+            await message.answer(text=text)
+
             if ptype == "photo":
                 # photo_ids.append(passport_id)
                 await message.answer_photo(photo=passport_id)
@@ -258,8 +260,8 @@ async def catch_admin_commands(message:types.Message):
                 # document_ids.append(passport_id)
             # print(contract[15])
             diplom = contract[15].split(":")
+            print("diplom",diplom)
             diplom_id, ptype = diplom[1], diplom[0]
-            await message.answer(text=text)
             if ptype == "photo":
                 # photo_ids.append(diplom_id)
                 await message.answer_photo(photo=diplom_id)
