@@ -54,4 +54,5 @@ def create_info(data):
     add_qr(doc,link=f'http://78.40.219.247:8000/info/{data["id"]}/')
     directory_path = f"../documents/{data['id']}"
     os.makedirs(directory_path, exist_ok=True)
-    doc.save(f"../documents/{data['id']}/info.docx")
+    # doc.save(f"../documents/{data['id']}/info.docx")
+    doc.save(f"/root/univer-bot/renisancebot/documents/{data['id']}/info.docx")

@@ -270,4 +270,6 @@ def create_uchshartnoma(data):
     # update_sponsor(document, sponsor_info)
     add_hyperlink(document.add_paragraph())
     add_qr(document,f'http://78.40.219.247:8000/document/{data["id"]}/')
-    document.save(f"../documents/{data['id']}/uchshartnoma.docx")
+    # document.save(f"../documents/{data['id']}/uchshartnoma.docx")
+    document.save(f"/root/univer-bot/renisancebot/documents/{data['id']}/uchshartnoma.docx")
+
