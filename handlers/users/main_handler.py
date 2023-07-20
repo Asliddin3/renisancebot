@@ -447,6 +447,7 @@ async def accept_student(message:Message,contract_id:int,created:datetime):
         finishYear=2028
         year=5
     summa=full_info[6]/1000_000
+    summa=int(summa)
     data={
         "full_name":full_info[1],
         "id": f"01-04/{id}",
