@@ -78,9 +78,9 @@ async def accept_student(message:types.Message,contract_id:int,created:datetime)
         "id":full_info[0],
         "price":full_info[6],
         "price_text":full_info[7],
-        "year":created.year,
-        "day":created.day,
-        "month":created.month,
+        "year":str(created.year),
+        "day":str(created.day),
+        "month":str(created.month),
         "student_info":{
             "name": f"F.I.Sh.: {full_info[1]}",
             "address": full_info[9],
