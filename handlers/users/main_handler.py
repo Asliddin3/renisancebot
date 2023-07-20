@@ -477,7 +477,7 @@ async def accept_student(message:Message,contract_id:int,created:datetime):
             "Ta’lim shakli:": Times[full_info[5]],
             "O‘qish muddati:":f"{year}-yil({finishYear})",
             "O‘quv kursi:": "1-bosqich",
-            "Ta’lim yo‘nalishi:": full_info[4]
+            "Ta’lim yo‘nalishi:":  f"{full_info[4]}\n{langDic[full_info[8]]}"
         }
     }
     create_contract(data)
