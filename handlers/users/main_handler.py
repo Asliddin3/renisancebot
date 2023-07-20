@@ -21,7 +21,6 @@ langDic={
     # "Ingliz":"en",
 }
 backDic={
-
     "lang":{
         "key":menu,
         "state":"menu",

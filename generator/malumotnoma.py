@@ -13,7 +13,7 @@ info = {
 
 def update_payment_info(doc, infos):
     replacements = {
-        "Abituriyent ______________________": f'Abituriyent {infos["name"]}',
+        "Abituriyent ______________________": f'Abituriyent {infos["name"]} ',
         "muassasasining __________": f'muassasasining {infos["faculty"]} ',
         "________ ta\'lim": f'{infos["learn_type"]} ta\'lim',
         "No ____________": f'No {infos["id"]}',

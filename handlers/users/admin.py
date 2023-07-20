@@ -34,7 +34,6 @@ async def catch_admin_callback_data(call:types.CallbackQuery,callback_data:dict)
         if telegram_id is None:
             await call.message.answer("Bu id lis shartnoma mavjud emas")
             return
-        print(telegram_id)
         await accept_student(message=call.message,contract_id=int(contract_id),created=current_time)
         await db.update_contract_state(id=int(contract_id),state="accepted")
         await db.update_contract_created_time(id=int(contract_id),created=current_time.date())
