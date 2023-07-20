@@ -218,7 +218,7 @@ def add_qr(doc, link="https://t.me/renuadmisson"):
     img.save("qrcode.png")
     paragraph = doc.add_paragraph()
     run = paragraph.add_run()
-    run.add_picture('qrcode.png', width=Cm(3), height=Cm(3))
+    run.add_picture('qrcode.png', width=Cm(2), height=Cm(2))
 
 
 contract_info = {
