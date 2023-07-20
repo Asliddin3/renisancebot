@@ -27,7 +27,7 @@ async def catch_admin_callback_data(call:types.CallbackQuery,callback_data:dict)
     action=callback_data.get("action")
     if action=="accept":
         current_time = datetime.now(timezone)
-        telegram_id=await db.get_user_telegram_id_by_contract()
+        telegram_id=await db.get_user_telegram_id_by_contract(contract_id)
         await accept_student(message=call.message,contract_id=int(contract_id),created=current_time)
         await db.update_contract_state(id=int(contract_id),state="accepted")
         await db.update_contract_created_time(id=int(contract_id),created=current_time.date())
