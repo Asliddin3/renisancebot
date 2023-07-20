@@ -8,7 +8,7 @@ from filters.user_filter import UserFilter
 import re
 from datetime import datetime
 from handlers.users.start import photo_id,jshshr_id,video_id
-from generator import create_contract,create_info,create_uchshartnoma
+from generator import create_contract,create_info,create_uchtamonlama
 import pytz
 """
 States
@@ -429,11 +429,11 @@ async def main_handler(message:Message):
             await db.update_contract_created_time(id=int(contract_id), created=current_time.date())
             malumotnoma = InputFile(f"/root/univer-bot/renisancebot/documents/{contract_id}/info.pdf")
             shartnoma = InputFile(f"/root/univer-bot/renisancebot/documents/{contract_id}/shartnoma.pdf")
-            uchshartnoma = InputFile(f"/root/univer-bot/renisancebot/documents/{contract_id}/uchshartnoma.pdf")
+            uchtamonlama = InputFile(f"/root/univer-bot/renisancebot/documents/{contract_id}/uchtamonlama.pdf")
             await message.answer( text="✅Tabriklaymiz siz Renaissance Universtyga talabalikka qabul qilindingiz !!!",reply_markup=menu)
             await message.answer_document(document=malumotnoma, caption="Malumotnoma")
             await message.answer_document( document=shartnoma, caption="Shartnoma")
-            await message.answer_document( document=uchshartnoma, caption="Uch tomonli shartnoma")
+            await message.answer_document( document=uchtamonlama, caption="Uch tomonli shartnoma")
             # await call.answer("Shartnoma jonatildi")
             return
         else:
@@ -509,7 +509,7 @@ async def accept_student(message:Message,contract_id:int,created:datetime):
         }
     }
     create_contract(data)
-    create_uchshartnoma(data)
+    create_uchtamonlama(data)
 
 uzbek_month_names = [
     "Yanvar", "Fevral", "Mart", "Aprel", "May", "Iyun", "Iyul", "Avgust", "Sentabr",

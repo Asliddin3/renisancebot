@@ -58,10 +58,10 @@ def create_info(data):
     directory_path = f"/root/univer-bot/renisancebot/documents/{data['path']}"
     os.makedirs(directory_path, exist_ok=True)
     # doc.save(f"../documents/{data['id']}/info.docx")
-    doc.save(f"/root/univer-bot/renisancebot/documents/{data['path']}/info.docx")
+    doc.save(f"/root/univer-bot/renisancebot/documents/{data['path']}/malumotnoma.docx")
     subprocess.run(['soffice', '--headless', '--convert-to', 'pdf', '--outdir',
                     f"/root/univer-bot/renisancebot/documents/{data['path']}",
-                    f"/root/univer-bot/renisancebot/documents/{data['path']}/info.docx"])
+                    f"/root/univer-bot/renisancebot/documents/{data['path']}/malumotnoma.docx"])
     # convert(f"/root/univer-bot/renisancebot/documents/{data['id']}/info.docx",
     #         f"/root/univer-bot/renisancebot/documents/{data['id']}/info.pdf")
-    os.remove(f"/root/univer-bot/renisancebot/documents/{data['path']}/info.docx")
+    os.remove(f"/root/univer-bot/renisancebot/documents/{data['path']}/malumotnoma.docx")

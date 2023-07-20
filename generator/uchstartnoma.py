@@ -266,7 +266,7 @@ sponsor_info = {
 #
 # document.save("output.docx")
 
-def create_uchshartnoma(data):
+def create_uchtamonlama(data):
     document = Document('/root/univer-bot/renisancebot/generator/uchshartnoma.docx')
     update_doc_id(document, data['id'])
     update_date(document, data["year"], data["day"],data["month"])
@@ -279,11 +279,11 @@ def create_uchshartnoma(data):
     add_hyperlink(document.add_paragraph())
     add_qr(document,f'http://78.40.219.247:8000/document/{data["path"]}/')
     add_qr(document)
-    # document.save(f"../documents/{data['id']}/uchshartnoma.docx")
+    # document.save(f"../documents/{data['id']}/uchtamonlama.docx")
 
-    document.save(f"/root/univer-bot/renisancebot/documents/{data['path']}/uchshartnoma.docx")
+    document.save(f"/root/univer-bot/renisancebot/documents/{data['path']}/uchtamonlama.docx")
     subprocess.run(['soffice', '--headless', '--convert-to', 'pdf', '--outdir',
                     f"/root/univer-bot/renisancebot/documents/{data['path']}",
-                    f"/root/univer-bot/renisancebot/documents/{data['path']}/uchshartnoma.docx"])
-    os.remove(f"/root/univer-bot/renisancebot/documents/{data['path']}/uchshartnoma.docx")
+                    f"/root/univer-bot/renisancebot/documents/{data['path']}/uchtamonlama.docx"])
+    os.remove(f"/root/univer-bot/renisancebot/documents/{data['path']}/uchtamonlama.docx")
 
