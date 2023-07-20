@@ -131,8 +131,11 @@ async def catch_admin_notification(message:types.Message):
         await db.update_user_state(telegram_id=message.from_user.id, state=state)
         await message.answer(text="Kimlarga elon jonatmoqchisiz", reply_markup=notificationType)
         return
+    sendMap={}
     for user in users:
         user_id = user[0]
+        if sendMap[user_id]:
+            continue
         if len(message.photo) != 0:
             await bot.send_photo(chat_id=user_id, caption=message.caption,
                                  photo=message.photo[0].file_id)
@@ -144,6 +147,7 @@ async def catch_admin_notification(message:types.Message):
                 chat_id=user_id, text=message.text
             )
         await asyncio.sleep(0.05)
+        sendMap[user_id]=True
 
 @dp.message_handler(AdminFilter(),user_id=ADMINS)
 async def catch_admin_commands(message:types.Message):

@@ -104,7 +104,7 @@ def update_student(doc, student_data):
         "Pasport ma’lumotlari:__________________________": student_data["passport"],
         "JSHSHIR:  ___________________________________": student_info["jshshir"],
         "Telefon raqami: ______________________________": student_data["number"],
-        "Talaba _______   _____________________________": "Talaba __________ {}".format(student_data["name"])
+        "Talaba _______   _____________________________": "Talaba ________ {}".format(student_data["name"])
     }
     table = doc.tables[1]
     cell = table.cell(0, 1)

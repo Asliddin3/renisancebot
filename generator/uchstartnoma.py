@@ -152,7 +152,7 @@ def update_student(doc, student_data):
     run = paragraph.add_run(original_text)
 
     font = run.font
-    font.bold = True
+    font.bold = False
     font.size = Pt(9)
 
 
