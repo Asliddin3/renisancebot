@@ -1607,7 +1607,7 @@ windows_locale = {
     0x0c6b: "quz_PE",# Quechua (Peru)
     0x0418: "ro_RO", # Romanian - Romania
     0x0417: "rm_CH", # Romansh
-    0x0419: "ru_RU", # Russian
+    0x0419: "ru_RU", # Rus tili
     0x243b: "smn_FI",# Sami Finland
     0x103b: "smj_NO",# Sami Norway
     0x143b: "smj_SE",# Sami Sweden

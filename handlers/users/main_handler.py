@@ -2,7 +2,7 @@ import asyncpg
 
 from loader import dp,db
 from aiogram.types import ContentType,Message,CallbackQuery,ReplyKeyboardRemove,InputFile
-from keyboards.default.start_keyboard import lang,format,menu,make_fakultet_keyboard,backKeyboard,testKey,dtmKey
+from keyboards.default.start_keyboard import lang,format,menu,make_fakultet_keyboard,backKeyboard,testKey,dtmKey,teslKeyboard
 from keyboards.inline.menu_keyboards import make_test_keyboard,test
 from filters.user_filter import UserFilter
 import re
@@ -51,7 +51,7 @@ backDic={
         "text":"Talabaning toliq F.I.SH kiriting "
     },
     "extra_phone":{
-        "key":backKeyboard,
+        "key":teslKeyboard,
         "state":"phone",
         "text":"Talabaning telefon raqamini kiriting"
     },
@@ -119,6 +119,20 @@ Times = {
 # @dp.message_handler(content_types=ContentType.PHOTO)
 # async def catch_passport_photo(message:Message):
 #     await message.answer(message.photo[-1].file_id)
+@dp.message_handler(UserFilter(),content_types=ContentType.CONTACT)
+async def catch_contact(message:Message):
+    state=await db.get_user_state_by_telegram_id(message.from_user.id)
+    state=state.split(":")
+    if state[0]=="phone":
+        state[0]="extra_phone"
+        phone=message.text.replace("+","")
+        state=":".join(state)
+        await db.update_user_state(telegram_id=message.from_user.id,state=state)
+        await db.update_contract_field(contract_id=int(state[4]),field="phone",value=phone)
+        await message.answer("Qoshimcha telefon raqamni shu formata kiriting  +998901112233",reply_markup=backKeyboard)
+        return
+    await message.answer("Hato amal kiritildi")
+
 
 @dp.message_handler(UserFilter(),content_types=ContentType.PHOTO)
 async def catch_passport_photo(message:Message):
@@ -293,7 +307,7 @@ async def main_handler(message:Message):
         name=" ".join(name)
         row=await db.create_new_user_contract(telegram_id=message.from_user.id,fakultet_id=int(state[3]),full_name=name)
         state[4]=str(row[0])
-        await message.answer("Talabaning telefon raqamini shu formata kiriting +998991112233",reply_markup=backKeyboard)
+        await message.answer("Talabaning telefon raqamini shu formata kiriting +998991112233",reply_markup=teslKeyboard)
         state[0]="phone"
     elif state[0]=="phone":
         phone_number_pattern = re.compile(r'^\+998\d{9}$')
@@ -495,6 +509,6 @@ CTimes = {
 
 Lang={
 'en': 'English',
-'ru': 'Russian',
+'ru': 'Rus tili',
 "uz":"O'zbek"
 }

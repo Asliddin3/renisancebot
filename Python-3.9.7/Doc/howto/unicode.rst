@@ -21,7 +21,7 @@ Today's programs need to be able to handle a wide variety of
 characters.  Applications are often internationalized to display
 messages and output in a variety of user-selectable languages; the
 same program might need to output an error message in English, French,
-Japanese, Hebrew, or Russian.  Web content can be written in any of
+Japanese, Hebrew, or Rus tili.  Web content can be written in any of
 these languages and can also include a variety of emoji symbols.
 Python's string type uses the Unicode Standard for representing
 characters, which lets Python programs work with all these different
