@@ -224,7 +224,7 @@ class Database:
     async def drop_users(self):
         await self.execute("DROP TABLE products_user", execute=True)
 
-    async def get_fakultets(self,language,time,name):
+    async def get_fakultets(self,language,time):
         sql="SELECT name FROM products_fakultet WHERE lang=$1 AND time=$2"
         return await self.execute(sql,language,time,fetch=True)
 
