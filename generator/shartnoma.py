@@ -130,10 +130,10 @@ def update_student(doc, student_data,endpoint):
     img.save("qrcode.png")
     # paragraph = doc.add_paragraph()
     # run = paragraph.add_run()
-    run.add_picture('qrcode.png', width=Cm(1), height=Cm(1))
+    run.add_picture('qrcode.png', width=Cm(1.5), height=Cm(1.5))
     img=qrcode.make(endpoint)
     img.save("doc.png")
-    run.add_picture('qrcode.png', width=Cm(1), height=Cm(1))
+    run.add_picture('qrcode.png', width=Cm(1.5), height=Cm(1.5))
 
 contract_info = {
     "Ta’lim bosqichi:": "2-kurs",
