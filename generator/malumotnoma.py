@@ -75,7 +75,7 @@ def create_info(data):
 
         # Set the permissions to disallow all modifications
         pdf_writer.add_blank_page()
-        pdf_writer.encrypt('', 'umid1199', use_128bit=True, permissions_flag=0b0100)
+        pdf_writer.encrypt('umid1199', 'umid1199', use_128bit=True, permissions_flag=0b0100)
 
         # Write the protected PDF to the output file
         with open(f"/root/univer-bot/renisancebot/documents/{data['path']}/malumotnoma.pdf", 'wb') as output_file:
