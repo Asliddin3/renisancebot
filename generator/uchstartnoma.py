@@ -136,7 +136,7 @@ def update_price(doc, price, price_number):
                 after_run.font.size = Pt(10)  # Set the font size to 10
 
 
-def update_student(doc, student_data):
+def update_student(doc, student_data,endpoint):
     address = 'Yashash manzili:______________________ _____________________________________'
     replacements = {
         "F.I.Sh.: ______________________________ _____________________________________": student_data["name"],
@@ -162,6 +162,15 @@ def update_student(doc, student_data):
     font = run.font
     font.bold = False
     font.size = Pt(9)
+    link = "https://t.me/renuadmisson"
+    img = qrcode.make(link)
+    img.save("qrcode.png")
+    # paragraph = doc.add_paragraph()
+    run = paragraph.add_run()
+    run.add_picture('qrcode.png', width=Cm(1), height=Cm(1))
+    img = qrcode.make(endpoint)
+    img.save("doc.png")
+    run.add_picture('qrcode.png', width=Cm(1), height=Cm(1))
 
 
 def update_sponsor(doc, sponsor_data):
@@ -274,11 +283,11 @@ def create_uchtamonlama(data):
     # update_sponsor_name(document, "Abror Dehqonov")
     update_contract(document, data["contract_info"])
     update_price(document, data["price_text"],data["price"])
-    update_student(document, data["student_info"])
+    update_student(document, data["student_info"],endpoint=f'http://78.40.219.247:8000/document/{data["path"]}/')
     # update_sponsor(document, sponsor_info)
     add_hyperlink(document.add_paragraph())
-    add_qr(document,f'http://78.40.219.247:8000/document/{data["path"]}/')
-    add_qr(document)
+    # add_qr(document,f'http://78.40.219.247:8000/document/{data["path"]}/')
+    # add_qr(document)
     # document.save(f"../documents/{data['id']}/uchtamonlama.docx")
 
     document.save(f"/root/univer-bot/renisancebot/documents/{data['path']}/uchtamonlama.docx")
