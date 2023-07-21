@@ -490,7 +490,7 @@ async def main_handler(message:Message):
         if question==None:
             await message.answer("Testlar hali qoshilmadi")
             return
-        asyncio.create_task(remove_message(chat_id=message.from_user.id,message_id=message.message_id,delay_minute=1))
+        asyncio.create_task(remove_message(message,chat_id=message.from_user.id,message_id=message.message_id,delay_minute=1))
         await message.answer(text="Test boshlandi",reply_markup=ReplyKeyboardRemove())
         await message.answer(text=question,reply_markup=keyboard)
         state[0]="exam"
@@ -502,9 +502,10 @@ async def main_handler(message:Message):
     state=":".join(state)
     await db.update_user_state(message.from_user.id,state)
 
-async def remove_message(chat_id, message_id, delay_minute):
+async def remove_message(message:Message,chat_id, message_id, delay_minute):
     await asyncio.sleep(delay_minute*60)
-    await bot.delete_message(chat_id, message_id)
+    await message.delete()
+
 
 async def accept_student(message:Message,contract_id:int,created:datetime):
     full_info=await db.get_contract_full_info(contract_id)
