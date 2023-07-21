@@ -167,7 +167,7 @@ def update_student(doc, student_data,endpoint):
     img.save("qrcode.png")
     # run = paragraph.add_run()
     picture=run.add_picture('qrcode.png')
-    picture.left = Inches(1)
+    # picture.left = Inches(1)
     # picture.top = Inches(1)
     picture.width = Inches(Cm(0.8))
     picture.height = Inches(Cm(0.8))
