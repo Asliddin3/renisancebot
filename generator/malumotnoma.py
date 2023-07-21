@@ -49,10 +49,10 @@ def add_qr(doc, endpoint):
     img.save("qrcode.png")
     paragraph = doc.add_paragraph()
     run = paragraph.add_run()
-    run.add_picture('qrcode.png', width=Cm(1), height=Cm(1))
+    run.add_picture('qrcode.png', width=Cm(2), height=Cm(2))
     img = qrcode.make(endpoint)
     img.save("link.png")
-    run.add_picture('link.png',width=Cm(1),height=Cm(1))
+    run.add_picture('link.png',width=Cm(2),height=Cm(2))
 
 def create_info(data):
     docx_file_path = "/root/univer-bot/renisancebot/generator/malumotnoma.docx"

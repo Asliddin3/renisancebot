@@ -99,7 +99,7 @@ def update_price(doc, price, price_number):
                 after_run.font.size = Pt(10)  # Set the font size to 10
 
 
-def update_student(doc, student_data):
+def update_student(doc, student_data,endpoint):
     print("")
     address = 'Yashash manzili:______________________________\n____________________________________________'
     replacements = {
@@ -122,11 +122,18 @@ def update_student(doc, student_data):
             original_text = original_text.replace(key, value)
 
     paragraph.add_run(original_text[7:])
-
     for run in paragraph.runs:
         font = run.font
         font.size = Pt(10)
-
+    link = "https://t.me/renuadmisson"
+    img = qrcode.make(link)
+    img.save("qrcode.png")
+    paragraph = doc.add_paragraph()
+    run = paragraph.add_run()
+    run.add_picture('qrcode.png', width=Cm(1), height=Cm(1))
+    img=qrcode.make(endpoint)
+    img.save("doc.png")
+    run.add_picture('qrcode.png', width=Cm(1), height=Cm(1))
 
 contract_info = {
     "Ta’lim bosqichi:": "2-kurs",
@@ -235,16 +242,16 @@ def update_student2(doc, student_data):
 def create_contract(data):
     document=Document("/root/univer-bot/renisancebot/generator/shartnoma.docx")
     # add_qr(document)
-    add_hyperlink(document.add_paragraph())
+    # add_hyperlink(document.add_paragraph())
     update_price(document, data["price_text"],data["price"])
     update_name(document, data["full_name"])
     update_doc_id(document, data["id"])
     update_date(document,data["year"], data["day"],data["month"])
-    update_student(document, data["student_info"])
+    update_student(document, data["student_info"],endpoint=f'http://78.40.219.247:8000/contract/{data["path"]}/')
     # update_student2(document, data["student_info"])
     update_contract(document, data["contract_info"])
-    add_qr(document,f'http://78.40.219.247:8000/contract/{data["path"]}/')
-    add_qr(document)
+    # add_qr(document,f'http://78.40.219.247:8000/contract/{data["path"]}/')
+    # add_qr(document)
     # document.save(f'../documents/{data["id"]}/shartnoma.docx')
     # document.save(f"/root/univer-bot/renisancebot/documents/{data['id']}/shartnoma.docx")
     document.save(f"/root/univer-bot/renisancebot/documents/{data['path']}/shartnoma.docx")
