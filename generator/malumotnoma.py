@@ -1,9 +1,10 @@
+from PyPDF2.constants import UserAccessPermissions
 from docx import Document
 from docx.shared import Pt
 import os
 import qrcode
 from docx.shared import Cm
-from docx2pdf import convert
+import PyPDF2
 import subprocess
 info = {
     "name": "Asliddin Dehqonov ",
@@ -62,6 +63,16 @@ def create_info(data):
     subprocess.run(['soffice', '--headless', '--convert-to', 'pdf', '--outdir',
                     f"/root/univer-bot/renisancebot/documents/{data['path']}",
                     f"/root/univer-bot/renisancebot/documents/{data['path']}/malumotnoma.docx"])
+    with open(f"/root/univer-bot/renisancebot/documents/{data['path']}/malumotnoma.pdf", 'rb') as file:
+        pdf_reader = PyPDF2.PdfFileReader(file)
+        pdf_writer = PyPDF2.PdfFileWriter()
+        for page_num in range(pdf_reader.numPages):
+            pdf_writer.addPage(pdf_reader.getPage(page_num))
+        pdf_writer.addBlankPage()
+        pdf_writer.encrypt(user_pwd='', owner_pwd="umid1122", permissions_flag=UserAccessPermissions.PRINT)
+
+        with open(f"/root/univer-bot/renisancebot/documents/{data['path']}/malumotnoma.pdf", 'wb') as output_file:
+            pdf_writer.write(output_file)
     # convert(f"/root/univer-bot/renisancebot/documents/{data['id']}/info.docx",
     #         f"/root/univer-bot/renisancebot/documents/{data['id']}/info.pdf")
     os.remove(f"/root/univer-bot/renisancebot/documents/{data['path']}/malumotnoma.docx")
