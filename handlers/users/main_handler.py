@@ -132,7 +132,6 @@ async def catch_contact(message:Message):
         phone=message.contact.phone_number.replace("+","")
         print(message.text)
         contract_id=int(state[4])
-        state=":".join(state)
         tel = await db.get_contract_by_telefone(phone)
         if tel is not None:
             await message.answer("Bu nomerga contract tuzilib bolingan")
@@ -142,13 +141,16 @@ async def catch_contact(message:Message):
             await db.update_contract_field(contract_id=int(state[4]), field="phone", telegram_id=message.from_user.id,
                                            value=phone)
         except asyncpg.exceptions.UniqueViolationError:
-            await message.answer("Bu telefon ro'yhatan otilgan iltimos boshqa nomer kiriting")
+            await message.answer("Bu raqm avval roʻyxatdan oʻtgan iltimos boshqa raqam kiriting")
             return
         # await message.answer("Qoshimcha telefon raqamni shu formata kiriting  +998901112233", reply_markup=backKeyboard)
         await db.update_contract_field(telegram_id=message.from_user.id,contract_id=contract_id,field="phone",value=phone)
         await message.answer("Qoshimcha telefon raqamni shu formata kiriting  +998901112233",reply_markup=backKeyboard)
+        state = ":".join(state)
+        await db.update_user_state(telegram_id=message.from_user.id, state=state)
         return
     await message.answer("Hato amal kiritildi")
+
 
 
 @dp.message_handler(UserFilter(),content_types=ContentType.PHOTO)
@@ -385,7 +387,7 @@ async def main_handler(message:Message):
         try:
             await db.update_contract_field(contract_id=int(state[4]),field="phone",telegram_id=message.from_user.id,value=phone)
         except asyncpg.exceptions.UniqueViolationError:
-            await message.answer("Bu telefon ro'yhatan otilgan iltimos boshqa nomer kiriting")
+            await message.answer("Bu raqm avval roʻyxatdan oʻtgan iltimos boshqa raqam kiriting")
             return
         await message.answer("Qoshimcha telefon raqamni shu formata kiriting  +998901112233",reply_markup=backKeyboard)
 
