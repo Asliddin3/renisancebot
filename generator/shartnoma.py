@@ -172,7 +172,7 @@ def add_qr(doc, link="https://t.me/renuadmisson"):
     img.save("qrcode.png")
     paragraph = doc.add_paragraph()
     run = paragraph.add_run()
-    run.add_picture('qrcode.png', width=Cm(2), height=Cm(2))
+    run.add_picture('qrcode.png', width=Cm(1), height=Cm(1))
 
 
 def update_student2(doc, student_data):

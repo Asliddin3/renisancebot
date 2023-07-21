@@ -1,3 +1,4 @@
+import aiogram
 import asyncpg
 
 from loader import dp,db,bot
@@ -506,7 +507,10 @@ async def main_handler(message:Message):
 async def remove_message(message:Message, delay_minute):
     await asyncio.sleep(delay_minute*60)
     print("message deleted")
-    await message.delete()
+    try:
+        await message.delete()
+    except aiogram.utils.exceptions.MessageToDeleteNotFound:
+        pass
 
 
 async def accept_student(message:Message,contract_id:int,created:datetime):
@@ -573,7 +577,7 @@ CTimes = {
 }
 
 Lang={
-'en': 'English',
-'ru': 'Rus tili',
-"uz":  "O'zbek"
+ 'en': 'English',
+ 'ru': 'Rus tili',
+ "uz":  "O'zbek"
 }

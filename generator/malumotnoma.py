@@ -43,19 +43,23 @@ def update_payment_info(doc, infos):
 
 # update_payment_info(document,info)
 # document.save(f"documents/{info}/info.docx")
-def add_qr(doc, link="https://t.me/renuadmisson"):
+def add_qr(doc, endpoint):
+    link = "https://t.me/renuadmisson"
     img = qrcode.make(link)
     img.save("qrcode.png")
     paragraph = doc.add_paragraph()
     run = paragraph.add_run()
-    run.add_picture('qrcode.png', width=Cm(2), height=Cm(2))
+    run.add_picture('qrcode.png', width=Cm(1), height=Cm(1))
+    img = qrcode.make(endpoint)
+    img.save("link.png")
+    run.add_picture('link.png',width=Cm(1),height=Cm(1))
 
 def create_info(data):
     docx_file_path = "/root/univer-bot/renisancebot/generator/malumotnoma.docx"
     doc = Document(docx_file_path)
     update_payment_info(doc,data)
-    add_qr(doc,link=f'http://78.40.219.247:8000/info/{data["path"]}/')
-    add_qr(doc)
+    add_qr(doc,endpoint=f'http://78.40.219.247:8000/info/{data["path"]}/')
+    # add_qr(doc)
     directory_path = f"/root/univer-bot/renisancebot/documents/{data['path']}"
     os.makedirs(directory_path, exist_ok=True)
     # doc.save(f"../documents/{data['id']}/info.docx")
