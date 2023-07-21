@@ -4,7 +4,7 @@ from docx import Document
 from docx.shared import Pt
 import docx
 import qrcode
-from docx.shared import Cm
+from docx.shared import Cm,Inches
 from python_docx_replace import docx_replace
 import subprocess
 
@@ -165,15 +165,23 @@ def update_student(doc, student_data,endpoint):
     link = "https://t.me/renuadmisson"
     img = qrcode.make(link)
     img.save("qrcode.png")
-    # paragraph = doc.add_paragraph()
-    # run = paragraph.add_run()
-    run.add_picture('qrcode.png', width=Cm(0.8), height=Cm(0.8))
+
+    run = paragraph.add_run()
+
+    picture=run.add_picture('qrcode.png')
+    picture.left = Inches(1)
+    picture.top = Inches(1)
+    picture.width = Inches(Cm(0.8))
+    picture.height = Inches(Cm(0.8))
     img = qrcode.make(endpoint)
     img.save("doc.png")
-    run.add_picture('qrcode.png', width=Cm(0.8), height=Cm(0.8))
+    doc=run.add_picture('doc.png')
+    doc.left = Inches(1)
+    doc.top = Inches(1)
+    doc.width = Inches(Cm(0.8))
+    doc.height = Inches(Cm(0.8))
 
-
-def update_sponsor(doc, sponsor_data):
+def sponsor(doc, sponsor_data):
     replacements = {
         "Tashkilot nomi:_______________________ _____________________________________": sponsor_data["company_name"],
         "Manzil:______________________________ _____________________________________": sponsor_data["address"],
