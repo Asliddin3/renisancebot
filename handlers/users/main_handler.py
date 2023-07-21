@@ -25,7 +25,7 @@ lan
 langDic={
     "O'zbek":"uz",
     "Rus tili":"ru",
-    # "Ingliz":"en",
+    "Ingliz":"en",
 }
 backDic={
     "lang":{
