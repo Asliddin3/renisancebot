@@ -157,7 +157,7 @@ def update_student(doc, student_data,endpoint):
             original_text = original_text.replace(key, value)
 
     paragraph = cell.paragraphs[0]
-    run = paragraph.add_run(original_text)
+    run = paragraph.add_text(original_text)
 
     font = run.font
     font.bold = False
@@ -166,10 +166,10 @@ def update_student(doc, student_data,endpoint):
     img = qrcode.make(link)
     img.save("qrcode.png")
     # run = paragraph.add_run()
-    run.add_picture('qrcode.png',width=Cm(0.8),height=Cm(0.8))
+    paragraph.add_picture('qrcode.png',width=Cm(0.8),height=Cm(0.8))
     img = qrcode.make(endpoint)
     img.save("doc.png")
-    run.add_picture('doc.png',width=Cm(0.8),height=Cm(0.8))
+    paragraph.add_picture('doc.png',width=Cm(0.8),height=Cm(0.8))
 def sponsor(doc, sponsor_data):
     replacements = {
         "Tashkilot nomi:_______________________ _____________________________________": sponsor_data["company_name"],
