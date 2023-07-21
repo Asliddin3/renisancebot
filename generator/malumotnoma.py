@@ -64,13 +64,20 @@ def create_info(data):
                     f"/root/univer-bot/renisancebot/documents/{data['path']}",
                     f"/root/univer-bot/renisancebot/documents/{data['path']}/malumotnoma.docx"])
     with open(f"/root/univer-bot/renisancebot/documents/{data['path']}/malumotnoma.pdf", 'rb') as file:
-        pdf_reader = PyPDF2.PdfFileReader(file)
-        pdf_writer = PyPDF2.PdfFileWriter()
-        for page_num in range(pdf_reader.numPages):
-            pdf_writer.addPage(pdf_reader.getPage(page_num))
-        pdf_writer.addBlankPage()
-        pdf_writer.encrypt(user_pwd='', owner_pwd="umid1122", permissions_flag=UserAccessPermissions.PRINT)
+        pdf_reader = PyPDF2.PdfReader(file)
 
+        # Create a new PDF writer object
+        pdf_writer = PyPDF2.PdfWriter()
+
+        # Add each page from the original PDF to the writer object
+        for page_num in range(len(pdf_reader.pages)):
+            pdf_writer.add_page(pdf_reader.pages[page_num])
+
+        # Set the permissions to disallow all modifications
+        pdf_writer.add_blank_page()
+        pdf_writer.encrypt('', 'umid1199', use_128bit=True, permissions_flag=UserAccessPermissions.PRINT)
+
+        # Write the protected PDF to the output file
         with open(f"/root/univer-bot/renisancebot/documents/{data['path']}/malumotnoma.pdf", 'wb') as output_file:
             pdf_writer.write(output_file)
     # convert(f"/root/univer-bot/renisancebot/documents/{data['id']}/info.docx",
