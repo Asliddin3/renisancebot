@@ -490,7 +490,7 @@ async def main_handler(message:Message):
         if question==None:
             await message.answer("Testlar hali qoshilmadi")
             return
-        asyncio.create_task(remove_message(chat_id=message.from_user.id,message_id=message.message_id,delay_minute=60))
+        asyncio.create_task(remove_message(chat_id=message.from_user.id,message_id=message.message_id,delay_minute=1))
         await message.answer(text="Test boshlandi",reply_markup=ReplyKeyboardRemove())
         await message.answer(text=question,reply_markup=keyboard)
         state[0]="exam"
