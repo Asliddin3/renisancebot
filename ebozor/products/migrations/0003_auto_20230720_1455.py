@@ -17,6 +17,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='fakultet',
             name='lang',
-            field=models.CharField(choices=[('ru', 'Russian'), ('uz', 'Uzbek')], default='uz', max_length=12, verbose_name='Fakultet tili'),
+            field=models.CharField(choices=[('ru', 'Rus tili'), ('uz', 'Uzbek')], default='uz', max_length=12, verbose_name='Fakultet tili'),
         ),
     ]

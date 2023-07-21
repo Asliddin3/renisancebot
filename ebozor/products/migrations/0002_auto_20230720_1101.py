@@ -13,7 +13,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='fakultet',
             name='lang',
-            field=models.CharField(choices=[('en', 'English'), ('ru', 'Russian'), ('uz', 'Uzbek')], default='uz', max_length=12, verbose_name='Fakultet tili'),
+            field=models.CharField(choices=[('en', 'English'), ('ru', 'Rus tili'), ('uz', 'Uzbek')], default='uz', max_length=12, verbose_name='Fakultet tili'),
         ),
         migrations.AlterField(
             model_name='fakultet',

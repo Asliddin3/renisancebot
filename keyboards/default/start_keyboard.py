@@ -13,7 +13,7 @@ lang=ReplyKeyboardMarkup(
     keyboard=[
         [
             KeyboardButton(text="O'zbek"),
-            KeyboardButton(text="Ruscha")
+            KeyboardButton(text="Rus tili")
         ],
         [
             # KeyboardButton(text="Ingliz"),

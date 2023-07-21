@@ -24,7 +24,7 @@ lan
 
 langDic={
     "O'zbek":"uz",
-    "Ruscha":"ru",
+    "Rus tili":"ru",
     # "Ingliz":"en",
 }
 backDic={
@@ -94,9 +94,9 @@ backDic={
         "text":"Siz DTM test topshirganmisiz?"
     },
     "test":{
-        "key":backKeyboard,
+        "key":dtmKey,
         "state":"dtm",
-        "text":"Talabaning passport rasmini kiriting"
+        "text":"Siz DTM testan o'tganmisiz?"
     }
 }
 
@@ -209,7 +209,7 @@ async def catch_answers(call:CallbackQuery,callback_data:dict):
     state = state.split(":")
     question=callback_data.get("question")
     if question=="1":
-        asyncio.create_task(remove_message(call.message,delay_minute=1))
+        asyncio.create_task(remove_message(call.message,delay_minute=60))
     action=callback_data.get("action")
     value=callback_data.get("value")
     if state[0]!="exam":
@@ -335,7 +335,7 @@ async def main_handler(message:Message):
                                   "@Renuadmin2\n" \
                                   "@Renaissance7220\n" \
                                   "@Renuadmin3")
-    elif message.text in ["O'zbek","Ruscha","Ingliz"] and state[0]=="lang":
+    elif message.text in ["O'zbek","Rus tili","Ingliz"] and state[0]=="lang":
         state[0]="format"
         state[1]=langDic[message.text]
         await message.answer("Ta'lim shaklini tanlang.",reply_markup=format)
@@ -510,6 +510,9 @@ async def remove_message(message:Message, delay_minute):
     try:
         await message.delete()
     except aiogram.utils.exceptions.MessageToDeleteNotFound:
+        state="menu::::"
+        await db.update_user_state(telegram_id=message.from_user.id,state=state)
+        await message.answer(text="Bosh menu",reply_markup=menu)
         pass
 
 
@@ -559,7 +562,7 @@ async def accept_student(message:Message,contract_id:int,created:datetime):
             "Ta’lim shakli:": CTimes[full_info[5]],
             "O‘qish muddati:":f"{year}-yil({finishYear})",
             "O‘quv kursi:": "1-bosqich",
-            "Ta’lim yo‘nalishi:":  full_info[4],
+            "Ta’lim yo‘nalishi:":  f"{full_info[4]}",
             "Ta’lim tili:": Lang[full_info[8]],
         }
     }
@@ -577,7 +580,7 @@ CTimes = {
 }
 
 Lang={
- 'en': 'English',
+ 'en': 'Ingliz',
  'ru': 'Rus tili',
  "uz":  "O'zbek"
 }

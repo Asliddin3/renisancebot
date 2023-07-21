@@ -311,7 +311,7 @@ Times = {
 }
 langDic={
     "uz":"O'zbek",
-    "ru":"Ruscha",
+    "ru":"Rus tili",
     "en":"Ingliz"
 }
 
