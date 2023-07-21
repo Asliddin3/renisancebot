@@ -157,7 +157,7 @@ def update_student(doc, student_data,endpoint):
             original_text = original_text.replace(key, value)
 
     paragraph = cell.paragraphs[0]
-    run = paragraph.add_text(original_text)
+    run = paragraph.add_run(original_text)
 
     font = run.font
     font.bold = False
