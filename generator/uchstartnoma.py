@@ -161,16 +161,16 @@ def update_student(doc, student_data,endpoint):
 
     font = run.font
     font.bold = False
-    font.size = Pt(9)
+    font.size = Pt(8)
     link = "https://t.me/renuadmisson"
     img = qrcode.make(link)
     img.save("qrcode.png")
     # paragraph = doc.add_paragraph()
     run = paragraph.add_run()
-    run.add_picture('qrcode.png', width=Cm(1), height=Cm(1))
+    run.add_picture('qrcode.png', width=Cm(0.8), height=Cm(0.8))
     img = qrcode.make(endpoint)
     img.save("doc.png")
-    run.add_picture('qrcode.png', width=Cm(1), height=Cm(1))
+    run.add_picture('qrcode.png', width=Cm(0.8), height=Cm(0.8))
 
 
 def update_sponsor(doc, sponsor_data):
@@ -285,7 +285,7 @@ def create_uchtamonlama(data):
     update_price(document, data["price_text"],data["price"])
     update_student(document, data["student_info"],endpoint=f'http://78.40.219.247:8000/document/{data["path"]}/')
     # update_sponsor(document, sponsor_info)
-    add_hyperlink(document.add_paragraph())
+    # add_hyperlink(document.add_paragraph())
     # add_qr(document,f'http://78.40.219.247:8000/document/{data["path"]}/')
     # add_qr(document)
     # document.save(f"../documents/{data['id']}/uchtamonlama.docx")
