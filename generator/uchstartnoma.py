@@ -166,10 +166,10 @@ def update_student(doc, student_data,endpoint):
     img = qrcode.make(link)
     img.save("qrcode.png")
     # run = paragraph.add_run()
-    paragraph.add_picture('qrcode.png',width=Cm(0.8),height=Cm(0.8))
+    run.add_picture('qrcode.png',width=Cm(0.8),height=Cm(0.8))
     img = qrcode.make(endpoint)
     img.save("doc.png")
-    paragraph.add_picture('doc.png',width=Cm(0.8),height=Cm(0.8))
+    run.add_picture('doc.png',width=Cm(0.8),height=Cm(0.8))
 def sponsor(doc, sponsor_data):
     replacements = {
         "Tashkilot nomi:_______________________ _____________________________________": sponsor_data["company_name"],
