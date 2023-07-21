@@ -154,7 +154,7 @@ class Database:
     async def get_archived_contracts(self):
         sql = "SELECT products_contract.id,full_name,phone,extra_phone,f.name,f.time,f.lang,address,passport,jshshir,passport_photo,dtm,result " \
               " FROM products_contract INNER JOIN products_fakultet AS f " \
-              "ON f.id=fakultet_id  WHERE state='archive'"
+              "ON f.id=fakultet_id  WHERE state='archive' ORDER BY id"
         return await self.execute(sql, fetch=True)
 
     async def update_contract_state(self,id,state):
@@ -172,7 +172,7 @@ class Database:
         sql = "SELECT products_contract.id,full_name,phone,extra_phone,f.name,f.time,f.lang," \
               "address,passport,jshshir,passport_photo,dtm,result,created" \
               " FROM products_contract  INNER JOIN products_fakultet AS f " \
-              "ON f.id=fakultet_id WHERE state='accepted'"
+              "ON f.id=fakultet_id WHERE state='accepted' ORDER BY id"
         return await self.execute(sql, fetch=True)
     async def get_students(self):
         sql = "SELECT products_contract.id,full_name,phone,extra_phone,f.name,f.time,f.lang,address,passport,jshshir,dtm,result,created" \
