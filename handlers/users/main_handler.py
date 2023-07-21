@@ -229,7 +229,7 @@ async def catch_answers(call:CallbackQuery,callback_data:dict):
         return
     else:
         if answer==value:
-            await db.increment_user_result(telegram_id=call.from_user.id)
+            await db.increment_user_result(telegram_id=call.from_user.id,contract_id=int(state[4]))
     if number!=None:
         markup=make_test_keyboard(str(number))
         await call.message.edit_text(text=new_question,reply_markup=markup)

@@ -81,9 +81,9 @@ class Database:
     async def delete_user_result(self,telegram_id):
         sql="UPDATE products_contract SET result=0 WHERE telegram_id=$1"
         return await self.execute(sql,telegram_id,execute=True)
-    async def increment_user_result(self,telegram_id):
-        sql="UPDATE products_contract SET result=result+1 WHERE telegram_id=$1"
-        return await self.execute(sql,telegram_id,execute=True)
+    async def increment_user_result(self,telegram_id,contract_id):
+        sql="UPDATE products_contract SET result=result+1 WHERE telegram_id=$1 AND id=$2"
+        return await self.execute(sql,telegram_id,contract_id,execute=True)
 
     async def get_user_result(self,telegram_id):
         sql="SELECT result FROM products_contract WHERE telegram_id=$1"
