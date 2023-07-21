@@ -349,7 +349,7 @@ async def main_handler(message:Message):
         fakultetKey=make_fakultet_keyboard(fakultets)
         await message.answer("Yo'nalishni tanlang.",reply_markup=fakultetKey)
     elif state[0]=="fakultet":
-        fakultet_id=await db.get_fakultet_id_by_name(message.text)
+        fakultet_id=await db.get_fakultet_id_by_name(message.text,lang=state[1],time=state[2])
         if fakultet_id is None:
             await message.answer("Hato amal kiritildi")
             return

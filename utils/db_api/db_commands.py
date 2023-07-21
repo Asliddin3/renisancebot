@@ -224,7 +224,7 @@ class Database:
     async def drop_users(self):
         await self.execute("DROP TABLE products_user", execute=True)
 
-    async def get_fakultets(self,language,time):
+    async def get_fakultets(self,language,time,name):
         sql="SELECT name FROM products_fakultet WHERE lang=$1 AND time=$2"
         return await self.execute(sql,language,time,fetch=True)
 
@@ -247,9 +247,9 @@ class Database:
         sql="SELECT * FROM products_contract WHERE phone=$1 AND state='registered'"
         return await self.execute(sql,telefon,fetchrow=True)
 
-    async def get_fakultet_id_by_name(self, name):
-        sql = "SELECT id FROM products_fakultet WHERE name=$1"
-        return await self.execute(sql, name, fetchrow=True)
+    async def get_fakultet_id_by_name(self, name,lang,time):
+        sql = "SELECT id FROM products_fakultet WHERE name=$1 AND lang=$2 AND time=$3"
+        return await self.execute(sql, name,lang,time, fetchrow=True)
     async def check_for_phone_exists(self,phone):
         sql="SELECT id FROM products_contract WHERE phone=$1 AND state='new'"
         return await self.execute(sql,phone,fetchval=True)
