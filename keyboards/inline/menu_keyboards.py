@@ -45,7 +45,7 @@ def make_test_keyboard(question_number:str):
                     question=question_number, action="answer", value="D"))
             ],
             [
-                InlineKeyboardButton(text="Testni tohtatish", callback_data=make_test_callback_data(
+                InlineKeyboardButton(text="Testni to'htatish", callback_data=make_test_callback_data(
                     question=question_number, action="stop", value="")),
             ],
 

@@ -50,7 +50,7 @@ backDic={
     "phone":{
         "key":backKeyboard,
         "state":"full_name",
-        "text":"Talabaning toliq F.I.SH kiriting "
+        "text":"Talabaning to'liq F.I.SH kiriting "
     },
     "extra_phone":{
         "key":teslKeyboard,
@@ -352,7 +352,7 @@ async def main_handler(message:Message):
             return
         state[0]="full_name"
         state[3]=str(fakultet_id[0])
-        await message.answer("Talabaning toliq F.I.SH kiriting ", reply_markup=backKeyboard)
+        await message.answer("Talabaning to'liq F.I.SH kiriting ", reply_markup=backKeyboard)
     elif state[0]=="full_name":
         if message.text.isdigit():
             await message.answer("F.I.SH hato kiritildi iltimos qaytadan kiriting")
@@ -497,7 +497,7 @@ async def main_handler(message:Message):
         await db.remove_contract_user_result(telegram_id=message.from_user.id)
         # await db.update_user_status(message.from_user.id,"registered")
     else:
-        await message.answer("Notogri amal bajarildi")
+        await message.answer("Hato amal bajarildi")
         return
     state=":".join(state)
     await db.update_user_state(message.from_user.id,state)
