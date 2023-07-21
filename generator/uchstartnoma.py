@@ -166,7 +166,7 @@ def update_student(doc, student_data,endpoint):
     img = qrcode.make(link)
     img.save("qrcode.png")
     # paragraph = doc.add_paragraph()
-    run = paragraph.add_run()
+    # run = paragraph.add_run()
     run.add_picture('qrcode.png', width=Cm(0.8), height=Cm(0.8))
     img = qrcode.make(endpoint)
     img.save("doc.png")
