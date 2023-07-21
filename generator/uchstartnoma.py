@@ -144,7 +144,7 @@ def update_student(doc, student_data,endpoint):
         "Pasport ma’lumotlari:_________________": student_data["passport"],
         "JSHSHIR:  __________________________": student_info["jshshir"],
         "Telefon raqami:_______________________": student_data["number"],
-        "Talaba __________ ____________________": "Talaba(imzo) __________ {} ".format(student_data["name"])
+        "Talaba __________ ____________________": "Talaba(imzo) __________ {}".format(student_data["name"])
     }
     table = doc.tables[1]
     cell = table.cell(0, 2)
@@ -169,7 +169,7 @@ def update_student(doc, student_data,endpoint):
     run.add_picture('qrcode.png',width=Cm(0.8),height=Cm(0.8))
     img = qrcode.make(endpoint)
     img.save("doc.png")
-    run.add_picture('doc.png')
+    run.add_picture('doc.png',width=Cm(0.8),height=Cm(0.8))
 def sponsor(doc, sponsor_data):
     replacements = {
         "Tashkilot nomi:_______________________ _____________________________________": sponsor_data["company_name"],
