@@ -86,7 +86,7 @@ backDic={
     "dtm":{
         "key":backKeyboard,
         "state":"diplom",
-        "text":"Talabaning attestat yo'ki diplomini rasmini jo'nating"
+        "text":"Talabaning attestat yoki diplomini rasmini jo'nating"
     },
     "ball":{
         "key":dtmKey,
@@ -168,7 +168,7 @@ async def catch_passport_photo(message:Message):
         state[0]="diplom"
         state=":".join(state)
         await db.update_user_state(telegram_id=message.from_user.id, state=state)
-        await message.answer("Talabaning attestat yo'ki diplomini rasmini jo'nating",reply_markup=backKeyboard)
+        await message.answer("Talabaning attestat yoki diplomini rasmini jo'nating",reply_markup=backKeyboard)
     else:
         state[0] = "dtm"
         await db.update_contract_field(contract_id=int(state[4]),telegram_id=message.from_user.id,
@@ -192,7 +192,7 @@ async def catch_passport_photo(message:Message):
         state[0] = "diplom"
         state = ":".join(state)
         await db.update_user_state(telegram_id=message.from_user.id, state=state)
-        await message.answer("Talabaning attestat yo'ki diplomini rasmini jo'nating", reply_markup=backKeyboard)
+        await message.answer("Talabaning attestat yoki diplomini rasmini jo'nating", reply_markup=backKeyboard)
     else:
         state[0] = "dtm"
         await db.update_contract_field(contract_id=int(state[4]), telegram_id=message.from_user.id,
@@ -279,7 +279,7 @@ async def main_handler(message:Message):
             await message.answer_photo(photo=photo_id)
             await message.answer_location(longitude=69.210325,latitude=41.19043)
             await message.answer(
-                text="Universtetimizga quyidagi lakatsiya orqali yo'ki 131/58/47/62 yoʻnalishli avtobuslarning oxirgi bekatiga tushib kelishingiz mumkin")
+                text="Universtetimizga quyidagi lakatsiya orqali yoki 131/58/47/62 yoʻnalishli avtobuslarning oxirgi bekatiga tushib kelishingiz mumkin")
             await message.answer(
                 text="RENAISSANCE UNIVERSITYda 500 ta grant oʻrinlari mavjud boʻlib 1 semestrni aʼlo bahoga tamomlagan talabalar oʻrtasida qoʻshimcha saralash yoʻli bilan eng yuqori bal olganlarga 2 semestrdan taqdim etiladi")
             await message.answer(text="Murojat uchun telefonlar:\n" \
@@ -324,7 +324,7 @@ async def main_handler(message:Message):
         await message.answer_photo(photo=photo_id)
         await message.answer_location(longitude=69.210325, latitude=41.19043)
         await message.answer(
-            text="Universtetimizga quyidagi lakatsiya orqali yo'ki 131/58/47/62 yoʻnalishli avtobuslarning oxirgi bekatiga tushib kelishingiz mumkin")
+            text="Universtetimizga quyidagi lakatsiya orqali yoki 131/58/47/62 yoʻnalishli avtobuslarning oxirgi bekatiga tushib kelishingiz mumkin")
         await message.answer(
             text="RENAISSANCE UNIVERSITYda 500 ta grant oʻrinlari mavjud boʻlib 1 semestrni aʼlo bahoga tamomlagan talabalar oʻrtasida qoʻshimcha saralash yoʻli bilan eng yuqori bal olganlarga 2 semestrdan taqdim etiladi")
         await message.answer(text="Murojat uchun telefonlar:\n" \
@@ -442,7 +442,7 @@ async def main_handler(message:Message):
         await db.update_contract_field(contract_id=int(state[4]),field="address",telegram_id=message.from_user.id,value=address)
         # await db.update_user_address(message.from_user.id,message.text)
         state[0]="photo"
-        await message.answer(text="Talabaning passport yo'ki id kartasini rasmini jo'nating",reply_markup=backKeyboard)
+        await message.answer(text="Talabaning passport yoki id kartasini rasmini jo'nating",reply_markup=backKeyboard)
     elif state[0]=="dtm":
         if message.text=="Ha":
             await message.answer(text="DTM testan olgan ballingizni kiriting",reply_markup=backKeyboard)
