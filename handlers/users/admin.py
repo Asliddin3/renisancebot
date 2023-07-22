@@ -175,6 +175,7 @@ async def catch_admin_commands(message:types.Message):
                 markup=make_contract_keyboard(contract[0])
                 text=prepare_contract_data(contract)
                 await message.answer(text=text,reply_markup=markup)
+                await asyncio.sleep(0.5)
                 passport=contract[10].split(":")
                 passport_id,ptype=passport[1],passport[0]
                 photo_ids=[]
@@ -203,13 +204,14 @@ async def catch_admin_commands(message:types.Message):
                 markup = make_archive_keyboard(contract[0])
                 text = prepare_contract_data(contract)
                 await message.answer(text=text, reply_markup=markup)
+                await asyncio.sleep(0.5)
                 photo = contract[10].split(":")
                 photo_id, ptype = photo[1], photo[0]
                 if ptype == "photo":
                     await message.answer_photo(photo=photo_id)
                 else:
                     await message.answer_document(document=photo_id)
-                await asyncio.sleep(0.5)
+                await asyncio.sleep(1)
                 # await message.answer_photo(photo=contract[10])
         elif text == "Qabul bo'lganlar":
             contracts=await db.get_accepted_contracts()
@@ -220,6 +222,7 @@ async def catch_admin_commands(message:types.Message):
                 text = prepare_contract_data(contract)
                 markup=make_resend_keyboard(str(contract[0]))
                 await message.answer(text=text,reply_markup=markup)
+                await asyncio.sleep(0.5)
                 photo = contract[10].split(":")
                 photo_id, ptype = photo[1], photo[0]
                 if ptype == "photo":
