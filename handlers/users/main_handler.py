@@ -467,24 +467,26 @@ async def main_handler(message:Message):
                 return
             await db.update_contract_field(contract_id=int(state[4]),field="dtm",telegram_id=message.from_user.id,value=float(message.text))
             await db.update_contract_field(contract_id=int(state[4]),field="state",telegram_id=message.from_user.id,value="registered")
-            state[0]="menu"
-            contract_id=int(state[4])
-            state=":".join(state)
+            # state[0]="menu"
+            # contract_id=int(state[4])
+            # state=":".join(state)
+            state="menu::::"
             await db.update_user_state(telegram_id=message.from_user.id,state=state)
-            timezone = pytz.timezone('Asia/Tashkent')
-
-            current_time = datetime.now(timezone)
-
-            await accept_student(message=message, contract_id=int(contract_id), created=current_time)
-            await db.update_contract_state(id=int(contract_id), state="accepted")
-            await db.update_contract_created_time(id=int(contract_id), created=current_time.date())
-            malumotnoma = InputFile(f"/root/univer-bot/renisancebot/documents/{contract_id}/malumotnoma.pdf")
-            shartnoma = InputFile(f"/root/univer-bot/renisancebot/documents/{contract_id}/shartnoma.pdf")
-            uchtamonlama = InputFile(f"/root/univer-bot/renisancebot/documents/{contract_id}/uchtamonlama.pdf")
-            await message.answer( text="✅Tabriklaymiz siz Renaissance Universtyga talabalikka qabul qilindingiz !!!",reply_markup=menu)
-            await message.answer_document(document=malumotnoma, caption="Ma'lumotnoma")
-            await message.answer_document( document=shartnoma, caption="Shartnoma")
-            await message.answer_document( document=uchtamonlama, caption="Uch tomonli shartnoma")
+            await message.answer("Bosh menu",reply_markup=menu)
+            # timezone = pytz.timezone('Asia/Tashkent')
+            #
+            # current_time = datetime.now(timezone)
+            #
+            # await accept_student(message=message, contract_id=int(contract_id), created=current_time)
+            # await db.update_contract_state(id=int(contract_id), state="accepted")
+            # await db.update_contract_created_time(id=int(contract_id), created=current_time.date())
+            # malumotnoma = InputFile(f"/root/univer-bot/renisancebot/documents/{contract_id}/malumotnoma.pdf")
+            # shartnoma = InputFile(f"/root/univer-bot/renisancebot/documents/{contract_id}/shartnoma.pdf")
+            # uchtamonlama = InputFile(f"/root/univer-bot/renisancebot/documents/{contract_id}/uchtamonlama.pdf")
+            # await message.answer( text="✅Tabriklaymiz siz Renaissance Universtyga talabalikka qabul qilindingiz !!!",reply_markup=menu)
+            # await message.answer_document(document=malumotnoma, caption="Ma'lumotnoma")
+            # await message.answer_document( document=shartnoma, caption="Shartnoma")
+            # await message.answer_document( document=uchtamonlama, caption="Uch tomonli shartnoma")
             # await call.answer("Shartnoma jo'natildi")
             return
         else:
