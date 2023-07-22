@@ -34,7 +34,7 @@ def make_resend_keyboard(contract:str):
     makrkup=InlineKeyboardMarkup(
         inline_keyboard=[
             [
-                InlineKeyboardButton("Shartnomane boshqatan jo'natish",callback_data=make_contract_callback_data(
+                InlineKeyboardButton("Shartnomani qaytadan jo'natish",callback_data=make_contract_callback_data(
                     contract_id=contract,action="accept"
                 )),
             ]
