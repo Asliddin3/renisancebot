@@ -275,7 +275,8 @@ async def catch_admin_commands(message:types.Message):
         if len(contract)!=0:
             contract=contract[0]
             text=prepare_contract_data(contract)
-            markup=make_resend_keyboard(contract)
+            print(contract)
+            markup=make_resend_keyboard(str(contract))
             passport = contract[10].split(":")
             passport_id, ptype = passport[1], passport[0]
             await message.answer(text=text,reply_markup=markup)
