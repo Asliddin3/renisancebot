@@ -134,7 +134,7 @@ async def catch_contact(message:Message):
         contract_id=int(state[4])
         tel = await db.get_contract_by_telefone(phone)
         if tel is not None:
-            await message.answer("Bu nomerga contract tuzilib bolingan")
+            await message.answer("Bu nomerga shartnoma tuzilib bolingan")
             return
         # id=await db.check_for_phone_exists(phone)
         try:
@@ -246,8 +246,7 @@ async def catch_answers(call:CallbackQuery,callback_data:dict):
         await call.message.delete()
         await db.update_contract_field(contract_id=int(state[4]), field="state", telegram_id=call.from_user.id,
                                        value="registered")
-        await call.message.answer(text="Malumotlaringiz jo'natildi."
-                                  "Natijalaringiz ko'rib chiqilgandan keyin shartnomani jo'natamiz.",
+        await call.message.answer(text="Tabriklaymiz siz muvaffaqiyatli roʻyxatdan oʻtdingiz sizga tez orada shartnoma joʻnatamiz",
                              reply_markup=menu)
         state[0] = "menu"
         state=":".join(state)
@@ -380,7 +379,7 @@ async def main_handler(message:Message):
         phone=message.text.replace("+","")
         tel = await db.get_contract_by_telefone(phone)
         if tel is not None:
-            await message.answer("Bu nomerga contract tuzilib bolingan")
+            await message.answer("Bu nomerga shartnoma tuzilib bolingan")
             return
         # id=await db.check_for_phone_exists(phone)
 
@@ -415,7 +414,7 @@ async def main_handler(message:Message):
         text=message.text.upper()
         count = await db.check_for_passport_exists(text)
         if count != 0:
-            await message.answer("Bu passport id raqamga contract tuzilgan")
+            await message.answer("Bu passport id raqamga shartnoma tuzilgan")
             return
         # await db.update_user_passport(telegram_id=message.from_user.id,passport=text)
         await db.update_contract_field(contract_id=int(state[4]),field="passport",telegram_id=message.from_user.id,value=text)
@@ -448,7 +447,7 @@ async def main_handler(message:Message):
         if message.text=="Ha":
             await message.answer(text="DTM testan olgan ballingizni kiriting",reply_markup=backKeyboard)
             state[0]="ball"
-        elif message.text=="Yoq":
+        elif message.text=="Yo'q":
             state[0]="test"
             await message.answer("Imtihonni boshlash uchun `Imtihonni boshlash` tugmasini bosing.",
                                  reply_markup=testKey)
@@ -472,7 +471,8 @@ async def main_handler(message:Message):
             # state=":".join(state)
             state="menu::::"
             await db.update_user_state(telegram_id=message.from_user.id,state=state)
-            await message.answer("Bosh menu",reply_markup=menu)
+            await message.answer(text="Tabriklaymiz siz muvaffaqiyatli roʻyxatdan oʻtdingiz sizga tez orada shartnoma joʻnatamiz",reply_markup=menu)
+            # await message.answer("Bosh menu",reply_markup=menu)
             # timezone = pytz.timezone('Asia/Tashkent')
             #
             # current_time = datetime.now(timezone)
