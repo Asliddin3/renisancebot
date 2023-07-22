@@ -33,7 +33,7 @@ async def bot_start(message: types.Message):
                 "1 mlrdlik grant",reply_markup=menu)
     await message.answer_photo(photo=photo_id)
     await message.answer_location(longitude=69.210325, latitude=41.19043,)
-    await message.answer(text="Universtetimizga quyidagi lakatsiya orqali yoki 131/58/47/62 yoʻnalishli avtobuslarning oxirgi bekatiga tushib kelishingiz mumkin")
+    await message.answer(text="Universtetimizga quyidagi lakatsiya orqali yo'ki 131/58/47/62 yoʻnalishli avtobuslarning oxirgi bekatiga tushib kelishingiz mumkin")
     await message.answer(text="RENAISSANCE UNIVERSITYda 500 ta grant oʻrinlari mavjud boʻlib 1 semestrni aʼlo bahoga tamomlagan talabalar oʻrtasida qoʻshimcha saralash yoʻli bilan eng yuqori bal olganlarga 2 semestrdan taqdim etiladi")
     await message.answer(text="Murojat uchun telefonlar:\n"\
                             "+998947405220  Komila\n"\

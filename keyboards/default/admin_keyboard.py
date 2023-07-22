@@ -26,7 +26,7 @@ notificationType=ReplyKeyboardMarkup(
             KeyboardButton(text="Arhivdagilarga")
         ],
         [
-            KeyboardButton(text="Hammaga jonatish"),
+            KeyboardButton(text="Hammaga jo'natish"),
             KeyboardButton(text="Qabul bolganlarga")
         ],[
 

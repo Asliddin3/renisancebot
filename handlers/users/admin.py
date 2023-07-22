@@ -41,10 +41,10 @@ async def catch_admin_callback_data(call:types.CallbackQuery,callback_data:dict)
         malumotnoma=InputFile(f"/root/univer-bot/renisancebot/documents/{contract_id}/malumotnoma.pdf")
         shartnoma=InputFile(f"/root/univer-bot/renisancebot/documents/{contract_id}/shartnoma.pdf")
         uchtamonlama=InputFile(f"/root/univer-bot/renisancebot/documents/{contract_id}/uchtamonlama.pdf")
-        await bot.send_document(chat_id=telegram_id,document=malumotnoma,caption="Malumotnoma")
+        await bot.send_document(chat_id=telegram_id,document=malumotnoma,caption="Ma'lumotnoma")
         await bot.send_document(chat_id=telegram_id,document=shartnoma,caption="Shartnoma")
         await bot.send_document(chat_id=telegram_id,document=uchtamonlama,caption="Uch tomonli")
-        await call.answer("Shartnoma jonatildi")
+        await call.answer("Shartnoma jo'natildi")
 
     elif action=="archive":
         await db.update_contract_state(id=int(contract_id),state="archive")
@@ -135,7 +135,7 @@ async def catch_admin_notification(message:types.Message):
         state[1] = "notification"
         state = ";".join(state)
         await db.update_user_state(telegram_id=message.from_user.id, state=state)
-        await message.answer(text="Kimlarga elon jonatmoqchisiz", reply_markup=notificationType)
+        await message.answer(text="Kimlarga elon jo'natmoqchisiz", reply_markup=notificationType)
         return
     sendMap={}
     for user in users:
@@ -239,7 +239,7 @@ async def catch_admin_commands(message:types.Message):
             state[1]="notification"
             state=";".join(state)
             await db.update_user_state(telegram_id=message.from_user.id,state=state)
-            await message.answer(text="Kimlarga elon jonatmoqchisiz",reply_markup=notificationType)
+            await message.answer(text="Kimlarga elon jo'natmoqchisiz",reply_markup=notificationType)
         elif text=="Shartnoma idsi boicha qidirish":
             state[1]="student"
             state=";".join(state)
@@ -251,13 +251,13 @@ async def catch_admin_commands(message:types.Message):
             state=";".join(state)
             await db.update_user_state(telegram_id=message.from_user.id,state=state)
             await message.answer(text="Admin menu",reply_markup=main_admin)
-        elif message.text in ["Registraciyadan o'tganlarga", "Arhivdagilarga", "Hammaga jonatish","Qabul bolganlarga"]:
+        elif message.text in ["Registraciyadan o'tganlarga", "Arhivdagilarga", "Hammaga jo'natish","Qabul bolganlarga"]:
             state[1] = notTypes[message.text]
             state=";".join(state)
             await db.update_user_state(telegram_id=message.from_user.id,state=state)
             await message.answer(text="Eloni kiriting",reply_markup=back)
         else:
-            await message.answer("Hato amal kiritildi")
+            await message.answer("Xato amal kiritildi")
     elif state[1] in ["all","accepted","archive","registered"]:
         await message.answer("Bot nosoz ishlayapti")
     elif state[1]=="student":
@@ -298,7 +298,7 @@ async def catch_admin_commands(message:types.Message):
 
 
 notTypes={
-    "Hammaga jonatish":"all",
+    "Hammaga jo'natish":"all",
     "Arhivdagilarga":"archive",
     "Registraciyadan o'tganlarga":"registered",
     "Qabul bolganlarga":"accepted"
@@ -328,9 +328,9 @@ def prepare_contract_data(contract:list):
         f"<b>DTM</b>:        {contract[11]}\n" \
         f"<b>Test natijasi</b>:        {contract[12]}\n"
     if len(contract)>=14:
-        res+=f"<b>Shartnoma jonatilgan sana</b>:        {contract[13]}\n"
+        res+=f"<b>Shartnoma jo'natilgan sana</b>:        {contract[13]}\n"
         enpoint="http://78.40.219.247:8000"
-        res += f"<a href='{enpoint}/info/{contract[0]}'>Malumotnoma</a>\n"
+        res += f"<a href='{enpoint}/info/{contract[0]}'>Ma'lumotnoma</a>\n"
         res += f"<a href='{enpoint}/contract/{contract[0]}'>Shartnoma</a>\n"
         res += f"<a href='{enpoint}/document/{contract[0]}'>Uchtomonli Shartnoma</a>\n"
     return res

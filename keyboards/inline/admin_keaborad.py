@@ -34,7 +34,7 @@ def make_resend_keyboard(contract:str):
     makrkup=InlineKeyboardMarkup(
         inline_keyboard=[
             [
-                InlineKeyboardButton("Shartnomane boshqatan jonatish",callback_data=make_contract_callback_data(
+                InlineKeyboardButton("Shartnomane boshqatan jo'natish",callback_data=make_contract_callback_data(
                     contract_id=contract,action="accept"
                 )),
             ]
@@ -74,7 +74,7 @@ def make_test_keyboard(question_number:str):
                     question=question_number, action="answer", value="D"))
             ],
             [
-                InlineKeyboardButton(text="Testni to'htatish", callback_data=make_test_callback_data(
+                InlineKeyboardButton(text="Testni to'xtatish", callback_data=make_test_callback_data(
                     question=question_number, action="stop", value="")),
             ],
 

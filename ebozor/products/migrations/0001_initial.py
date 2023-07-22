@@ -27,7 +27,7 @@ class Migration(migrations.Migration):
                 ('address', models.CharField(max_length=1000, null=True, verbose_name='Propiska joyi')),
                 ('passport', models.CharField(max_length=100, null=True, unique=True, verbose_name='Passport raqami')),
                 ('passport_photo', models.CharField(max_length=1000, null=True, verbose_name='Passoprt rasmini idsi')),
-                ('diplom', models.CharField(max_length=1500, null=True, verbose_name='Talabaning Diplom yoki attestati')),
+                ('diplom', models.CharField(max_length=1500, null=True, verbose_name='Talabaning Diplom yo'ki attestati')),
                 ('jshshir', models.CharField(max_length=30, null=True, verbose_name='JSHSHIR')),
                 ('created', models.DateField(null=True, verbose_name='Shartnoma yaratilgan sana')),
             ],
