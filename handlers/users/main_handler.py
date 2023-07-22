@@ -513,13 +513,13 @@ async def main_handler(message:Message):
 
 async def remove_message(message:Message, delay_minute):
     await asyncio.sleep(delay_minute*60)
-    print("message deleted")
     try:
         await message.delete()
     except aiogram.utils.exceptions.MessageToDeleteNotFound:
         state="menu::::"
         await db.update_user_state(telegram_id=message.from_user.id,state=state)
         await message.answer(text="Bosh menu",reply_markup=menu)
+        print("message deleted")
         pass
 
 

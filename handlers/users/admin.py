@@ -193,7 +193,7 @@ async def catch_admin_commands(message:types.Message):
                     await message.answer_media_group(media=[InputMediaPhoto(media=photo_id) for photo_id in photo_ids])
                 if len(document_ids)!=0:
                     await message.answer_media_group(media=[InputMediaDocument(media=photo_id) for photo_id in document_ids])
-                await asyncio.sleep(0.20)
+                await asyncio.sleep(0.5)
         elif text=="Arhivdagilar":
             contracts = await db.get_archived_contracts()
             if len(contracts)==0:
@@ -209,7 +209,7 @@ async def catch_admin_commands(message:types.Message):
                     await message.answer_photo(photo=photo_id)
                 else:
                     await message.answer_document(document=photo_id)
-                await asyncio.sleep(0.2)
+                await asyncio.sleep(0.5)
                 # await message.answer_photo(photo=contract[10])
         elif text == "Qabul bo'lganlar":
             contracts=await db.get_accepted_contracts()
@@ -226,7 +226,7 @@ async def catch_admin_commands(message:types.Message):
                     await message.answer_photo(photo=photo_id)
                 else:
                     await message.answer_document(document=photo_id)
-                await asyncio.sleep(0.2)
+                await asyncio.sleep(0.5)
                 # await message.answer_photo(photo=contract[10])
         elif text=="Excel yuklavolish":
             contracts = await db.get_students()
@@ -275,9 +275,10 @@ async def catch_admin_commands(message:types.Message):
         if len(contract)!=0:
             contract=contract[0]
             text=prepare_contract_data(contract)
+            markup=make_resend_keyboard(contract)
             passport = contract[10].split(":")
             passport_id, ptype = passport[1], passport[0]
-            await message.answer(text=text)
+            await message.answer(text=text,reply_markup=markup)
 
             if ptype == "photo":
                 # photo_ids.append(passport_id)
