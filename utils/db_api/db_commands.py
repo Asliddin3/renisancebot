@@ -177,7 +177,7 @@ class Database:
     async def get_students(self):
         sql = "SELECT products_contract.id,full_name,phone,extra_phone,f.name,f.time,f.lang,address,passport,jshshir,dtm,result,created" \
               " FROM products_contract  INNER JOIN products_fakultet AS f " \
-              "ON f.id=fakultet_id WHERE state='accepted' ORDER BY created"
+              "ON f.id=fakultet_id WHERE state='accepted' ORDER BY id"
         return await self.execute(sql, fetch=True)
     async def update_user_photo(self,telegram_id,photo_id):
         sql="UPDATE products_contract SET passport_photo=$1 WHERE telegram_id=$2"

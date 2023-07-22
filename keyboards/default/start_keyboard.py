@@ -53,7 +53,7 @@ dtmKey=ReplyKeyboardMarkup(
     keyboard=[
         [
             KeyboardButton("Ha"),
-            KeyboardButton("Yoq")
+            KeyboardButton("Yo'q")
         ],
         [
             KeyboardButton(text="🔙 Ortga"),

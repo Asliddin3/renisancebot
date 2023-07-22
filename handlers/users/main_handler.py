@@ -141,7 +141,7 @@ async def catch_contact(message:Message):
             await db.update_contract_field(contract_id=int(state[4]), field="phone", telegram_id=message.from_user.id,
                                            value=phone)
         except asyncpg.exceptions.UniqueViolationError:
-            await message.answer("Bu raqm avval roʻyxatdan oʻtgan iltimos boshqa raqam kiriting")
+            await message.answer("Bu raqam avval roʻyxatdan oʻtgan iltimos boshqa raqam kiriting")
             return
         # await message.answer("Qoshimcha telefon raqamni shu formata kiriting  +998901112233", reply_markup=backKeyboard)
         await db.update_contract_field(telegram_id=message.from_user.id,contract_id=contract_id,field="phone",value=phone)
@@ -228,7 +228,7 @@ async def catch_answers(call:CallbackQuery,callback_data:dict):
         state[0]="test"
         state=":".join(state)
         await call.message.delete()
-        await call.message.answer("Test tohtatildi",reply_markup=testKey)
+        await call.message.answer("Test toʻxtatildi",reply_markup=testKey)
         await db.delete_user_result(telegram_id=call.from_user.id)
         await db.update_user_state(telegram_id=call.from_user.id,state=state)
         return
@@ -363,7 +363,8 @@ async def main_handler(message:Message):
             await message.answer("F.I.SH xato kiritildi iltimos qaytadan kiriting")
             return
         # await db.update_user_real_name(telegram_id=message.from_user.id,real_name=message.text)
-        name=message.text.split(" ")
+        name=message.text.replace("\n","")
+        name=name.split(" ")
         for i in range(len(name)) :
             name[i]=name[i].capitalize()
         name=" ".join(name)
@@ -387,7 +388,7 @@ async def main_handler(message:Message):
         try:
             await db.update_contract_field(contract_id=int(state[4]),field="phone",telegram_id=message.from_user.id,value=phone)
         except asyncpg.exceptions.UniqueViolationError:
-            await message.answer("Bu raqm avval roʻyxatdan oʻtgan iltimos boshqa raqam kiriting")
+            await message.answer("Bu raqam avval roʻyxatdan oʻtgan iltimos boshqa raqam kiriting")
             return
         await message.answer("Qoshimcha telefon raqamni shu formata kiriting  +998901112233",reply_markup=backKeyboard)
 
@@ -433,9 +434,11 @@ async def main_handler(message:Message):
         await message.answer(text="Yashash joyingizni kiriting passportdagi misol:"
                                   "Toshkent shahar Yakasaroy tumani Shota Rustaveli Kochasi 87 dom 99 honadon",reply_markup=backKeyboard)
     elif state[0]=="address":
-        name = message.text.split(" ")
+        name=message.text.replace("\n","")
+        name = name.split(" ")
         for i in range(len(name)):
             name[i] = name[i].capitalize()
+
         address = " ".join(name)
         await db.update_contract_field(contract_id=int(state[4]),field="address",telegram_id=message.from_user.id,value=address)
         # await db.update_user_address(message.from_user.id,message.text)
