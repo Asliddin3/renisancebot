@@ -74,7 +74,7 @@ class Contract(models.Model):
     address=models.CharField(verbose_name="Propiska joyi",max_length=1000,null=True)
     passport = models.CharField(verbose_name="Passport raqami", max_length=100,unique=True,null=True)
     passport_photo=models.CharField(verbose_name="Passoprt rasmini idsi",max_length=1000,null=True)
-    diplom =models.CharField(verbose_name="Talabaning Diplom yo'ki attestati",max_length=1500,null=True)
+    diplom =models.CharField(verbose_name="Talabaning Diplom yoki attestati",max_length=1500,null=True)
     jshshir=models.CharField(verbose_name="JSHSHIR",null=True,max_length=30)
     created=models.DateField(verbose_name="Shartnoma yaratilgan sana",null=True)
     DisplayFields=["id","full_name","phone","fakultet_id","extra_phone","state","passport","jshshir","created"]
