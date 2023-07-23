@@ -264,33 +264,43 @@ async def main_handler(message:Message):
             await message.answer("Ta'lim tilini tanlang.",reply_markup=lang)
         elif message.text=="Biz haqimizda":
             await message.answer_video(video_id,
-                                       caption=f"<a href=\"https://t.me/renuadmisson/15\">✅Universitet haqida</a>\n" \
-                                               f"<a href=\"https://t.me/renuadmisson/8\">✅Taʼlim yoʻnalishlari</a>\n" \
-                                               f"<a href=\"https://t.me/renuadmisson/57\">✅Kantrakt miqdori</a>\n" \
-                                               f"<a href=\"https://t.me/renuadmisson/18\">✅Imtiyzolar</a>\n" \
-                                               f"<a href=\"https://t.me/renuadmisson/16\">✅Nega ayan biz</a>\n" \
-                                               f"<a href=\"https://t.me/renuadmisson/28\">✅Qabul 2023</a>\n" \
-                                               f"<a href=\"https://t.me/renuadmisson/23\">✅Univertetga qanday boriladi ?</a>\n" \
-                                               f"<a href=\"https://t.me/renuadmisson/26\">✅Kantakt maʼlumotlar</a>\n" \
-                                               f"<a href=\"https://t.me/renuadmisson/25\">✅Lakatsiya</a>\n" \
-                                               f"<a href=\"https://t.me/renuadmisson/27\">✅Hujjat topshirish</a>\n" \
-                                               f"<a href=\"https://t.me/renuadmisson/10?single\">✅Litsenziya</a>\n" \
-                                               "1 mlrdlik grant", reply_markup=menu)
+                                       caption="<a href='https://t.me/renuadmission/89'>500 ta</a><a href='https://t.me/renuadmission/89' >grant va sitipendiya oʻrinlari haqida batafsil</a>\n\n" \
+                                      "<a href='https://t.me/renuadmission/19'>Universitet haqida batafsil</a>\n\n" \
+                                      "<a href='https://t.me/renuadmission/85'>Xususiy oliygohlar diplimi haqida batafsil</a>\n\n" \
+                                      "<a href='https://t.me/renuadmission/86'>Baklavr va Magistratura yoʻnlishlari haqida batafsil (har bir yoʻnalishda nimalar oʻrgatiladi ? Asosiy fanlar qaysilar ?)</a>\n\n" \
+                                      "Telefonlar:\n"\
+                                      "+998947405220  Komila\n"\
+                                      "+998947406220  Sarvinoz\n"\
+                                      "+998947407220  Diyora\n"\
+                                      "+998911357797  Sarvinoz\n" \
+                                      "@renuqabul2023\n" \
+                                      "@Renuadmin2\n" \
+                                      "@Renaissance7220\n" \
+                                      "@Renuadmin3\n"\
+                                      "Xujjat topshirish uchun @renutestbot", reply_markup=menu)
             await message.answer_photo(photo=photo_id)
             await message.answer_location(longitude=69.210325,latitude=41.19043)
             await message.answer(
                 text="Universtetimizga quyidagi lakatsiya orqali yoki 131/58/47/62 yoʻnalishli avtobuslarning oxirgi bekatiga tushib kelishingiz mumkin")
             await message.answer(
                 text="RENAISSANCE UNIVERSITYda 500 ta grant oʻrinlari mavjud boʻlib 1 semestrni aʼlo bahoga tamomlagan talabalar oʻrtasida qoʻshimcha saralash yoʻli bilan eng yuqori bal olganlarga 2 semestrdan taqdim etiladi")
-            await message.answer(text="Murojat uchun telefonlar:\n" \
-                                      "+998947405220  Komila\n" \
-                                      "+998947406220  Sarvinoz\n" \
-                                      "+998947407220  Diyora\n" \
-                                      "+998911357797  Sarvinoz\n" \
-                                      "@renuqabul2023\n" \
-                                      "@Renuadmin2\n" \
-                                      "@Renaissance7220\n" \
-                                      "@Renuadmin3")
+            # await message.answer(text="<a href='https://t.me/renuadmission/89'>500 ta</a><a href='https://t.me/renuadmission/89' >grant va sitipendiya oʻrinlari haqida batafsil</a>\n\n" \
+            #                           "<a href='https://t.me/renuadmission/19'>Universitet haqida batafsil</a>\n\n" \
+            #                           "<a href='https://t.me/renuadmission/85'>Xususiy oliygohlar diplimi haqida batafsil</a>\n\n" \
+            #                           "<a href='https://t.me/renuadmission/86'>Baklavr va Magistratura yoʻnlishlari haqida batafsil (har bir yoʻnalishda nimalar oʻrgatiladi ? Asosiy fanlar qaysilar ?)</a>\n\n" \
+            #                           "Telefonlar:\n"\
+            #                           "+998947405220  Komila\n"\
+            #                           "+998947406220  Sarvinoz\n"\
+            #                           "+998947407220  Diyora\n"\
+            #                           "+998911357797  Sarvinoz\n" \
+            #                           "@renuqabul2023\n" \
+            #                           "@Renuadmin2\n" \
+            #                           "@Renaissance7220\n" \
+            #                           "@Renuadmin3\n"\
+            #                           "Xujjat topshirish uchun @renutestbot"
+            #                      )
+
+
     elif message.text=="🔙 Ortga":
         if state[0]=="full_name":
             state[0] = "fakultet"
@@ -309,33 +319,35 @@ async def main_handler(message:Message):
         await message.answer(text="Assalomu alaykum, Xush kelibsiz. Universitetga ro'yxatdan o'tish uchun `Ro'yxatdan o'tish` tugmasini bosing",
                              reply_markup=menu)
         await message.answer_video(video_id,
-                                   caption=f"<a href=\"https://t.me/renuadmisson/15\">✅Universitet haqida</a>\n" \
-                                           f"<a href=\"https://t.me/renuadmisson/8\">✅Taʼlim yoʻnalishlari</a>\n" \
-                                           f"<a href=\"https://t.me/renuadmisson/57\">✅Kantrakt miqdori</a>\n" \
-                                           f"<a href=\"https://t.me/renuadmisson/18\">✅Imtiyzolar</a>\n" \
-                                           f"<a href=\"https://t.me/renuadmisson/16\">✅Nega ayan biz</a>\n" \
-                                           f"<a href=\"https://t.me/renuadmisson/28\">✅Qabul 2023</a>\n" \
-                                           f"<a href=\"https://t.me/renuadmisson/23\">✅Univertetga qanday boriladi ?</a>\n" \
-                                           f"<a href=\"https://t.me/renuadmisson/26\">✅Kantakt maʼlumotlar</a>\n" \
-                                           f"<a href=\"https://t.me/renuadmisson/25\">✅Lakatsiya</a>\n" \
-                                           f"<a href=\"https://t.me/renuadmisson/27\">✅Hujjat topshirish</a>\n" \
-                                           f"<a href=\"https://t.me/renuadmisson/10?single\">✅Litsenziya</a>\n" \
-                                           "1 mlrdlik grant", reply_markup=menu)
+                                   caption="<a href='https://t.me/renuadmission/89'>500 ta</a><a href='https://t.me/renuadmission/89' >grant va sitipendiya oʻrinlari haqida batafsil</a>\n\n" \
+                                      "<a href='https://t.me/renuadmission/19'>Universitet haqida batafsil</a>\n\n" \
+                                      "<a href='https://t.me/renuadmission/85'>Xususiy oliygohlar diplimi haqida batafsil</a>\n\n" \
+                                      "<a href='https://t.me/renuadmission/86'>Baklavr va Magistratura yoʻnlishlari haqida batafsil (har bir yoʻnalishda nimalar oʻrgatiladi ? Asosiy fanlar qaysilar ?)</a>\n\n" \
+                                      "Telefonlar:\n"\
+                                      "+998947405220  Komila\n"\
+                                      "+998947406220  Sarvinoz\n"\
+                                      "+998947407220  Diyora\n"\
+                                      "+998911357797  Sarvinoz\n" \
+                                      "@renuqabul2023\n" \
+                                      "@Renuadmin2\n" \
+                                      "@Renaissance7220\n" \
+                                      "@Renuadmin3\n"\
+                                      "Xujjat topshirish uchun @renutestbot", reply_markup=menu)
         await message.answer_photo(photo=photo_id)
         await message.answer_location(longitude=69.210325, latitude=41.19043)
         await message.answer(
             text="Universtetimizga quyidagi lakatsiya orqali yoki 131/58/47/62 yoʻnalishli avtobuslarning oxirgi bekatiga tushib kelishingiz mumkin")
         await message.answer(
             text="RENAISSANCE UNIVERSITYda 500 ta grant oʻrinlari mavjud boʻlib 1 semestrni aʼlo bahoga tamomlagan talabalar oʻrtasida qoʻshimcha saralash yoʻli bilan eng yuqori bal olganlarga 2 semestrdan taqdim etiladi")
-        await message.answer(text="Murojat uchun telefonlar:\n" \
-                                  "+998947405220  Komila\n" \
-                                  "+998947406220  Sarvinoz\n" \
-                                  "+998947407220  Diyora\n" \
-                                  "+998911357797  Sarvinoz\n" \
-                                  "@renuqabul2023\n" \
-                                  "@Renuadmin2\n" \
-                                  "@Renaissance7220\n" \
-                                  "@Renuadmin3")
+        # await message.answer(text="Murojat uchun telefonlar:\n" \
+        #                           "+998947405220  Komila\n" \
+        #                           "+998947406220  Sarvinoz\n" \
+        #                           "+998947407220  Diyora\n" \
+        #                           "+998911357797  Sarvinoz\n" \
+        #                           "@renuqabul2023\n" \
+        #                           "@Renuadmin2\n" \
+        #                           "@Renaissance7220\n" \
+        #                           "@Renuadmin3")
     elif message.text in ["O'zbek","Rus tili","Ingliz"] and state[0]=="lang":
         state[0]="format"
         state[1]=langDic[message.text]
