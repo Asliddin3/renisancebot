@@ -160,7 +160,9 @@ async def catch_admin_notification(message:types.Message):
             print("message blocked")
         except aiogram.utils.exceptions.UserDeactivated:
             print("user diactiveted")
-        # except aiogram.utils.ex
+        except:
+            print("get any error")
+    # except aiogram.utils.ex
 
 @dp.message_handler(AdminFilter(),user_id=ADMINS)
 async def catch_admin_commands(message:types.Message):
