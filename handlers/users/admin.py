@@ -153,7 +153,7 @@ async def catch_admin_notification(message:types.Message):
                 await bot.send_message(
                 chat_id=user_id, text=message.text
                 )
-            await asyncio.sleep(0.05)
+            await asyncio.sleep(1)
             sendMap[user_id]=True
         except aiogram.utils.exceptions.BotBlocked:
             print("message blocked")
