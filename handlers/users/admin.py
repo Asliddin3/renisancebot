@@ -1,5 +1,5 @@
 import asyncio
-
+import aiogram
 from aiogram import types
 from aiogram.types import ContentType,InputMediaPhoto,InputMediaDocument,InputFile
 from filters.admin_filter import AdminFilter,AdminContentFilter
@@ -142,18 +142,21 @@ async def catch_admin_notification(message:types.Message):
         user_id = user[0]
         if sendMap.get(user_id):
             continue
-        if len(message.photo) != 0:
-            await bot.send_photo(chat_id=user_id, caption=message.caption,
+        try:
+            if len(message.photo) != 0:
+                await bot.send_photo(chat_id=user_id, caption=message.caption,
                                  photo=message.photo[0].file_id)
-        elif message.video is not None:
-            await bot.send_video(chat_id=user_id, caption=message.caption,
+            elif message.video is not None:
+                await bot.send_video(chat_id=user_id, caption=message.caption,
                                  photo=message.video.file_id)
-        else:
-            await bot.send_message(
+            else:
+                await bot.send_message(
                 chat_id=user_id, text=message.text
-            )
-        await asyncio.sleep(0.05)
-        sendMap[user_id]=True
+                )
+            await asyncio.sleep(0.05)
+            sendMap[user_id]=True
+        except aiogram.utils.exceptions.BotBlocked:
+            print("message blocked")
 
 @dp.message_handler(AdminFilter(),user_id=ADMINS)
 async def catch_admin_commands(message:types.Message):
