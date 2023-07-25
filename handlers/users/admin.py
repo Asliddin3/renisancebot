@@ -155,8 +155,12 @@ async def catch_admin_notification(message:types.Message):
                 )
             await asyncio.sleep(1)
             sendMap[user_id]=True
+            print("message sended")
         except aiogram.utils.exceptions.BotBlocked:
             print("message blocked")
+        except aiogram.utils.exceptions.UserDeactivated:
+            print("user diactiveted")
+        # except aiogram.utils.ex
 
 @dp.message_handler(AdminFilter(),user_id=ADMINS)
 async def catch_admin_commands(message:types.Message):
