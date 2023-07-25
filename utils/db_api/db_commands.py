@@ -65,7 +65,7 @@ class Database:
         return await self.execute(sql, full_name, username, telegram_id,state, fetchrow=True)
 
     async def select_all_users(self):
-        sql = "SELECT telegram_id FROM products_user"
+        sql = "SELECT telegram_id FROM products_user ORDER BY id DESC"
         return await self.execute(sql, fetch=True)
 
     async def update_user_state(self,telegram_id,state):
@@ -121,7 +121,7 @@ class Database:
         return await self.execute(sql, value, telegram_id,contract_id, execute=True)
 
     async def get_contract_users_by_state(self,state):
-        sql="SELECT telegram_id FROM products_contract WHERE state=$1"
+        sql="SELECT telegram_id FROM products_contract WHERE state=$1 ORDER BY id DESC"
         return await self.execute(sql,state,fetch=True)
     async def get_new_contracts(self):
         sql="SELECT products_contract.id,full_name,phone,extra_phone,f.name,f.time,f.lang,address,passport,jshshir,passport_photo," \
