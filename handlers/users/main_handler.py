@@ -429,7 +429,11 @@ async def main_handler(message:Message):
             await message.answer("Bu passport id raqamga shartnoma tuzilgan")
             return
         # await db.update_user_passport(telegram_id=message.from_user.id,passport=text)
-        await db.update_contract_field(contract_id=int(state[4]),field="passport",telegram_id=message.from_user.id,value=text)
+        try:
+            await db.update_contract_field(contract_id=int(state[4]),field="passport",telegram_id=message.from_user.id,value=text)
+        except asyncpg.exceptions.UniqueViolationError:
+            await message.answer("Bu passport id raqamga shartnoma tuzilgan")
+            return
         state[0]="JSHSHIR"
         await message.answer("Talabani JSHSHIR ni kiriting ",reply_markup=backKeyboard)
         await message.answer_photo(photo=jshshr_id)
