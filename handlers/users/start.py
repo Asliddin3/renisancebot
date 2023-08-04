@@ -3,9 +3,10 @@ from aiogram import types
 from aiogram.dispatcher.filters.builtin import CommandStart
 from keyboards.default.start_keyboard import menu
 from loader import dp, db, bot
-video_id="BAACAgIAAxkBAAMTZLd0NW9mZuR8sQT3N1bSZUy86T4AApIsAAJbG8FJn034aIY8OSUvBA"
+video_id="BAACAgIAAxkBAAEBEktkzR61Jl98Fv4Oa7JZ-rA58JIvDAACXS8AAggwSUprpgdrbeO8rC8E"
 photo_id ="AgACAgIAAxkBAAMRZLdz6r4QA00ijBspTR4iOf8FDOgAAhTGMRtbG8FJRZd5gY8LhMABAAMCAAN5AAMvBA"
 jshshr_id="AgACAgIAAxkBAAMVZLd0XImfh0Agvl_Y0WLzt1h1ovwAAhXGMRtbG8FJN2xN2--cwsgBAAMCAAN5AAMvBA"
+contract_id="AgACAgIAAxkBAAEBEk9kzR7ahOdESywpuAABF1dYlBxyjRQAAq7MMRsPvGhK-ThtN-GNv8kBAAMCAAN4AAMvBA"
 @dp.message_handler(CommandStart())
 async def bot_start(message: types.Message):
     try:
@@ -36,6 +37,7 @@ async def bot_start(message: types.Message):
                                        "Xujjat topshirish uchun @renutestbot", reply_markup=menu)
     await message.answer_photo(photo=photo_id)
     await message.answer_location(longitude=69.210325, latitude=41.19043,)
+    await message.answer_photo(photo=contract_id)
     await message.answer(text="Universtetimizga quyidagi lakatsiya orqali yoki 131/58/47/62 yoʻnalishli avtobuslarning oxirgi bekatiga tushib kelishingiz mumkin")
     await message.answer(text="RENAISSANCE UNIVERSITYda 500 ta grant oʻrinlari mavjud boʻlib 1 semestrni aʼlo bahoga tamomlagan talabalar oʻrtasida qoʻshimcha saralash yoʻli bilan eng yuqori bal olganlarga 2 semestrdan taqdim etiladi")
     # await message.answer(text="Murojat uchun telefonlar:\n"\

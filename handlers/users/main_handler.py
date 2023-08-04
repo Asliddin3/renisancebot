@@ -9,7 +9,7 @@ from keyboards.inline.menu_keyboards import make_test_keyboard,test
 from filters.user_filter import UserFilter
 import re
 from datetime import datetime
-from handlers.users.start import photo_id,jshshr_id,video_id
+from handlers.users.start import photo_id,jshshr_id,video_id,contract_id
 from generator import create_contract,create_info,create_uchtamonlama
 import pytz
 import asyncio
@@ -280,6 +280,7 @@ async def main_handler(message:Message):
                                       "Xujjat topshirish uchun @renutestbot", reply_markup=menu)
             await message.answer_photo(photo=photo_id)
             await message.answer_location(longitude=69.210325,latitude=41.19043)
+            await message.answer_photo(photo=contract_id)
             await message.answer(
                 text="Universtetimizga quyidagi lakatsiya orqali yoki 131/58/47/62 yoʻnalishli avtobuslarning oxirgi bekatiga tushib kelishingiz mumkin")
             await message.answer(
@@ -335,6 +336,7 @@ async def main_handler(message:Message):
                                       "Xujjat topshirish uchun @renutestbot", reply_markup=menu)
         await message.answer_photo(photo=photo_id)
         await message.answer_location(longitude=69.210325, latitude=41.19043)
+        await message.answer_photo(photo=contract_id)
         await message.answer(
             text="Universtetimizga quyidagi lakatsiya orqali yoki 131/58/47/62 yoʻnalishli avtobuslarning oxirgi bekatiga tushib kelishingiz mumkin")
         await message.answer(
