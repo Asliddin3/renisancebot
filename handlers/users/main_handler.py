@@ -109,19 +109,19 @@ Times = {
 
 
 #
-# @dp.message_handler(content_types=ContentType.VIDEO)
-# async def catch_video(message:Message):
-#     video_id=message.video.file_id
-#     print(video_id)
-#     await message.answer_video(video_id)
+@dp.message_handler(content_types=ContentType.VIDEO)
+async def catch_video(message:Message):
+    video_id=message.video.file_id
+    print(video_id)
+    await message.answer_video(video_id)
 
 # @dp.message_handler(content_types=ContentType.LOCATION)
 # async def get_location(message:Message):
 #     await message.answer(text=f"long {message.location.longitude} lat {message.location.latitude}")
 
-# @dp.message_handler(content_types=ContentType.PHOTO)
-# async def catch_passport_photo(message:Message):
-#     await message.answer(message.photo[-1].file_id)
+@dp.message_handler(content_types=ContentType.PHOTO)
+async def catch_passport_photo(message:Message):
+    await message.answer(message.photo[-1].file_id)
 @dp.message_handler(UserFilter(),content_types=ContentType.CONTACT)
 async def catch_contact(message:Message):
     state=await db.get_user_state_by_telegram_id(message.from_user.id)
