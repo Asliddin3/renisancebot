@@ -174,6 +174,11 @@ class Database:
               " FROM products_contract  INNER JOIN products_fakultet AS f " \
               "ON f.id=fakultet_id WHERE state='accepted' ORDER BY id"
         return await self.execute(sql, fetch=True)
+    async def get_accepted_contracts_for_resend(self):
+        sql = "SELECT products_contract.id,created,telegram_id" \
+              " FROM products_contract  INNER JOIN products_fakultet AS f " \
+              "ON f.id=fakultet_id WHERE state='accepted' ORDER BY id"
+        return await self.execute(sql, fetch=True)
     async def get_students(self):
         sql = "SELECT products_contract.id,full_name,phone,extra_phone,f.name,f.time,f.lang,address,passport,jshshir,dtm,result,created" \
               " FROM products_contract  LEFT JOIN products_fakultet AS f " \

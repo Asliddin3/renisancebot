@@ -1,4 +1,6 @@
 import asyncio
+import time
+
 import aiogram
 from aiogram import types
 from aiogram.types import ContentType,InputMediaPhoto,InputMediaDocument,InputFile
@@ -260,6 +262,25 @@ async def catch_admin_commands(message:types.Message):
             state=";".join(state)
             await db.update_user_state(telegram_id=message.from_user.id,state=state)
             await message.answer(text="Shartnoma idsi kiriting",reply_markup=back)
+        elif  text=="Shartnomani hammaga bo'shqatan jo'natish":
+            contracts=await db.get_accepted_contracts_for_resend()
+            for contract in contracts:
+                contract_id=contract[0]
+                telegram_id=contract[2]
+                current_time=contract[1]
+                await accept_student(message,contract[0],current_time)
+                await accept_student(message=message, contract_id=int(contract_id), created=current_time)
+                # await db.update_contract_state(id=int(contract_id), state="accepted")
+                await db.update_contract_created_time(id=int(contract_id), created=current_time.date())
+                # await bot.send_message(chat_id=telegram_id,text="✅Tabriklaymiz siz Renaissance Universtyga talabalikka qabul qilindingiz !!!")
+                malumotnoma = InputFile(f"/root/univer-bot/renisancebot/documents/{contract_id}/malumotnoma.pdf")
+                shartnoma = InputFile(f"/root/univer-bot/renisancebot/documents/{contract_id}/shartnoma.pdf")
+                uchtamonlama = InputFile(f"/root/univer-bot/renisancebot/documents/{contract_id}/uchtamonlama.pdf")
+                await bot.send_document(chat_id=telegram_id, document=malumotnoma, caption="Ma'lumotnoma")
+                await bot.send_document(chat_id=telegram_id, document=shartnoma, caption="Shartnoma")
+                await bot.send_document(chat_id=telegram_id, document=uchtamonlama, caption="Uch tomonli")
+                await message.answer(text=f"Shartnoma jo'natildi idsi:{contract_id}")
+                time.sleep(1.5)
     elif state[1]=="notification":
         if message.text=="🔙 Ortga":
             state[1]=""
