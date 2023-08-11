@@ -268,10 +268,10 @@ async def catch_admin_commands(message:types.Message):
                 contract_id=contract[0]
                 telegram_id=contract[2]
                 current_time=contract[1]
-                await accept_student(message,contract[0],current_time)
+                # await accept_student(message,contract[0],current_time)
                 await accept_student(message=message, contract_id=int(contract_id), created=current_time)
                 # await db.update_contract_state(id=int(contract_id), state="accepted")
-                await db.update_contract_created_time(id=int(contract_id), created=current_time.date())
+                # await db.update_contract_created_time(id=int(contract_id), created=current_time.date())
                 # await bot.send_message(chat_id=telegram_id,text="✅Tabriklaymiz siz Renaissance Universtyga talabalikka qabul qilindingiz !!!")
                 malumotnoma = InputFile(f"/root/univer-bot/renisancebot/documents/{contract_id}/malumotnoma.pdf")
                 shartnoma = InputFile(f"/root/univer-bot/renisancebot/documents/{contract_id}/shartnoma.pdf")
