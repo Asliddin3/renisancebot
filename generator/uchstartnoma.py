@@ -142,7 +142,7 @@ def update_student(doc, student_data,endpoint):
         "F.I.Sh.: ______________________________ _____________________________________": student_data["name"],
         address: student_data["address"],
         "Pasport ma’lumotlari:_________________": student_data["passport"],
-        "JSHSHIR:  __________________________": student_info["jshshir"],
+        "JSHSHIR:  __________________________": student_data["jshshir"],
         "Telefon raqami:_______________________": student_data["number"],
         "Talaba __________ ____________________": "Talaba(imzo) __________ \n{}\n".format(student_data["name"])
     }
