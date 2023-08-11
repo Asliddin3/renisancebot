@@ -106,7 +106,7 @@ def update_student(doc, student_data,endpoint):
         "F.I.Sh.:______________________________________": student_data["name"],
         address: student_data["address"],
         "Pasport ma’lumotlari:__________________________": student_data["passport"],
-        "JSHSHIR:  ___________________________________": student_info["jshshir"],
+        "JSHSHIR:  ___________________________________": student_data["jshshir"],
         "Telefon raqami: ______________________________": student_data["number"],
         "Talaba _______   _____________________________": "Talaba(imzo) __________ \n{}".format(student_data["name"])
     }
