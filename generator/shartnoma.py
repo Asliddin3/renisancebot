@@ -142,13 +142,13 @@ contract_info = {
     "O‘quv kursi:": "Ingliz tili",
     "Ta’lim yo‘nalishi: ": "Moliya"
 }
-student_info = {
-    "name": "F.I.Sh.: Asliddin Dehqonov",
-    "address": "Yashash manzili: Toshkent viloyati Bekobod tumani Golang mahallasi 15-uy",
-    "passport": "Pasport ma’lumotlari: FA1111111",
-    "jshshir": "JSHSHIR:  21820719689744",
-    "number": "Telefon raqami: 87 123 45 67",
-}
+# student_info = {
+#     "name": "F.I.Sh.: Asliddin Dehqonov",
+#     "address": "Yashash manzili: Toshkent viloyati Bekobod tumani Golang mahallasi 15-uy",
+#     "passport": "Pasport ma’lumotlari: FA1111111",
+#     "jshshir": "JSHSHIR:  21820719689744",
+#     "number": "Telefon raqami: 87 123 45 67",
+# }
 
 
 def add_hyperlink(paragraph, url="https://t.me/renuadmisson", text="https://t.me/renuadmisson"):
@@ -185,10 +185,9 @@ def add_qr(doc, link="https://t.me/renuadmisson"):
 def update_student2(doc, student_data):
     replacements = {
         "F.I.Sh.:______________________________________": student_data["name"],
-        "Yashash manzili:______________________________\n____________________________________________": student_data[
-            "address"],
+        "Yashash manzili:______________________________\n____________________________________________": student_data["address"],
         "Pasport ma’lumotlari:__________________________": student_data["passport"],
-        "JSHSHIR:  _________________________________": student_data["jshshir"],
+        "JSHSHIR:  ___________________________________": student_data["jshshir"],
         "Telefon raqami: ______________________________": student_data["number"]
     }
 
