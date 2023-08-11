@@ -188,7 +188,7 @@ def update_student2(doc, student_data):
         "Yashash manzili:______________________________\n____________________________________________": student_data[
             "address"],
         "Pasport ma’lumotlari:__________________________": student_data["passport"],
-        "JSHSHIR:  ___________________________________": student_data["jshshir"],
+        "JSHSHIR:  _________________________________": student_data["jshshir"],
         "Telefon raqami: ______________________________": student_data["number"]
     }
 
