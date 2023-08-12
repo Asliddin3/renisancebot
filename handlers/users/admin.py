@@ -252,15 +252,6 @@ async def catch_admin_commands(message:types.Message):
             with open(excel_file_path, 'rb') as file:
                 await bot.send_document(message.from_user.id, file)
             os.remove(excel_file_path)
-            contracts = await db.get_fakultets_data()
-            print(contracts)
-            df = pd.DataFrame(contracts, columns=['Nome', 'Tili', "Ta'lim turi",
-                                                  "Summa", "summa text"])
-            excel_file_path = 'fakultet.xlsx'  # Specify the file path where the Excel file will be saved
-            df.to_excel(excel_file_path, index=False)
-            with open(excel_file_path, 'rb') as file:
-                await bot.send_document(message.from_user.id, file)
-            os.remove(excel_file_path)
         elif text=="Elon qilish":
             state[1]="notification"
             state=";".join(state)
