@@ -234,7 +234,7 @@ class Database:
         return await self.execute(sql,language,time,fetch=True)
 
     async def get_fakultets_data(self):
-        sql="SELECT name,lang,time,summa,summa_text FROM products_contract"
+        sql="SELECT name,lang,time,summa,summa_text FROM products_fakultet"
     async def get_test(self,number):
         sql = "SELECT question FROM products_test WHERE number=$1"
         return await self.execute(sql,number,fetchval=True)
