@@ -21,8 +21,7 @@ async def bot_start(message: types.Message):
         user = await db.select_user(telegram_id=message.from_user.id)
 
     await message.answer_video(video_id,
-                               caption="<a href='https://t.me/renuadmission/89'>500 ta</a><a href='https://t.me/renuadmission/89' >grant va sitipendiya oʻrinlari haqida batafsil</a>\n\n" \
-                                       "<a href='https://t.me/renuadmission/19'>Universitet haqida batafsil</a>\n\n" \
+                               caption="<a href='https://t.me/renuadmission/19'>Universitet haqida batafsil</a>\n\n" \
                                        "<a href='https://t.me/renuadmission/85'>Xususiy oliygohlar diplimi haqida batafsil</a>\n\n" \
                                        "<a href='https://t.me/renuadmission/86'>Baklavr va Magistratura yoʻnlishlari haqida batafsil (har bir yoʻnalishda nimalar oʻrgatiladi ? Asosiy fanlar qaysilar ?)</a>\n\n" \
                                        "Telefonlar:\n" \
@@ -39,7 +38,7 @@ async def bot_start(message: types.Message):
     await message.answer_location(longitude=69.210325, latitude=41.19043,)
     await message.answer_photo(photo=contract_id)
     await message.answer(text="Universtetimizga quyidagi lakatsiya orqali yoki 131/58/47/62 yoʻnalishli avtobuslarning oxirgi bekatiga tushib kelishingiz mumkin")
-    await message.answer(text="RENAISSANCE UNIVERSITYda 500 ta grant oʻrinlari mavjud boʻlib 1 semestrni aʼlo bahoga tamomlagan talabalar oʻrtasida qoʻshimcha saralash yoʻli bilan eng yuqori bal olganlarga 2 semestrdan taqdim etiladi")
+    # await message.answer(text="RENAISSANCE UNIVERSITYda 500 ta grant oʻrinlari mavjud boʻlib 1 semestrni aʼlo bahoga tamomlagan talabalar oʻrtasida qoʻshimcha saralash yoʻli bilan eng yuqori bal olganlarga 2 semestrdan taqdim etiladi")
     # await message.answer(text="Murojat uchun telefonlar:\n"\
     #                         "+998947405220  Komila\n"\
     #                         "+998947406220  Sarvinoz\n"\
