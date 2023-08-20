@@ -181,6 +181,7 @@ def process_excel(input):
         phone_number=phone_number.replace("+","")
         phone_number=phone_number.replace(" ","")
         phone_number=phone_number.replace(" ","")
+        phone_number=phone_number.replace("'","")
         phone_number=phone_number.replace(" ","")
         phone_number=phone_number.replace("-","")
         phone_number=phone_number.replace(",","")
