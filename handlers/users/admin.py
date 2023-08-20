@@ -178,6 +178,7 @@ def process_excel(input):
         if phone_number=="None":
             continue
         print(phone_number is None)
+        result = re.sub(r'[^0-9]', '', phone_number)
         while not phone_number[0].isdigit():
             phone_number=phone_number.replace(phone_number[0],"")
         phone_number=phone_number.replace("+","")
