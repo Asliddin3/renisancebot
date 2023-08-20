@@ -200,7 +200,7 @@ def process_excel(input):
             print("phone with 12 ",phone_number)
         else:
             print("phone with not 12 ", phone_number)
-        if re.match(pattern, phone_number):
+        if re.match(pattern, phone_number) or len(phone_number)==12:
             correct.append((phone_number,""))
         else:
             print("incorrect phone number",phone_number)
