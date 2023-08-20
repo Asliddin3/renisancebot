@@ -196,6 +196,7 @@ def process_excel(input):
         if re.match(pattern, phone_number):
             correct.append((phone_number,""))
         else:
+            print("incorrect phone number",phone_number)
             incorect.append((phone_number,""))
             # row[0] = reformat_phone_number(phone_number)
     new_filename1 = './handlers/users/correct.xlsx'
