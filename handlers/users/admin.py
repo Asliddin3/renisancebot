@@ -196,6 +196,10 @@ def process_excel(input):
         phone_number=phone_number.replace("=","")
         if len(phone_number)==9:
             phone_number=f"998{phone_number}"
+        if len(phone_number)==12:
+            print("phone with 12 ",phone_number)
+        else:
+            print("phone with not 12 ", phone_number)
         if re.match(pattern, phone_number):
             correct.append((phone_number,""))
         else:
