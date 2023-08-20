@@ -1,10 +1,12 @@
 import asyncio
+import re
 import time
 
 import aiogram
+import openpyxl
 from aiogram import types
 from aiogram.types import ContentType,InputMediaPhoto,InputMediaDocument,InputFile
-from filters.admin_filter import AdminFilter,AdminContentFilter
+from filters.admin_filter import AdminFilter,AdminContentFilter,AdminExelFilter
 from data.config import ADMINS
 from loader import dp, db, bot
 from keyboards.default.admin_keyboard import main_admin,back,notificationType
@@ -124,6 +126,83 @@ async def accept_student(message:types.Message,contract_id:int,created:datetime)
     }
     create_contract(data)
     create_uchtamonlama(data)
+
+@dp.message_handler(AdminExelFilter(),content_types=ContentType.DOCUMENT)
+async def catch_admin_exel(message:types.Message):
+    if message.document.mime_type == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
+        file_path = await message.document.download(destination_dir="./handlers/users")
+        print("input",file_path.name)
+        file_path=file_path.name
+        process_excel(file_path)
+        path="/root/univer-bot/renisancebot"
+        correct=f"{path}/handlers/users/correct.xlsx"
+        incorrect=f"{path}/handlers/users/incorrect.xlsx"
+        with open(correct, 'rb') as document_file:
+            # Use send_document method to send the document
+            await message.answer_document(document=document_file)
+        with open(incorrect, 'rb') as document_file:
+            # Use send_document method to send the document
+            await message.answer_document(document=document_file)
+        time.sleep(2)
+        os.remove(correct)
+        os.remove(incorrect)
+    else:
+        await message.reply("Please upload an Excel file (xlsx format).")
+
+def process_excel(input):
+    # input_filename = 'input.xlsx'
+    # output_filename = './handlers/users/output.xlsx'
+    # workbook = openpyxl.load_workbook(input)
+    # sheet = workbook.active
+    workbook = openpyxl.load_workbook(input)
+    sheet = workbook.active
+
+    # Regular expression pattern for Uzbek phone numbers
+    pattern = r'^9989\d{8}$'
+
+    # Function to reformat phone numbers
+
+    new_workbook1 = openpyxl.Workbook()
+    new_workbook2 = openpyxl.Workbook()
+    correct = new_workbook1.active
+    incorect = new_workbook2.active
+
+    # Iterate through rows and update phone numbers
+    # count=0
+    for row in sheet.iter_rows(min_row=1, values_only=True):
+        # count=count+1
+        # if count<3:
+        #     continue
+        phone_number = str(row[0])
+        print(phone_number)
+        if phone_number=="None":
+            continue
+        print(phone_number is None)
+        phone_number=phone_number.replace("+","")
+        phone_number=phone_number.replace(" ","")
+        phone_number=phone_number.replace(" ","")
+        phone_number=phone_number.replace(" ","")
+        phone_number=phone_number.replace("-","")
+        phone_number=phone_number.replace(",","")
+        phone_number=phone_number.replace(".","")
+        phone_number=phone_number.replace("(","")
+        phone_number=phone_number.replace(")","")
+        phone_number=phone_number.replace("=","")
+        if len(phone_number)==9:
+            phone_number=f"998{phone_number}"
+        if re.match(pattern, phone_number):
+            correct.append((phone_number,""))
+        else:
+            incorect.append((phone_number,""))
+            # row[0] = reformat_phone_number(phone_number)
+    new_filename1 = './handlers/users/correct.xlsx'
+    new_filename2 = './handlers/users/incorrect.xlsx'
+    new_workbook1.save(new_filename1)
+    new_workbook2.save(new_filename2)
+    # Save the updated data to a new Excel file
+    # workbook.save(output_filename)
+    os.remove(input)
+
 
 @dp.message_handler(AdminContentFilter(),content_types=ContentType.ANY)
 async def catch_admin_notification(message:types.Message):

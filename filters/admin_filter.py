@@ -21,3 +21,14 @@ class AdminContentFilter(BoundFilter):
                 return True
             return False
         return False
+
+
+class AdminExelFilter(BoundFilter):
+    async def check(self, message:types.Message) -> bool:
+        user=await db.get_user_state_by_telegram_id(message.from_user.id)
+        if ":" in user:
+            return False
+        state=user.split(";")
+        if state[0]=="admin" and state[1]=="" and state[2]=="":
+            return True
+        return False
