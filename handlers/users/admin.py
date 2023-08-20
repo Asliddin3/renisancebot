@@ -169,6 +169,8 @@ def process_excel(input):
 
     # Iterate through rows and update phone numbers
     # count=0
+    correctPhones={}
+    incorectPhones={}
     for row in sheet.iter_rows(min_row=1, values_only=True):
         # count=count+1
         # if count<3:
@@ -201,11 +203,17 @@ def process_excel(input):
         else:
             print("phone with not 12 ", phone_number)
         if re.match(pattern, phone_number) or len(phone_number)==12:
-            correct.append((phone_number,""))
+            correctPhones[phone_number]=""
+            # correct.append((phone_number,""))
         else:
+            incorectPhones[phone_number]=""
             print("incorrect phone number",phone_number)
-            incorect.append((phone_number,""))
+            # incorect.append((phone_number,""))
             # row[0] = reformat_phone_number(phone_number)
+    for key in correctPhones.keys():
+        correct.append((key, ""))
+    for key in incorectPhones.keys():
+        incorect.append((key, ""))
     new_filename1 = './handlers/users/correct.xlsx'
     new_filename2 = './handlers/users/incorrect.xlsx'
     new_workbook1.save(new_filename1)
