@@ -176,6 +176,7 @@ def process_excel(input):
         # if count<3:
         #     continue
         phone_number = str(row[0])
+        print("phone number",phone_number)
         print(phone_number)
         if phone_number=="None":
             continue
@@ -183,8 +184,6 @@ def process_excel(input):
         # result = re.sub(r'[^0-9]', '', phone_number)
         # print("result",result)
         # phone_number=result
-        while not phone_number[0].isdigit():
-            phone_number=phone_number.replace(phone_number[0],"")
         phone_number=phone_number.replace("+","")
         phone_number=phone_number.replace(" ","")
         phone_number=phone_number.replace(" ","")
@@ -196,6 +195,9 @@ def process_excel(input):
         phone_number=phone_number.replace("(","")
         phone_number=phone_number.replace(")","")
         phone_number=phone_number.replace("=","")
+        while len(phone_number)>6 and not phone_number[0].isdigit():
+            phone_number=phone_number.replace(phone_number[0],"")
+
         if len(phone_number)==9:
             phone_number=f"998{phone_number}"
         if len(phone_number)==12:
@@ -206,6 +208,13 @@ def process_excel(input):
             correctPhones[phone_number]=""
             # correct.append((phone_number,""))
         else:
+            if "/" in phone_number:
+                arr=phone_number.split("/")
+                phone_one = f"998{arr[0]}"
+                phone_two = f"998{arr[1]}"
+                if len(phone_one)==12 and len(phone_two)==12:
+                    correctPhones[phone_one]=""
+                    correctPhones[phone_two]=""
             incorectPhones[phone_number]=""
             print("incorrect phone number",phone_number)
             # incorect.append((phone_number,""))
