@@ -176,11 +176,11 @@ def process_excel(input):
         # if count<3:
         #     continue
         phone_number = str(row[0])
-        print("phone number",phone_number)
-        print(phone_number)
+        # print("phone number",phone_number)
+        # print(phone_number)
         if phone_number=="None":
             continue
-        print(phone_number is None)
+        # print(phone_number is None)
         # result = re.sub(r'[^0-9]', '', phone_number)
         # print("result",result)
         # phone_number=result
@@ -200,23 +200,34 @@ def process_excel(input):
 
         if len(phone_number)==9:
             phone_number=f"998{phone_number}"
-        if len(phone_number)==12:
-            print("phone with 12 ",phone_number)
-        else:
-            print("phone with not 12 ", phone_number)
+        # if len(phone_number)==12:
+            # print("phone with 12 ",phone_number)
+        # else:
+            # print("phone with not 12 ", phone_number)
         if re.match(pattern, phone_number) or len(phone_number)==12:
             correctPhones[phone_number]=""
             # correct.append((phone_number,""))
         else:
             if "/" in phone_number:
+                print("/ phone number",phone_number)
                 arr=phone_number.split("/")
+                print(arr)
                 phone_one = f"998{arr[0]}"
                 phone_two = f"998{arr[1]}"
-                if len(phone_one)==12 and len(phone_two)==12:
+                print("len 1",len(phone_one))
+                print("len 2",len(phone_two))
+                exist=False
+                if len(phone_one)==12:
                     correctPhones[phone_one]=""
+                    exist=True
+                if len(phone_two)==12:
                     correctPhones[phone_two]=""
+                    exist=True
+                if exist:
+                    continue
+
             incorectPhones[phone_number]=""
-            print("incorrect phone number",phone_number)
+            # print("incorrect phone number",phone_number)
             # incorect.append((phone_number,""))
             # row[0] = reformat_phone_number(phone_number)
     for key in correctPhones.keys():
