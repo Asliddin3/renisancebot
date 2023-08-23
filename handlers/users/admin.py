@@ -234,11 +234,17 @@ def process_excel(input):
             if len(phone_number)==18:
                 f=phone_number[:9]
                 s=phone_number[9:]
-                f=f"998{f}"
-                s=f"998{s}"
-                correctPhones[f]=""
-                correctPhones[s]=""
-                continue
+                f = f"998{f}"
+                s = f"998{s}"
+                exists=False
+                if re.match(pattern, f):
+                    correctPhones[f] = ""
+                    exists=True
+                if re.match(pattern, s):
+                    correctPhones[s] = ""
+                    exists=True
+                if exists:
+                    continue
             incorectPhones[phone_number]=""
             # print("incorrect phone number",phone_number)
             # incorect.append((phone_number,""))
