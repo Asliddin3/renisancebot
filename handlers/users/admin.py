@@ -208,7 +208,7 @@ def process_excel(input):
             correctPhones[phone_number]=""
             # correct.append((phone_number,""))
         else:
-            if "/" in phone_number:
+            if "/" in phone_number and len(phone_number)>12:
                 print("/ phone number",phone_number)
                 arr=phone_number.split("/")
                 print(arr)
@@ -225,7 +225,12 @@ def process_excel(input):
                     exist=True
                 if exist:
                     continue
-
+            if "/" in phone_number:
+                phone_number=phone_number.replace("/","")
+                phone_number=f"998{phone_number}"
+                if len(phone_number)==12:
+                    correctPhones[phone_number]=""
+                    continue
             incorectPhones[phone_number]=""
             # print("incorrect phone number",phone_number)
             # incorect.append((phone_number,""))
