@@ -231,6 +231,14 @@ def process_excel(input):
                 if len(phone_number)==12:
                     correctPhones[phone_number]=""
                     continue
+            if len(phone_number)==16:
+                f=phone_number[:8]
+                s=phone_number[8:]
+                f=f"998{f}"
+                s=f"998{s}"
+                correctPhones[f]=""
+                correctPhones[s]=""
+                continue
             incorectPhones[phone_number]=""
             # print("incorrect phone number",phone_number)
             # incorect.append((phone_number,""))
