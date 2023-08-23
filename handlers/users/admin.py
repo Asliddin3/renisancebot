@@ -232,8 +232,8 @@ def process_excel(input):
                     correctPhones[phone_number]=""
                     continue
             if len(phone_number)==18:
-                f=phone_number[:8]
-                s=phone_number[8:]
+                f=phone_number[:9]
+                s=phone_number[9:]
                 f=f"998{f}"
                 s=f"998{s}"
                 correctPhones[f]=""
