@@ -282,6 +282,8 @@ async def catch_admin_notification(message:types.Message):
     state=state.split(";")
     if state[1] == "all":
         users = await db.select_all_users()
+    elif state[1]=="notregirtered":
+        users=await db.select_not_registered()
     else:
         users = await db.get_contract_users_by_state(state=state[1])
     if message.text == "🔙 Ortga":
@@ -441,8 +443,11 @@ async def catch_admin_commands(message:types.Message):
             state=";".join(state)
             await db.update_user_state(telegram_id=message.from_user.id,state=state)
             await message.answer(text="Admin menu",reply_markup=main_admin)
-        elif message.text in ["Registraciyadan o'tganlarga", "Arhivdagilarga", "Hammaga jo'natish","Qabul bolganlarga"]:
-            state[1] = notTypes[message.text]
+        elif message.text in ["Registraciyadan o'tmaganlarga", "Arhivdagilarga", "Hammaga jo'natish","Qabul bolganlarga"]:
+            if message.text!="Registraciyadan o'tmaganlarga":
+                state[1] = notTypes[message.text]
+            else:
+                state[1]="notregirtered"
             state=";".join(state)
             await db.update_user_state(telegram_id=message.from_user.id,state=state)
             await message.answer(text="Eloni kiriting",reply_markup=back)

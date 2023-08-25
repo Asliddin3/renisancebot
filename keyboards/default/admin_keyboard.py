@@ -22,7 +22,7 @@ main_admin=ReplyKeyboardMarkup(
 notificationType=ReplyKeyboardMarkup(
     keyboard=[
         [
-            KeyboardButton(text="Registraciyadan o'tganlarga"),
+            KeyboardButton(text="Registraciyadan o'tmaganlarga"),
             KeyboardButton(text="Arhivdagilarga")
         ],
         [

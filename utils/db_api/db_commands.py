@@ -68,6 +68,14 @@ class Database:
         sql = "SELECT telegram_id FROM products_user ORDER BY id DESC"
         return await self.execute(sql, fetch=True)
 
+    async def select_not_registered(self):
+        sql = ("SELECT telegram_id FROM products_user "
+               "WHERE telegram_id NOT IN (SELECT telegram_id FROM product_contract) "
+               "OR telegram_id IN (select telegram_id FROM product_contract WHERE state='new') "
+               " ORDER BY id DESC")
+        return await self.execute(sql, fetch=True)
+
+
     async def update_user_state(self,telegram_id,state):
         sql="UPDATE products_user SET state=$1 WHERE telegram_id=$2"
         return await self.execute(sql,state,telegram_id,execute=True)
