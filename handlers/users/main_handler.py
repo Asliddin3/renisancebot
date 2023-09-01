@@ -173,7 +173,7 @@ async def catch_passport_photo(message:Message):
         state[0] = "menu"
         await db.update_contract_field(contract_id=int(state[4]),telegram_id=message.from_user.id,
                                        value=photo_id,field="diplom")
-        # await db.update_contract_field(contract_id=int(state[4]),telegram_id=message.from_user.id,value="registered",field="state")
+        await db.update_contract_field(contract_id=int(state[4]),telegram_id=message.from_user.id,value="registered",field="state")
         state=":".join(state)
         await db.update_user_state(telegram_id=message.from_user.id,state=state)
         await message.answer(text="Tabriklaymiz siz muvaffaqiyatli roʻyxatdan oʻtdingiz sizga tez orada siz bilan bog'lanamiz", reply_markup=menu)
@@ -202,8 +202,8 @@ async def catch_passport_photo(message:Message):
         state[0] = "menu"
         await db.update_contract_field(contract_id=int(state[4]), telegram_id=message.from_user.id,
                                        value=photo_id, field="diplom")
-        # await db.update_contract_field(contract_id=int(state[4]), telegram_id=message.from_user.id, value="registered",
-        #                                field="state")
+        await db.update_contract_field(contract_id=int(state[4]), telegram_id=message.from_user.id, value="registered",
+                                       field="state")
         state = ":".join(state)
         text="Farida \n+998900230751\n"\
              "Gulshoda \n+998900530751\n"\
