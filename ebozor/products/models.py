@@ -77,6 +77,7 @@ class Contract(models.Model):
     diplom =models.CharField(verbose_name="Talabaning Diplom yoki attestati",max_length=1500,null=True)
     jshshir=models.CharField(verbose_name="JSHSHIR",null=True,max_length=30)
     created=models.DateField(verbose_name="Shartnoma yaratilgan sana",null=True)
+    education=models.CharField(verbose_name="Oqish shakli va talim tili",max_length=50,null=True)
     DisplayFields=["id","full_name","phone","fakultet_id","extra_phone","state","passport","jshshir","created"]
     SearchableFields=["id","full_name","phone","extra_phone","passport","jshshir"]
     class Meta:

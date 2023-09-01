@@ -34,6 +34,8 @@ async def catch_admin_callback_data(call:types.CallbackQuery,callback_data:dict)
     action=callback_data.get("action")
     if action=="accept":
         current_time = datetime.now(timezone)
+        await call.message.answer("shartnoma jonatilmadi")
+        return
         telegram_id=await db.get_user_telegram_id_by_contract(int(contract_id))
         if telegram_id is None:
             await call.message.answer("Bu id lis shartnoma mavjud emas")
@@ -350,14 +352,19 @@ async def catch_admin_commands(message:types.Message):
                     document_ids.append(passport_id)
                 diplom=contract[15].split(":")
                 diplom_id, ptype = diplom[1], diplom[0]
+                print("ptype",ptype)
                 if ptype=="photo":
                     photo_ids.append(diplom_id)
                 else:
                     document_ids.append(diplom_id)
-                if len(photo_ids)!=0:
+                if len(photo_ids)>1:
                     await message.answer_media_group(media=[InputMediaPhoto(media=photo_id) for photo_id in photo_ids])
-                if len(document_ids)!=0:
+                elif len(photo_ids)==1:
+                    await message.answer_photo(photo=photo_ids[0])
+                if len(document_ids)>1:
                     await message.answer_media_group(media=[InputMediaDocument(media=photo_id) for photo_id in document_ids])
+                elif len(document_ids)==1:
+                    await message.answer_document(document=document_ids[0])
                 await asyncio.sleep(0.5)
         elif text=="Arhivdagilar":
             contracts = await db.get_archived_contracts()
@@ -401,6 +408,16 @@ async def catch_admin_commands(message:types.Message):
             "Ikkinchi telefon","Fakultet nomi","Ta'lim sharkli","Ta'lim Tili","Address","Passport",
             "JSHSHIR","DTM","Test natijasi","Shartnoma berilgan sana"])
             excel_file_path = 'talabalar.xlsx'  # Specify the file path where the Excel file will be saved
+            df.to_excel(excel_file_path, index=False)
+            with open(excel_file_path, 'rb') as file:
+                await bot.send_document(message.from_user.id, file)
+            os.remove(excel_file_path)
+            contracts = await db.get_new_students()
+            df = pd.DataFrame(contracts, columns=['Shartnoma Idsi', 'F.I.SH', "Telefon raqami",
+                                                  "Ikkinchi telefon",
+                                                  "Address", "Passport",
+                                                  "JSHSHIR","Talim shakli va talim tili"])
+            excel_file_path = 'abuturent.xlsx'  # Specify the file path where the Excel file will be saved
             df.to_excel(excel_file_path, index=False)
             with open(excel_file_path, 'rb') as file:
                 await bot.send_document(message.from_user.id, file)
@@ -472,7 +489,7 @@ async def catch_admin_commands(message:types.Message):
             passport_id, ptype = passport[1], passport[0]
             await message.answer(text=text,reply_markup=markup)
 
-            if ptype == "photo":
+            if "photo" in ptype:
                 # photo_ids.append(passport_id)
                 await message.answer_photo(photo=passport_id)
             else:
@@ -481,7 +498,7 @@ async def catch_admin_commands(message:types.Message):
             # print(contract[15])
             diplom = contract[15].split(":")
             diplom_id, ptype = diplom[1], diplom[0]
-            if ptype == "photo":
+            if  "photo" in ptype:
                 # photo_ids.append(diplom_id)
                 await message.answer_photo(photo=diplom_id)
             else:

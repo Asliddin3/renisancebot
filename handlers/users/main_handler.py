@@ -2,12 +2,12 @@ import aiogram
 import asyncpg
 
 from loader import dp,db,bot
-
+from aiogram import types
 from aiogram.types import ContentType,Message,CallbackQuery,ReplyKeyboardRemove,InputFile
 from keyboards.default.start_keyboard import lang,format,menu,make_fakultet_keyboard,backKeyboard,testKey,dtmKey,teslKeyboard
 from keyboards.inline.menu_keyboards import make_test_keyboard,test
 from filters.user_filter import UserFilter
-import re
+import re,os
 from datetime import datetime
 from handlers.users.start import photo_id,jshshr_id,video_id,contract_id
 from generator import create_contract,create_info,create_uchtamonlama
@@ -38,15 +38,15 @@ backDic={
         "state":"lang",
         "text":"Ta'lim tilini tanlang"
     },
-    "fakultet":{
+    # "fakultet":{
+    #     "key":format,
+    #     "state":"format",
+    #     "text":"Ta'lim shaklini tanlang"
+    # },
+    "full_name":{
         "key":format,
         "state":"format",
         "text":"Ta'lim shaklini tanlang"
-    },
-    "full_name":{
-        "key":backKeyboard,
-        "state":"fakultet",
-        "text":"Yo'nalishni tanlang."
     },
     "phone":{
         "key":backKeyboard,
@@ -102,7 +102,7 @@ backDic={
 
 
 Times = {
-         'Kunduzgi':'daytime',
+        'Kunduzgi':'daytime',
         'Kechgi':'evening' ,
         "Sirtqi":"distance"
 }
@@ -170,12 +170,17 @@ async def catch_passport_photo(message:Message):
         await db.update_user_state(telegram_id=message.from_user.id, state=state)
         await message.answer("Talabaning attestat yoki diplomini rasmini jo'nating",reply_markup=backKeyboard)
     else:
-        state[0] = "dtm"
+        state[0] = "menu"
         await db.update_contract_field(contract_id=int(state[4]),telegram_id=message.from_user.id,
                                        value=photo_id,field="diplom")
+        # await db.update_contract_field(contract_id=int(state[4]),telegram_id=message.from_user.id,value="registered",field="state")
         state=":".join(state)
         await db.update_user_state(telegram_id=message.from_user.id,state=state)
-        await message.answer(text="Siz DTM testan o'tganmisiz",reply_markup=dtmKey)
+        await message.answer(text="Tabriklaymiz siz muvaffaqiyatli roʻyxatdan oʻtdingiz sizga tez orada siz bilan bog'lanamiz", reply_markup=menu)
+        text = "Farida \n+998900230751\n" \
+               "Gulshoda \n+998900530751\n" \
+               "Dinara \n+998900630751"
+        await message.answer(text=text)
     # await message.answer("Imtihonni boshlash uchun `Imtihonni boshlash` tugmasini bosing.",reply_markup=testKey)
 @dp.message_handler(UserFilter(),content_types=ContentType.DOCUMENT)
 async def catch_passport_photo(message:Message):
@@ -194,13 +199,18 @@ async def catch_passport_photo(message:Message):
         await db.update_user_state(telegram_id=message.from_user.id, state=state)
         await message.answer("Talabaning attestat yoki diplomini rasmini jo'nating", reply_markup=backKeyboard)
     else:
-        state[0] = "dtm"
+        state[0] = "menu"
         await db.update_contract_field(contract_id=int(state[4]), telegram_id=message.from_user.id,
                                        value=photo_id, field="diplom")
+        # await db.update_contract_field(contract_id=int(state[4]), telegram_id=message.from_user.id, value="registered",
+        #                                field="state")
         state = ":".join(state)
-
+        text="Farida \n+998900230751\n"\
+             "Gulshoda \n+998900530751\n"\
+             "Dinara \n+998900630751"
         await db.update_user_state(telegram_id=message.from_user.id, state=state)
-        await message.answer(text="Siz DTM testan o'tganmisiz", reply_markup=dtmKey)
+        await message.answer(text="Tabriklaymiz siz muvaffaqiyatli roʻyxatdan oʻtdingiz sizga tez orada siz bilan bog'lanamiz", reply_markup=menu)
+        await message.answer(text=text)
 
 
 
@@ -244,8 +254,8 @@ async def catch_answers(call:CallbackQuery,callback_data:dict):
     else:
         state[0]="menu"
         await call.message.delete()
-        await db.update_contract_field(contract_id=int(state[4]), field="state", telegram_id=call.from_user.id,
-                                       value="registered")
+        # await db.update_contract_field(contract_id=int(state[4]), field="state", telegram_id=call.from_user.id,
+        #                                value="registered")
         await call.message.answer(text="Tabriklaymiz siz muvaffaqiyatli roʻyxatdan oʻtdingiz sizga tez orada shartnoma joʻnatamiz",
                              reply_markup=menu)
         state[0] = "menu"
@@ -263,51 +273,47 @@ async def main_handler(message:Message):
             state[0]="lang"
             await message.answer("Ta'lim tilini tanlang.",reply_markup=lang)
         elif message.text=="Biz haqimizda":
-            await message.answer_video(video_id,
-                                       caption="<a href='https://t.me/renuadmission/19'>Universitet haqida batafsil</a>\n\n" \
-                                      "<a href='https://t.me/renuadmission/85'>Xususiy oliygohlar diplimi haqida batafsil</a>\n\n" \
-                                      "<a href='https://t.me/renuadmission/86'>Baklavr va Magistratura yoʻnlishlari haqida batafsil (har bir yoʻnalishda nimalar oʻrgatiladi ? Asosiy fanlar qaysilar ?)</a>\n\n" \
-                                      "Telefonlar:\n"\
-                                      "+998947405220  Komila\n"\
-                                      "+998947406220  Sarvinoz\n"\
-                                      "+998947407220  Diyora\n"\
-                                      "+998911357797  Sarvinoz\n" \
-                                      "@renuqabul2023\n" \
-                                      "@Renuadmin2\n" \
-                                      "@Renaissance7220\n" \
-                                      "@Renuadmin3\n"\
-                                      "Xujjat topshirish uchun @renutestbot", reply_markup=menu)
-            await message.answer_photo(photo=photo_id)
-            await message.answer_location(longitude=69.210325,latitude=41.19043)
-            await message.answer_photo(photo=contract_id)
-            await message.answer(
-                text="Universtetimizga quyidagi lakatsiya orqali yoki 131/58/47/62 yoʻnalishli avtobuslarning oxirgi bekatiga tushib kelishingiz mumkin")
-            # await message.answer(
-            #     text="RENAISSANCE UNIVERSITYda 500 ta grant oʻrinlari mavjud boʻlib 1 semestrni aʼlo bahoga tamomlagan talabalar oʻrtasida qoʻshimcha saralash yoʻli bilan eng yuqori bal olganlarga 2 semestrdan taqdim etiladi")
-            # await message.answer(text="<a href='https://t.me/renuadmission/89'>500 ta</a><a href='https://t.me/renuadmission/89' >grant va sitipendiya oʻrinlari haqida batafsil</a>\n\n" \
-            #                           "<a href='https://t.me/renuadmission/19'>Universitet haqida batafsil</a>\n\n" \
-            #                           "<a href='https://t.me/renuadmission/85'>Xususiy oliygohlar diplimi haqida batafsil</a>\n\n" \
-            #                           "<a href='https://t.me/renuadmission/86'>Baklavr va Magistratura yoʻnlishlari haqida batafsil (har bir yoʻnalishda nimalar oʻrgatiladi ? Asosiy fanlar qaysilar ?)</a>\n\n" \
-            #                           "Telefonlar:\n"\
-            #                           "+998947405220  Komila\n"\
-            #                           "+998947406220  Sarvinoz\n"\
-            #                           "+998947407220  Diyora\n"\
-            #                           "+998911357797  Sarvinoz\n" \
-            #                           "@renuqabul2023\n" \
-            #                           "@Renuadmin2\n" \
-            #                           "@Renaissance7220\n" \
-            #                           "@Renuadmin3\n"\
-            #                           "Xujjat topshirish uchun @renutestbot"
-            #                      )
-
+            text = "Hurmatli talabalar universitet tanlashda qiynalayapsizmi ?\n" \
+                   "Qaysi Nodavlat taʼlim muassasalari diplomi tan olinadi ?\n" \
+                   "Litsenizyasi haqiqiymi  yoʻqmi ? Bu joyda oʻqisam keyin pullarimga kuyib qolmaymani ? shu kabi savollar sizni qiynayaptimi ?  Unda Nodavlat taʼlim muassasalariga litseniziya beruvchi vakolatli organ Oliy taʼlim fan va Innovatsiyalar vazirligi ishonch raqami 1006 yoki call markazi  712306464 ga qoʻngʻiroq qiling\n\n" \
+                   "https://stat.edu.uz/Univer-list.php\n" \
+                   "quyidagi havolada Oliy taʼlm vazirligi rasmiy saytida roʻyxati koʻrsatilgan litsenziyaga ega xususiy oliygohlar bilan tanishishingiz mumkin\n"
+            photo1 = f"./photo1.jpg"
+            photo2 = f"./photo2.jpg"
+            if os.path.exists(photo1) and os.path.exists(photo2):
+                media_group = [
+                    types.InputMediaPhoto(media=open(photo1, 'rb'), caption=text),
+                    types.InputMediaPhoto(media=open(photo2, 'rb'))
+                ]
+                await message.answer_media_group(media=media_group)
+            text = "Eng kerakli va zamonaviy kasblarni IIIU'da egallang!\n\n" \
+                   "📌 Bizning yo'nalishlar:\n" \
+                   "▫️ Boshlang'ich ta'lim;\n" \
+                   "▫️ Amaliy psixologiya;\n" \
+                   "▫️ Kompyuter ilmi va dasturlash texnologiyalari;\n" \
+                   "▫️ Maktabgacha ta'lim;\n" \
+                   "▫️ Filologiya va tillarni o'qitish;\n" \
+                   "▫️ Buxgalteriya va audit;\n" \
+                   "▫️ Moliya va moliyaviy texnologiyalar;\n" \
+                   "▫️ Iqtisodiyot.\n" \
+                   "✅ Ta'lim sifati kafolatlanadi:\n" \
+                   "Tajribali o'qituvchilarimizning 80% qismi ilmiy darajaga ega va ular xorij universitetlarida malaka oshirishadi.\n\n" \
+                   "✅ To'lov va moddiy ko'mak:\n" \
+                   "Talabalar oylik stipendiya bilan ta'minlanadi. Shartnoma to'lovi uchun ta'lim kreditini rasmiylashtirish imkoni mavjud.\n" \
+                   "✅ Onlayn imtihon:\n" \
+                   "Test sinovidan o'tish uchun hech qayerga borishingizga hojat yo'q. DTM imtihonidan 56.7 ball to'plaganlar esa imtihonsiz qabul qilinadi"
+            photo1 = "./hand.jpg"
+            with open(photo1, 'rb') as photo_file:
+                await bot.send_photo(message.from_user.id, photo_file, caption=text)
+            await message.answer_location(longitude=69.21678571163685, latitude=41.23966763877322, reply_markup=menu)
 
     elif message.text=="🔙 Ortga":
-        if state[0]=="full_name":
-            state[0] = "fakultet"
-            fakultets = await db.get_fakultets(language=state[1], time=state[2])
-            fakultetKey = make_fakultet_keyboard(fakultets)
-            await message.answer("Yo'nalishni tanlang.", reply_markup=fakultetKey)
-        elif state[0]=="exam":
+        # if state[0]=="full_name":
+        #     state[0] = "fakultet"
+        #     fakultets = await db.get_fakultets(language=state[1], time=state[2])
+        #     fakultetKey = make_fakultet_keyboard(fakultets)
+        #     await message.answer("Yo'nalishni tanlang.", reply_markup=fakultetKey)
+        if state[0]=="exam":
             await message.answer("Xato amal kirtildi")
             return
         else:
@@ -316,52 +322,59 @@ async def main_handler(message:Message):
             await message.answer(text=backAns["text"],reply_markup=backAns["key"])
     elif message.text=="🏠 Bosh menu":
         state[0]="menu"
-        await message.answer(text="Assalomu alaykum, Xush kelibsiz. Universitetga ro'yxatdan o'tish uchun `Ro'yxatdan o'tish` tugmasini bosing",
-                             reply_markup=menu)
-
-        await message.answer_video(video_id,
-                                   caption="<a href='https://t.me/renuadmission/19'>Universitet haqida batafsil</a>\n\n" \
-                                      "<a href='https://t.me/renuadmission/85'>Xususiy oliygohlar diplimi haqida batafsil</a>\n\n" \
-                                      "<a href='https://t.me/renuadmission/86'>Baklavr va Magistratura yoʻnlishlari haqida batafsil (har bir yoʻnalishda nimalar oʻrgatiladi ? Asosiy fanlar qaysilar ?)</a>\n\n" \
-                                      "Telefonlar:\n"\
-                                      "+998947405220  Komila\n"\
-                                      "+998947406220  Sarvinoz\n"\
-                                      "+998947407220  Diyora\n"\
-                                      "+998911357797  Sarvinoz\n" \
-                                      "@renuqabul2023\n" \
-                                      "@Renuadmin2\n" \
-                                      "@Renaissance7220\n" \
-                                      "@Renuadmin3\n"\
-                                      "Xujjat topshirish uchun @renutestbot", reply_markup=menu)
-        await message.answer_photo(photo=photo_id)
-        await message.answer_location(longitude=69.210325, latitude=41.19043)
-        await message.answer_photo(photo=contract_id)
-        await message.answer(
-            text="Universtetimizga quyidagi lakatsiya orqali yoki 131/58/47/62 yoʻnalishli avtobuslarning oxirgi bekatiga tushib kelishingiz mumkin")
-        # await message.answer(
-        #     text="RENAISSANCE UNIVERSITYda 500 ta grant oʻrinlari mavjud boʻlib 1 semestrni aʼlo bahoga tamomlagan talabalar oʻrtasida qoʻshimcha saralash yoʻli bilan eng yuqori bal olganlarga 2 semestrdan taqdim etiladi")
-        # await message.answer(text="Murojat uchun telefonlar:\n" \
-        #                           "+998947405220  Komila\n" \
-        #                           "+998947406220  Sarvinoz\n" \
-        #                           "+998947407220  Diyora\n" \
-        #                           "+998911357797  Sarvinoz\n" \
-        #                           "@renuqabul2023\n" \
-        #                           "@Renuadmin2\n" \
-        #                           "@Renaissance7220\n" \
-        #                           "@Renuadmin3")
+        text = "Hurmatli talabalar universitet tanlashda qiynalayapsizmi ?\n" \
+               "Qaysi Nodavlat taʼlim muassasalari diplomi tan olinadi ?\n" \
+               "Litsenizyasi haqiqiymi  yoʻqmi ? Bu joyda oʻqisam keyin pullarimga kuyib qolmaymani ? shu kabi savollar sizni qiynayaptimi ?  Unda Nodavlat taʼlim muassasalariga litseniziya beruvchi vakolatli organ Oliy taʼlim fan va Innovatsiyalar vazirligi ishonch raqami 1006 yoki call markazi  712306464 ga qoʻngʻiroq qiling\n\n" \
+               "https://stat.edu.uz/Univer-list.php\n" \
+               "quyidagi havolada Oliy taʼlm vazirligi rasmiy saytida roʻyxati koʻrsatilgan litsenziyaga ega xususiy oliygohlar bilan tanishishingiz mumkin\n"
+        path = "/home/asliddin/PycharmProjects/renaissance/mukammal-bot-paid"
+        photo1 = f"./photo1.jpg"
+        photo2 = f"./photo2.jpg"
+        if os.path.exists(photo1) and os.path.exists(photo2):
+            media_group = [
+                types.InputMediaPhoto(media=open(photo1, 'rb'), caption=text),
+                types.InputMediaPhoto(media=open(photo2, 'rb'))
+            ]
+            await message.answer_media_group(media=media_group)
+        text = "Eng kerakli va zamonaviy kasblarni IIIU'da egallang!\n\n" \
+               "📌 Bizning yo'nalishlar:\n" \
+               "▫️ Boshlang'ich ta'lim;\n" \
+               "▫️ Amaliy psixologiya;\n" \
+               "▫️ Kompyuter ilmi va dasturlash texnologiyalari;\n" \
+               "▫️ Maktabgacha ta'lim;\n" \
+               "▫️ Filologiya va tillarni o'qitish;\n" \
+               "▫️ Buxgalteriya va audit;\n" \
+               "▫️ Moliya va moliyaviy texnologiyalar;\n" \
+               "▫️ Iqtisodiyot.\n" \
+               "✅ Ta'lim sifati kafolatlanadi:\n" \
+               "Tajribali o'qituvchilarimizning 80% qismi ilmiy darajaga ega va ular xorij universitetlarida malaka oshirishadi.\n\n" \
+               "✅ To'lov va moddiy ko'mak:\n" \
+               "Talabalar oylik stipendiya bilan ta'minlanadi. Shartnoma to'lovi uchun ta'lim kreditini rasmiylashtirish imkoni mavjud.\n" \
+               "✅ Onlayn imtihon:\n" \
+               "Test sinovidan o'tish uchun hech qayerga borishingizga hojat yo'q. DTM imtihonidan 56.7 ball to'plaganlar esa imtihonsiz qabul qilinadi"
+        photo1 = "./hand.jpg"
+        with open(photo1, 'rb') as photo_file:
+            await bot.send_photo(message.from_user.id, photo_file, caption=text)
+        await message.answer_location(longitude=69.21678571163685, latitude=41.23966763877322, reply_markup=menu)
+        text = "Farida \n+998900230751\n" \
+               "Gulshoda \n+998900530751\n" \
+               "Dinara \n+998900630751"
+        await message.answer(text)
     elif message.text in ["O'zbek","Rus tili","Ingliz"] and state[0]=="lang":
         state[0]="format"
         state[1]=langDic[message.text]
         await message.answer("Ta'lim shaklini tanlang.",reply_markup=format)
     elif message.text in ["Kunduzgi","Kechgi","Sirtqi"] and state[0]=="format":
-        state[0]="fakultet"
+        state[0] = "full_name"
+        await message.answer("Talabaning to'liq F.I.SH kiriting ", reply_markup=backKeyboard)
+        # state[0]="fakultet"
         state[2]=Times[message.text]
-        fakultets=await db.get_fakultets(language=state[1],time=Times[message.text])
-        if len(fakultets)==0:
-            await message.answer("Bu ta'lim shakli boicha fakultet mavjud emas",reply_markup=format)
-            return
-        fakultetKey=make_fakultet_keyboard(fakultets)
-        await message.answer("Yo'nalishni tanlang.",reply_markup=fakultetKey)
+        # fakultets=await db.get_fakultets(language=state[1],time=Times[message.text])
+        # if len(fakultets)==0:
+        #     await message.answer("Bu ta'lim shakli boicha fakultet mavjud emas",reply_markup=format)
+        #     return
+        # fakultetKey=make_fakultet_keyboard(fakultets)
+        # await message.answer("Yo'nalishni tanlang.",reply_markup=fakultetKey)
     elif state[0]=="fakultet":
         fakultet_id=await db.get_fakultet_id_by_name(message.text,lang=state[1],time=state[2])
         if fakultet_id is None:
@@ -380,7 +393,11 @@ async def main_handler(message:Message):
         for i in range(len(name)) :
             name[i]=name[i].capitalize()
         name=" ".join(name)
-        row=await db.create_new_user_contract(telegram_id=message.from_user.id,fakultet_id=int(state[3]),full_name=name)
+        fakultet=0
+        row=await db.create_new_user_contract(telegram_id=message.from_user.id,fakultet_id=fakultet,full_name=name)
+        edu=f"{state[2]}:{state[1]}"
+        await db.update_contract_field(contract_id=int(row[0]),telegram_id=message.from_user.id,
+                                        field="education",value=edu)
         state[4]=str(row[0])
         await message.answer("Talabaning telefon raqamini shu formata kiriting +998991112233",reply_markup=teslKeyboard)
         state[0]="phone"
@@ -394,8 +411,6 @@ async def main_handler(message:Message):
         if tel is not None:
             await message.answer("Bu nomerga shartnoma tuzilib bolingan")
             return
-        # id=await db.check_for_phone_exists(phone)
-
         state[0]="extra_phone"
         try:
             await db.update_contract_field(contract_id=int(state[4]),field="phone",telegram_id=message.from_user.id,value=phone)
