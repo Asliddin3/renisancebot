@@ -133,7 +133,7 @@ class Database:
         return await self.execute(sql,state,fetch=True)
     async def get_new_contracts(self):
         sql="SELECT products_contract.id,full_name,phone,extra_phone,f.name,f.time,f.lang,address,passport,jshshir,passport_photo," \
-            "dtm,result,created,result,diplom " \
+            "dtm,result,created,result,diplom,education " \
             " FROM products_contract LEFT JOIN products_fakultet AS f " \
             "ON f.id=fakultet_id  WHERE state='registered' ORDER BY id"
         return await self.execute(sql,fetch=True)
@@ -195,7 +195,7 @@ class Database:
     async def get_new_students(self):
         sql = "SELECT id,full_name,phone,extra_phone,address,passport,jshshir,education" \
               " FROM products_contract  " \
-              "WHERE state='registered' and education not null ORDER BY id"
+              "WHERE state='registered' and education is not null ORDER BY id"
         return await self.execute(sql, fetch=True)
     async def update_user_photo(self,telegram_id,photo_id):
         sql="UPDATE products_contract SET passport_photo=$1 WHERE telegram_id=$2"
