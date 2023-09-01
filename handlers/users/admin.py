@@ -519,12 +519,15 @@ notTypes={
 Times = {
         'daytime':"Kunduzgi",
         "evening":'Kechgi' ,
-        "distance":"Sirtqi"
+        "distance":"Sirtqi",
+        None:""
 }
 langDic={
     "uz":"O'zbek",
     "ru":"Rus tili",
-    "en":"Ingliz"
+    "en":"Ingliz",
+    None: ""
+
 }
 
 def prepare_contract_data(contract:list):
