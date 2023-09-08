@@ -513,6 +513,14 @@ async def catch_admin_commands(message:types.Message):
             else:
                 # document_ids.append(diplom_id)
                 await message.answer_document(document=diplom_id)
+            if contract[16] is not None:
+                diplom = contract[17].split(":")
+                diplom_id, ptype = diplom[1], diplom[0]
+                print("picture")
+                if ptype == "photo":
+                    await message.answer_photo(photo=diplom_id)
+                else:
+                    await message.answer_document(document=diplom_id)
 
         else:
             await message.answer("Bu id li shartnoma topilmadi")

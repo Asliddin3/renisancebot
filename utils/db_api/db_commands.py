@@ -140,7 +140,7 @@ class Database:
 
     async def get_contract_by_id(self,id):
         sql="SELECT products_contract.id,full_name,phone,extra_phone,f.name,f.time,f.lang,address,passport,jshshir,passport_photo," \
-            "dtm,result,created,result,diplom " \
+            "dtm,result,created,result,diplom,picture " \
             " FROM products_contract LEFT JOIN products_fakultet AS f " \
             "ON f.id=fakultet_id  WHERE state !='new' AND products_contract.id=$1"
         return await self.execute(sql,id,fetch=True)
