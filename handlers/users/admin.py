@@ -1,17 +1,577 @@
-from django.contrib import admin
+import asyncio
+import re
+import time
 
-# Register your models here.
-from .models import User,Contract,Fakultet,Test
+import aiogram
+import openpyxl
+from aiogram import types
+from aiogram.types import ContentType,InputMediaPhoto,InputMediaDocument,InputFile
+from filters.admin_filter import AdminFilter,AdminContentFilter,AdminExelFilter
+from data.config import ADMINS
+from loader import dp, db, bot
+from keyboards.default.admin_keyboard import main_admin,back,notificationType
+from keyboards.inline.admin_keaborad import make_contract_keyboard,make_archive_keyboard,application,make_resend_keyboard
+from keyboards.default.start_keyboard import menu
+from datetime import datetime
+import pytz
+import os
+import pandas as pd
+from generator import create_uchtamonlama,create_info,create_contract
+timezone = pytz.timezone('Asia/Tashkent')
+
+# @dp.message_handler(text="/exit",user_id=ADMINS)
+# async def exit_admin_panel(message:types.Message):
+#     await db.update_user_state(telegram_id=message.from_user.id,state="menu::::")
+#     await message.answer(text="Bosh menu",reply_markup=menu)
+uzbek_month_names = [
+    "Yanvar", "Fevral", "Mart", "Aprel", "May", "Iyun", "Iyul", "Avgust", "Sentabr",
+    "Oktabr", "Noyabr", "Dekabr"
+]
+
+@dp.callback_query_handler(application.filter(),AdminFilter(),user_id=ADMINS)
+async def catch_admin_callback_data(call:types.CallbackQuery,callback_data:dict):
+    contract_id=callback_data.get("contract_id")
+    action=callback_data.get("action")
+    if action=="accept":
+        current_time = datetime.now(timezone)
+        await call.message.answer("shartnoma jonatilmadi")
+        return
+        telegram_id=await db.get_user_telegram_id_by_contract(int(contract_id))
+        if telegram_id is None:
+            await call.message.answer("Bu id lis shartnoma mavjud emas")
+            return
+        await accept_student(message=call.message,contract_id=int(contract_id),created=current_time)
+        await db.update_contract_state(id=int(contract_id),state="accepted")
+        await db.update_contract_created_time(id=int(contract_id),created=current_time.date())
+        await bot.send_message(chat_id=telegram_id,text="✅Tabriklaymiz siz Renaissance Universtyga talabalikka qabul qilindingiz !!!")
+        malumotnoma=InputFile(f"/root/univer-bot/qabulbot/documents/{contract_id}/malumotnoma.pdf")
+        shartnoma=InputFile(f"/root/univer-bot/qabulbot/documents/{contract_id}/shartnoma.pdf")
+        uchtamonlama=InputFile(f"/root/univer-bot/qabulbot/documents/{contract_id}/uchtamonlama.pdf")
+        await bot.send_document(chat_id=telegram_id,document=malumotnoma,caption="Ma'lumotnoma")
+        await bot.send_document(chat_id=telegram_id,document=shartnoma,caption="Shartnoma")
+        await bot.send_document(chat_id=telegram_id,document=uchtamonlama,caption="Uch tomonli")
+        await call.answer("Shartnoma jo'natildi")
+
+    elif action=="archive":
+        await db.update_contract_state(id=int(contract_id),state="archive")
+        await call.answer("Arhivega solindi")
+    elif action=="delete":
+        await db.delete_contract(id=int(contract_id))
+        await call.answer("Bazadan ochirildi")
+
+info = {
+    "name": "Asliddin Dehqonov ",
+    "faculty": "moliya",
+    "learn_type": "sirtqi",
+    "id": "12421",
+}
 
 
-# common/admin.py
-admin.site.register(User)
-admin.site.register(Test)
-admin.site.register(Fakultet)
-# admin.site.register(Contract)
- # Replace 'your_column_name' with the actual column name
+# Times={
+#     'daytime':'Kunduzgi',
+# 'evening':'Kechki',
+# "distance":"Sirtqi"
+# }
+Lang={
+'en': 'Ingliz',
+'ru': 'Rus tili',
+"uz":"O'zbek"
+}
 
-@admin.register(Contract)
-class ContractAdmin(admin.ModelAdmin):
-    list_display = Contract.DisplayFields
-    search_fields = Contract.SearchableFields
+async def accept_student(message:types.Message,contract_id:int,created:datetime):
+    full_info=await db.get_contract_full_info(contract_id)
+    if full_info is None:
+        await message.answer("Shartnoma topilmadi")
+        return
+    id=2000+full_info[0]
+
+    info_data={
+        "id":f"01-04/{id}",
+        "path":full_info[0],
+        "faculty":full_info[4],
+        "learn_type":Times[full_info[5]],
+        "name":full_info[1],
+        "date":created.strftime("%d.%m.%Y")
+    }
+    create_info(info_data)
+    finishYear=2027
+    year=4
+    if full_info[5]=="distance":
+        finishYear=2028
+        year=5
+    summa=full_info[6]/1000_000
+    summa=int(summa)
+    data={
+        "full_name":full_info[1],
+        "id":f"01-04/{id}",
+        "path":full_info[0],
+        "price":f"{summa} 000 000 ",
+        "price_text":f"({full_info[7]})",
+        "year":str(created.year),
+        "day":str(created.day),
+        "month":uzbek_month_names[created.month-1],
+        "student_info":{
+            "name": f"F.I.Sh.: {full_info[1]}",
+            "address": f"Yashash manzili: {full_info[9]}",
+            "passport": f"Pasport ma’lumotlari: {full_info[10]}",
+            "jshshir": f"JSHSHIR:{full_info[11]}",
+            "number": f"Telefon raqami: +{full_info[2]}\n+{full_info[3]}",
+        },
+        "contract_info":{
+            "Ta’lim bosqichi:": "Bakalavr",
+            "Ta’lim shakli:": Times[full_info[5]],
+            "O‘qish muddati:":f"{year}-yil({finishYear})",
+            "O‘quv kursi:": "1-bosqich",
+            "Ta’lim yo‘nalishi:": f"{full_info[4]}",
+            "Ta’lim tili:": langDic[full_info[8]],
+        }
+    }
+    create_contract(data)
+    create_uchtamonlama(data)
+
+@dp.message_handler(AdminExelFilter(),content_types=ContentType.DOCUMENT)
+async def catch_admin_exel(message:types.Message):
+    if message.document.mime_type == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
+        file_path = await message.document.download(destination_dir="./handlers/users")
+        print("input",file_path.name)
+        file_path=file_path.name
+        process_excel(file_path)
+        path="/root/univer-bot/qabulbot"
+        correct=f"{path}/handlers/users/correct.xlsx"
+        incorrect=f"{path}/handlers/users/incorrect.xlsx"
+        with open(correct, 'rb') as document_file:
+            # Use send_document method to send the document
+            await message.answer_document(document=document_file)
+        with open(incorrect, 'rb') as document_file:
+            # Use send_document method to send the document
+            await message.answer_document(document=document_file)
+        time.sleep(2)
+        os.remove(correct)
+        os.remove(incorrect)
+    else:
+        await message.reply("Please upload an Excel file (xlsx format).")
+
+def process_excel(input):
+    # input_filename = 'input.xlsx'
+    # output_filename = './handlers/users/output.xlsx'
+    # workbook = openpyxl.load_workbook(input)
+    # sheet = workbook.active
+    workbook = openpyxl.load_workbook(input)
+    sheet = workbook.active
+
+    # Regular expression pattern for Uzbek phone numbers
+    pattern = r'^9989\d{8}$'
+
+    # Function to reformat phone numbers
+
+    new_workbook1 = openpyxl.Workbook()
+    new_workbook2 = openpyxl.Workbook()
+    correct = new_workbook1.active
+    incorect = new_workbook2.active
+
+    # Iterate through rows and update phone numbers
+    # count=0
+    correctPhones={}
+    incorectPhones={}
+    for row in sheet.iter_rows(min_row=1, values_only=True):
+        # count=count+1
+        # if count<3:
+        #     continue
+        phone_number = str(row[0])
+        # print("phone number",phone_number)
+        # print(phone_number)
+        if phone_number=="None":
+            continue
+        # print(phone_number is None)
+        # result = re.sub(r'[^0-9]', '', phone_number)
+        # print("result",result)
+        # phone_number=result
+        phone_number=phone_number.replace("+","")
+        phone_number=phone_number.replace(" ","")
+        phone_number=phone_number.replace(" ","")
+        phone_number=phone_number.replace("'","")
+        phone_number=phone_number.replace(" ","")
+        phone_number=phone_number.replace("-","")
+        phone_number=phone_number.replace(",","")
+        phone_number=phone_number.replace(".","")
+        phone_number=phone_number.replace("(","")
+        phone_number=phone_number.replace(")","")
+        phone_number=phone_number.replace("=","")
+        while len(phone_number)>6 and not phone_number[0].isdigit():
+            phone_number=phone_number.replace(phone_number[0],"")
+
+        if len(phone_number)==9:
+            phone_number=f"998{phone_number}"
+        # if len(phone_number)==12:
+            # print("phone with 12 ",phone_number)
+        # else:
+            # print("phone with not 12 ", phone_number)
+        if re.match(pattern, phone_number) or len(phone_number)==12:
+            correctPhones[phone_number]=""
+            # correct.append((phone_number,""))
+        else:
+            if "/" in phone_number and len(phone_number)>12:
+                print("/ phone number",phone_number)
+                arr=phone_number.split("/")
+                print(arr)
+                phone_one = f"998{arr[0]}"
+                phone_two = f"998{arr[1]}"
+                print("len 1",len(phone_one))
+                print("len 2",len(phone_two))
+                exist=False
+                if len(phone_one)==12:
+                    correctPhones[phone_one]=""
+                    exist=True
+                if len(phone_two)==12:
+                    correctPhones[phone_two]=""
+                    exist=True
+                if exist:
+                    continue
+            if "/" in phone_number:
+                phone_number=phone_number.replace("/","")
+                phone_number=f"998{phone_number}"
+                if len(phone_number)==12:
+                    correctPhones[phone_number]=""
+                    continue
+            if len(phone_number)==18:
+                f=phone_number[:9]
+                s=phone_number[9:]
+                f = f"998{f}"
+                s = f"998{s}"
+                exists=False
+                if re.match(pattern, f):
+                    correctPhones[f] = ""
+                    exists=True
+                if re.match(pattern, s):
+                    correctPhones[s] = ""
+                    exists=True
+                if exists:
+                    continue
+            if len(phone_number)==21:
+                f=phone_number[:12]
+                s=phone_number[12:]
+                # f = f"998{f}"
+                s = f"998{s}"
+                exists=False
+                if re.match(pattern, f):
+                    correctPhones[f] = ""
+                    exists=True
+                if re.match(pattern, s):
+                    correctPhones[s] = ""
+                    exists=True
+                if exists:
+                    continue
+            incorectPhones[phone_number]=""
+            # print("incorrect phone number",phone_number)
+            # incorect.append((phone_number,""))
+            # row[0] = reformat_phone_number(phone_number)
+    for key in correctPhones.keys():
+        correct.append((key, ""))
+    for key in incorectPhones.keys():
+        incorect.append((key, ""))
+    new_filename1 = './handlers/users/correct.xlsx'
+    new_filename2 = './handlers/users/incorrect.xlsx'
+    new_workbook1.save(new_filename1)
+    new_workbook2.save(new_filename2)
+    # Save the updated data to a new Excel file
+    # workbook.save(output_filename)
+    os.remove(input)
+
+
+@dp.message_handler(AdminContentFilter(),content_types=ContentType.ANY)
+async def catch_admin_notification(message:types.Message):
+    state=await db.get_user_state_by_telegram_id(message.from_user.id)
+    state=state.split(";")
+    if state[1] == "all":
+        users = await db.select_all_users()
+    elif state[1]=="notregirtered":
+        users=await db.select_not_registered()
+    else:
+        users = await db.get_contract_users_by_state(state=state[1])
+    if message.text == "🔙 Ortga":
+        state[1] = "notification"
+        state = ";".join(state)
+        await db.update_user_state(telegram_id=message.from_user.id, state=state)
+        await message.answer(text="Kimlarga elon jo'natmoqchisiz", reply_markup=notificationType)
+        return
+    sendMap={}
+    for user in users:
+        user_id = user[0]
+        if sendMap.get(user_id):
+            continue
+        try:
+            if len(message.photo) != 0:
+                await bot.send_photo(chat_id=user_id, caption=message.caption,
+                                 photo=message.photo[0].file_id)
+            elif message.video is not None:
+                await bot.send_video(chat_id=user_id, caption=message.caption,
+                                 photo=message.video.file_id)
+            else:
+                await bot.send_message(
+                chat_id=user_id, text=message.text
+                )
+            await asyncio.sleep(1)
+            sendMap[user_id]=True
+            print("message sended")
+        except aiogram.utils.exceptions.BotBlocked:
+            print("message blocked")
+        except aiogram.utils.exceptions.UserDeactivated:
+            print("user diactiveted")
+        except:
+            print("get any error")
+    # except aiogram.utils.ex
+
+@dp.message_handler(AdminFilter(),user_id=ADMINS)
+async def catch_admin_commands(message:types.Message):
+    state=await db.get_user_state_by_telegram_id(message.from_user.id)
+    state=state.split(";")
+    if state[0]=="admin" and state[1]=="":
+        text=message.text
+        if text=="Chiqish":
+            await message.answer("Bosh menu",reply_markup=menu)
+            state="menu::::"
+            await db.update_user_state(telegram_id=message.from_user.id,state=state)
+            return
+        elif text=="Ariza topshirganlar":
+            contracts=await db.get_new_contracts()
+            if len(contracts)==0:
+                await message.answer("Yangi arizalar mavjud emas")
+                return
+            for contract in contracts:
+                markup=make_contract_keyboard(contract[0])
+                text=prepare_contract_data(contract)
+                await message.answer(text=text,reply_markup=markup)
+                await asyncio.sleep(0.5)
+                passport=contract[10].split(":")
+                passport_id,ptype=passport[1],passport[0]
+                photo_ids=[]
+                document_ids=[]
+                if ptype=="photo":
+                    photo_ids.append(passport_id)
+                else:
+                    document_ids.append(passport_id)
+                diplom=contract[15].split(":")
+                diplom_id, ptype = diplom[1], diplom[0]
+                print("ptype",ptype)
+                if ptype=="photo":
+                    photo_ids.append(diplom_id)
+                else:
+                    document_ids.append(diplom_id)
+                print("")
+                if contract[17] is not None:
+                    diplom = contract[17].split(":")
+                    diplom_id, ptype = diplom[1], diplom[0]
+                    print("picture")
+                    if ptype == "photo":
+                        photo_ids.append(diplom_id)
+                    else:
+                        document_ids.append(diplom_id)
+                if len(photo_ids)>1:
+                    await message.answer_media_group(media=[InputMediaPhoto(media=photo_id) for photo_id in photo_ids])
+                elif len(photo_ids)==1:
+                    await message.answer_photo(photo=photo_ids[0])
+                if len(document_ids)>1:
+                    await message.answer_media_group(media=[InputMediaDocument(media=photo_id) for photo_id in document_ids])
+                elif len(document_ids)==1:
+                    await message.answer_document(document=document_ids[0])
+                await asyncio.sleep(0.5)
+        elif text=="Arhivdagilar":
+            contracts = await db.get_archived_contracts()
+            if len(contracts)==0:
+                await message.answer("Arhivda arizalar mavjud emas")
+                return
+            for contract in contracts:
+                markup = make_archive_keyboard(contract[0])
+                text = prepare_contract_data(contract)
+                await message.answer(text=text, reply_markup=markup)
+                await asyncio.sleep(0.5)
+                photo = contract[10].split(":")
+                photo_id, ptype = photo[1], photo[0]
+                if ptype == "photo":
+                    await message.answer_photo(photo=photo_id)
+                else:
+                    await message.answer_document(document=photo_id)
+                await asyncio.sleep(1)
+                # await message.answer_photo(photo=contract[10])
+        elif text == "Qabul bo'lganlar":
+            contracts=await db.get_accepted_contracts()
+            if len(contracts)==0:
+                await message.answer("Qabul bolgan arizalar mavjud emas")
+                return
+            for contract in contracts:
+                text = prepare_contract_data(contract)
+                markup=make_resend_keyboard(str(contract[0]))
+                await message.answer(text=text,reply_markup=markup)
+                await asyncio.sleep(0.5)
+                photo = contract[10].split(":")
+                photo_id, ptype = photo[1], photo[0]
+                if ptype == "photo":
+                    await message.answer_photo(photo=photo_id)
+                else:
+                    await message.answer_document(document=photo_id)
+                await asyncio.sleep(0.5)
+                # await message.answer_photo(photo=contract[10])
+        elif text=="Excel yuklavolish":
+            contracts = await db.get_students()
+            df = pd.DataFrame(contracts, columns=['Shartnoma Idsi', 'F.I.SH',"Telefon raqami",
+            "Ikkinchi telefon","Fakultet nomi","Ta'lim sharkli","Ta'lim Tili","Address","Passport",
+            "JSHSHIR","DTM","Test natijasi","Shartnoma berilgan sana"])
+            excel_file_path = 'talabalar.xlsx'  # Specify the file path where the Excel file will be saved
+            df.to_excel(excel_file_path, index=False)
+            with open(excel_file_path, 'rb') as file:
+                await bot.send_document(message.from_user.id, file)
+            os.remove(excel_file_path)
+            # contracts = await db.get_new_students()
+            # df = pd.DataFrame(contracts, columns=['Shartnoma Idsi', 'F.I.SH', "Telefon raqami",
+            #                                       "Ikkinchi telefon",
+            #                                       "Address", "Passport",
+            #                                       "JSHSHIR","Talim shakli va talim tili"])
+            # excel_file_path = 'abuturent.xlsx'  # Specify the file path where the Excel file will be saved
+            # df.to_excel(excel_file_path, index=False)
+            # with open(excel_file_path, 'rb') as file:
+            #     await bot.send_document(message.from_user.id, file)
+            # os.remove(excel_file_path)
+        elif text=="Elon qilish":
+            state[1]="notification"
+            state=";".join(state)
+            await db.update_user_state(telegram_id=message.from_user.id,state=state)
+            await message.answer(text="Kimlarga elon jo'natmoqchisiz",reply_markup=notificationType)
+        elif text=="Shartnoma idsi boicha qidirish":
+            state[1]="student"
+            state=";".join(state)
+            await db.update_user_state(telegram_id=message.from_user.id,state=state)
+            await message.answer(text="Shartnoma idsi kiriting",reply_markup=back)
+        elif  text=="Shartnomani hammaga bo'shqatan jo'natish":
+            contracts=await db.get_accepted_contracts_for_resend()
+            for contract in contracts:
+                contract_id=contract[0]
+                telegram_id=contract[2]
+                current_time=contract[1]
+                # await accept_student(message,contract[0],current_time)
+                try:
+                    await accept_student(message=message, contract_id=int(contract_id), created=current_time)
+                # await db.update_contract_state(id=int(contract_id), state="accepted")
+                # await db.update_contract_created_time(id=int(contract_id), created=current_time.date())
+                # await bot.send_message(chat_id=telegram_id,text="✅Tabriklaymiz siz Renaissance Universtyga talabalikka qabul qilindingiz !!!")
+                    malumotnoma = InputFile(f"/root/univer-bot/qabulbot/documents/{contract_id}/malumotnoma.pdf")
+                    shartnoma = InputFile(f"/root/univer-bot/qabulbot/documents/{contract_id}/shartnoma.pdf")
+                    uchtamonlama = InputFile(f"/root/univer-bot/qabulbot/documents/{contract_id}/uchtamonlama.pdf")
+                    await bot.send_document(chat_id=telegram_id, document=malumotnoma, caption="Ma'lumotnoma")
+                    await bot.send_document(chat_id=telegram_id, document=shartnoma, caption="Shartnoma")
+                    await bot.send_document(chat_id=telegram_id, document=uchtamonlama, caption="Uch tomonli")
+                    await message.answer(text=f"Shartnoma jo'natildi idsi:{contract_id}")
+                    time.sleep(1.5)
+                except Exception as ex:
+                    print("got error ",ex)
+    elif state[1]=="notification":
+        if message.text=="🔙 Ortga":
+            state[1]=""
+            state=";".join(state)
+            await db.update_user_state(telegram_id=message.from_user.id,state=state)
+            await message.answer(text="Admin menu",reply_markup=main_admin)
+        elif message.text in ["Registraciyadan o'tmaganlarga", "Arhivdagilarga", "Hammaga jo'natish","Qabul bolganlarga"]:
+            if message.text!="Registraciyadan o'tmaganlarga":
+                state[1] = notTypes[message.text]
+            else:
+                state[1]="notregirtered"
+            state=";".join(state)
+            await db.update_user_state(telegram_id=message.from_user.id,state=state)
+            await message.answer(text="Eloni kiriting",reply_markup=back)
+        else:
+            await message.answer("Xato amal kiritildi")
+    elif state[1] in ["all","accepted","archive","registered"]:
+        await message.answer("Bot nosoz ishlayapti")
+    elif state[1]=="student":
+        if message.text=="🔙 Ortga":
+            state[1]=""
+            state=";".join(state)
+            await db.update_user_state(telegram_id=message.from_user.id,state=state)
+            await message.answer(text="Admin menu",reply_markup=main_admin)
+            return
+        id=message.text
+        contract =await db.get_contract_by_id(int(id))
+        if len(contract)!=0:
+            contract=contract[0]
+            text=prepare_contract_data(contract)
+            markup=make_resend_keyboard(str(contract[0]))
+            passport = contract[10].split(":")
+            passport_id, ptype = passport[1], passport[0]
+            await message.answer(text=text,reply_markup=markup)
+
+            if "photo" in ptype:
+                # photo_ids.append(passport_id)
+                await message.answer_photo(photo=passport_id)
+            else:
+                await message.answer_document(document=passport_id)
+                # document_ids.append(passport_id)
+            # print(contract[15])
+            diplom = contract[15].split(":")
+            diplom_id, ptype = diplom[1], diplom[0]
+            if  "photo" in ptype:
+                # photo_ids.append(diplom_id)
+                await message.answer_photo(photo=diplom_id)
+            else:
+                # document_ids.append(diplom_id)
+                await message.answer_document(document=diplom_id)
+
+        else:
+            await message.answer("Bu id li shartnoma topilmadi")
+        pass
+
+
+notTypes={
+    "Hammaga jo'natish":"all",
+    "Arhivdagilarga":"archive",
+    "Registraciyadan o'tganlarga":"registered",
+    "Qabul bolganlarga":"accepted"
+}
+Times = {
+        'daytime':"Kunduzgi",
+        "evening":'Kechgi' ,
+        "distance":"Sirtqi",
+        None:""
+}
+langDic={
+    "uz":"O'zbek",
+    "ru":"Rus tili",
+    "en":"Ingliz",
+    None: ""
+
+}
+
+def prepare_contract_data(contract:list):
+    res=f"<b>ID</b>:   {contract[0]}\n" \
+        f"<b>F.I.SH</b>:         {contract[1]}\n" \
+        f"<b>Telefon raqami</b>: {contract[2]}\n" \
+        f"<b>Ikkinch telefon</b>:{contract[3]}\n" \
+        f"<b>Fakultet nomi</b>:  {contract[4]}\n" \
+        f"<b>Ta'lim shakli</b>:  {Times[contract[5]]}\n" \
+        f"<b>Ta'lim tili</b>:    {langDic[contract[6]]}\n" \
+        f"<b>Address</b>:        {contract[7]}\n" \
+        f"<b>Passport IDsi</b>:  {contract[8]}\n" \
+        f"<b>JSHSHIR</b>:        {contract[9]}\n"\
+        f"<b>DTM</b>:        {contract[11]}\n" \
+        f"<b>Test natijasi</b>:        {contract[12]}\n"
+
+    if len(contract)>=14:
+        res+=f"<b>Shartnoma jo'natilgan sana</b>:        {contract[13]}\n"
+        enpoint="http://78.40.219.247:8000"
+        res += f"<a href='{enpoint}/info/{contract[0]}'>Ma'lumotnoma</a>\n"
+        res += f"<a href='{enpoint}/contract/{contract[0]}'>Shartnoma</a>\n"
+        res += f"<a href='{enpoint}/document/{contract[0]}'>Uchtomonli Shartnoma</a>\n"
+    return res
+
+
+@dp.message_handler(text="/admin", user_id=ADMINS)
+async def send_ad_to_all(message: types.Message):
+    state="admin;;"
+    await db.update_user_state(telegram_id=message.from_user.id,state=state)
+    await message.answer("Siz admin panelni ochdingiz",reply_markup=main_admin)
+    # users = await db.select_all_users()
+    # for user in users:
+    #     # print(user[3])
+    #     user_id = user[3]
+    #     await bot.send_message(
+    #         chat_id=user_id, text="Siz admin pan"
+    #     )
+    #     await asyncio.sleep(0.05)

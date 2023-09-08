@@ -78,6 +78,7 @@ class Contract(models.Model):
     jshshir=models.CharField(verbose_name="JSHSHIR",null=True,max_length=30)
     created=models.DateField(verbose_name="Shartnoma yaratilgan sana",null=True)
     education=models.CharField(verbose_name="Oqish shakli va talim tili",max_length=50,null=True)
+    picture=models.CharField(verbose_name="3x4 rasmi",max_length=700,null=True)
     DisplayFields=["id","full_name","phone","fakultet_id","extra_phone","state","passport","jshshir","created"]
     SearchableFields=["id","full_name","phone","extra_phone","passport","jshshir"]
     class Meta:

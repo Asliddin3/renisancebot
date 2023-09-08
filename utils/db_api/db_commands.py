@@ -133,7 +133,7 @@ class Database:
         return await self.execute(sql,state,fetch=True)
     async def get_new_contracts(self):
         sql="SELECT products_contract.id,full_name,phone,extra_phone,f.name,f.time,f.lang,address,passport,jshshir,passport_photo," \
-            "dtm,result,created,result,diplom,education " \
+            "dtm,result,created,result,diplom,education,picture " \
             " FROM products_contract LEFT JOIN products_fakultet AS f " \
             "ON f.id=fakultet_id  WHERE state='registered' ORDER BY id"
         return await self.execute(sql,fetch=True)

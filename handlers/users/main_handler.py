@@ -83,6 +83,11 @@ backDic={
         "state":"photo",
         "text":"Talabaning passport rasmini kiriting"
     },
+    "picture":{
+        "key":backKeyboard,
+        "state":"diplom",
+        "text":"Talabaning attestat yoki diplomini rasmini jo'nating"
+    },
     "dtm":{
         "key":backKeyboard,
         "state":"diplom",
@@ -159,7 +164,7 @@ async def catch_passport_photo(message:Message):
     user = await db.get_user_state_by_telegram_id(message.from_user.id)
     state=user
     state = state.split(":")
-    if state[0]!="photo" and state[0]!="diplom":
+    if state[0]!="photo" and state[0]!="diplom" and state[0]!="picture":
         await message.answer("Xato amal kiritildi")
         return
     photo_id=f"photo:{photo_id}"
@@ -169,18 +174,31 @@ async def catch_passport_photo(message:Message):
         state=":".join(state)
         await db.update_user_state(telegram_id=message.from_user.id, state=state)
         await message.answer("Talabaning attestat yoki diplomini rasmini jo'nating",reply_markup=backKeyboard)
-    else:
+    elif state[0]=="picture":
         state[0] = "menu"
-        await db.update_contract_field(contract_id=int(state[4]),telegram_id=message.from_user.id,
-                                       value=photo_id,field="diplom")
+        print("update picture",len(photo_id))
+        print("contract id",state[4])
+        await db.update_contract_field(contract_id=int(state[4]), telegram_id=message.from_user.id,
+                                       value=photo_id, field="picture")
         await db.update_contract_field(contract_id=int(state[4]),telegram_id=message.from_user.id,value="registered",field="state")
-        state=":".join(state)
-        await db.update_user_state(telegram_id=message.from_user.id,state=state)
-        await message.answer(text="Tabriklaymiz siz muvaffaqiyatli roʻyxatdan oʻtdingiz sizga tez orada siz bilan bog'lanamiz", reply_markup=menu)
+
+        await message.answer(
+            text="Tabriklaymiz siz muvaffaqiyatli roʻyxatdan oʻtdingiz sizga tez orada siz bilan bog'lanamiz",
+            reply_markup=menu)
         text = "Farida \n+998900230751\n" \
                "Gulshoda \n+998900530751\n" \
                "Dinara \n+998900630751"
         await message.answer(text=text)
+        state = ":".join(state)
+        await db.update_user_state(telegram_id=message.from_user.id, state=state)
+    else:
+        state[0]="picture"
+        await db.update_contract_field(contract_id=int(state[4]),telegram_id=message.from_user.id,
+                                       value=photo_id,field="diplom")
+        state=":".join(state)
+        await db.update_user_state(telegram_id=message.from_user.id,state=state)
+        await message.answer("Talabani 3x4 rasmini jo'nating")
+
     # await message.answer("Imtihonni boshlash uchun `Imtihonni boshlash` tugmasini bosing.",reply_markup=testKey)
 @dp.message_handler(UserFilter(),content_types=ContentType.DOCUMENT)
 async def catch_passport_photo(message:Message):
@@ -188,7 +206,7 @@ async def catch_passport_photo(message:Message):
     user = await db.get_user_state_by_telegram_id(message.from_user.id)
     state=user
     state = state.split(":")
-    if state[0] != "photo" and state[0] != "diplom":
+    if state[0] != "photo" and state[0] != "diplom" and state[0]!="picture":
         await message.answer("Xato amal kiritildi")
         return
     photo_id = f"document:{photo_id}"
@@ -198,19 +216,29 @@ async def catch_passport_photo(message:Message):
         state = ":".join(state)
         await db.update_user_state(telegram_id=message.from_user.id, state=state)
         await message.answer("Talabaning attestat yoki diplomini rasmini jo'nating", reply_markup=backKeyboard)
-    else:
+    elif state[0] == "picture":
         state[0] = "menu"
+        print("update picture",len(photo_id))
+        await db.update_contract_field(contract_id=int(state[4]), telegram_id=message.from_user.id,
+                                       value=photo_id, field="picture")
+        await db.update_contract_field(contract_id=int(state[4]),telegram_id=message.from_user.id,value="registered",field="state")
+
+        await message.answer(
+            text="Tabriklaymiz siz muvaffaqiyatli roʻyxatdan oʻtdingiz sizga tez orada siz bilan bog'lanamiz",
+            reply_markup=menu)
+        text = "Farida \n+998900230751\n" \
+               "Gulshoda \n+998900530751\n" \
+               "Dinara \n+998900630751"
+        await message.answer(text=text)
+        state = ":".join(state)
+        await db.update_user_state(telegram_id=message.from_user.id, state=state)
+    else:
+        state[0] = "picture"
         await db.update_contract_field(contract_id=int(state[4]), telegram_id=message.from_user.id,
                                        value=photo_id, field="diplom")
-        await db.update_contract_field(contract_id=int(state[4]), telegram_id=message.from_user.id, value="registered",
-                                       field="state")
         state = ":".join(state)
-        text="Farida \n+998900230751\n"\
-             "Gulshoda \n+998900530751\n"\
-             "Dinara \n+998900630751"
         await db.update_user_state(telegram_id=message.from_user.id, state=state)
-        await message.answer(text="Tabriklaymiz siz muvaffaqiyatli roʻyxatdan oʻtdingiz sizga tez orada siz bilan bog'lanamiz", reply_markup=menu)
-        await message.answer(text=text)
+        await message.answer("Talabani 3x4 rasmini jo'nating")
 
 
 
