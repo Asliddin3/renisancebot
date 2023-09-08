@@ -195,7 +195,7 @@ class Database:
     async def get_new_students(self):
         sql = "SELECT id,full_name,phone,extra_phone,address,passport,jshshir,education" \
               " FROM products_contract  " \
-              "WHERE state='registered' and education is not null ORDER BY id"
+              "WHERE state IN ('registered','new') and education is not null ORDER BY id"
         return await self.execute(sql, fetch=True)
     async def update_user_photo(self,telegram_id,photo_id):
         sql="UPDATE products_contract SET passport_photo=$1 WHERE telegram_id=$2"
