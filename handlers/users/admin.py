@@ -421,16 +421,16 @@ async def catch_admin_commands(message:types.Message):
             with open(excel_file_path, 'rb') as file:
                 await bot.send_document(message.from_user.id, file)
             os.remove(excel_file_path)
-            # contracts = await db.get_new_students()
-            # df = pd.DataFrame(contracts, columns=['Shartnoma Idsi', 'F.I.SH', "Telefon raqami",
-            #                                       "Ikkinchi telefon",
-            #                                       "Address", "Passport",
-            #                                       "JSHSHIR","Talim shakli va talim tili"])
-            # excel_file_path = 'abuturent.xlsx'  # Specify the file path where the Excel file will be saved
-            # df.to_excel(excel_file_path, index=False)
-            # with open(excel_file_path, 'rb') as file:
-            #     await bot.send_document(message.from_user.id, file)
-            # os.remove(excel_file_path)
+            contracts = await db.get_new_students()
+            df = pd.DataFrame(contracts, columns=['Shartnoma Idsi', 'F.I.SH', "Telefon raqami",
+                                                  "Ikkinchi telefon",
+                                                  "Address", "Passport",
+                                                  "JSHSHIR","Talim shakli va talim tili"])
+            excel_file_path = 'abuturent.xlsx'  # Specify the file path where the Excel file will be saved
+            df.to_excel(excel_file_path, index=False)
+            with open(excel_file_path, 'rb') as file:
+                await bot.send_document(message.from_user.id, file)
+            os.remove(excel_file_path)
         elif text=="Elon qilish":
             state[1]="notification"
             state=";".join(state)
