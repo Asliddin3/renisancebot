@@ -300,12 +300,13 @@ async def catch_admin_notification(message:types.Message):
         if sendMap.get(user_id):
             continue
         try:
+            print("message video",message.video)
             if len(message.photo) != 0:
                 await bot.send_photo(chat_id=user_id, caption=message.caption,
                                  photo=message.photo[0].file_id)
             elif message.video is not None:
                 await bot.send_video(chat_id=user_id, caption=message.caption,
-                                 photo=message.video.file_id)
+                                 video=message.video.file_id)
             else:
                 await bot.send_message(
                 chat_id=user_id, text=message.text
@@ -317,8 +318,8 @@ async def catch_admin_notification(message:types.Message):
             print("message blocked")
         except aiogram.utils.exceptions.UserDeactivated:
             print("user diactiveted")
-        except:
-            print("get any error")
+        except Exception as ex:
+            print("get any error",ex)
     # except aiogram.utils.ex
 
 @dp.message_handler(AdminFilter(),user_id=ADMINS)
