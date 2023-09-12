@@ -114,11 +114,11 @@ Times = {
 
 
 #
-# @dp.message_handler(content_types=ContentType.VIDEO)
-# async def catch_video(message:Message):
-#     video_id=message.video.file_id
-#     print(video_id)
-#     await message.answer_video(video_id)
+@dp.message_handler(content_types=ContentType.VIDEO)
+async def catch_video(message:Message):
+    video_id=message.video.file_id
+    print(video_id)
+    await message.answer_video(video_id)
 
 # @dp.message_handler(content_types=ContentType.LOCATION)
 # async def get_location(message:Message):
