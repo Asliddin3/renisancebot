@@ -6,6 +6,7 @@ from loader import db
 
 class AdminFilter(BoundFilter):
     async def check(self, message:types.Message) -> bool:
+        print(ADMINS)
         if message.from_user.id not in list(ADMINS):
             return False
         user=await db.get_user_state_by_telegram_id(message.from_user.id)
