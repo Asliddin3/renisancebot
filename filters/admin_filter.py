@@ -6,7 +6,7 @@ from loader import db
 
 class AdminFilter(BoundFilter):
     async def check(self, message:types.Message) -> bool:
-        if message.from_user.id not in ADMINS:
+        if message.from_user.id not in list(ADMINS):
             return False
         user=await db.get_user_state_by_telegram_id(message.from_user.id)
         state=user
@@ -16,7 +16,7 @@ class AdminFilter(BoundFilter):
 
 class AdminContentFilter(BoundFilter):
     async def check(self, message:types.Message) -> bool:
-        if message.from_user.id not in ADMINS:
+        if message.from_user.id not in list(ADMINS):
             return False
         user=await db.get_user_state_by_telegram_id(message.from_user.id)
         if ":" in user:
@@ -32,7 +32,7 @@ class AdminContentFilter(BoundFilter):
 class AdminExelFilter(BoundFilter):
     async def check(self, message:types.Message) -> bool:
         user=await db.get_user_state_by_telegram_id(message.from_user.id)
-        if message.from_user.id not in ADMINS:
+        if message.from_user.id not in list(ADMINS):
             return False
         if ":" in user:
             return False
