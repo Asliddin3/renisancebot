@@ -4,7 +4,7 @@ from aiogram.dispatcher.filters.builtin import CommandStart
 from keyboards.default.start_keyboard import menu
 from loader import dp, db, bot
 import  os
-video_id="BAACAgIAAxkBAAEBEktkzR61Jl98Fv4Oa7JZ-rA58JIvDAACXS8AAggwSUprpgdrbeO8rC8E"
+video_id="BAACAgIAAxkBAAEEC1dlAAEgUuHWi0VHPGePiB2eYDeZS4AAAhYyAAKv1_hLjpgGE4_VuLkwBA"
 photo_id ="AgACAgIAAxkBAAMRZLdz6r4QA00ijBspTR4iOf8FDOgAAhTGMRtbG8FJRZd5gY8LhMABAAMCAAN5AAMvBA"
 jshshr_id="AgACAgIAAxkBAAMVZLd0XImfh0Agvl_Y0WLzt1h1ovwAAhXGMRtbG8FJN2xN2--cwsgBAAMCAAN5AAMvBA"
 contract_id="AgACAgIAAxkBAAEBEk9kzR7ahOdESywpuAABF1dYlBxyjRQAAq7MMRsPvGhK-ThtN-GNv8kBAAMCAAN4AAMvBA"
@@ -34,24 +34,30 @@ async def bot_start(message: types.Message):
             types.InputMediaPhoto(media=open(photo2, 'rb'))
         ]
         await message.answer_media_group(media=media_group)
-    text="Eng kerakli va zamonaviy kasblarni IIIU'da egallang!\n\n"\
-    "📌 Bizning yo'nalishlar:\n"\
-    "▫️ Boshlang'ich ta'lim;\n"\
-    "▫️ Amaliy psixologiya;\n"\
-    "▫️ Kompyuter ilmi va dasturlash texnologiyalari;\n"\
-    "▫️ Maktabgacha ta'lim;\n"\
-    "▫️ Filologiya va tillarni o'qitish;\n"\
-    "▫️ Buxgalteriya va audit;\n"\
-    "▫️ Moliya va moliyaviy texnologiyalar;\n"\
-    "▫️ Iqtisodiyot.\n"\
-    "✅ Ta'lim sifati kafolatlanadi:\n"\
-    "Tajribali o'qituvchilarimizning 80% qismi ilmiy darajaga ega va ular xorij universitetlarida malaka oshirishadi.\n\n"\
-    "✅ To'lov va moddiy ko'mak:\n"\
-    "Talabalar oylik stipendiya bilan ta'minlanadi. Shartnoma to'lovi uchun ta'lim kreditini rasmiylashtirish imkoni mavjud.\n"\
-    "✅ Onlayn imtihon:\n"\
-    "Test sinovidan o'tish uchun hech qayerga borishingizga hojat yo'q. DTM imtihonidan 56.7 ball to'plaganlar esa imtihonsiz qabul qilinadi"
-    photo1="./hand.jpg"
+    text = "Eng kerakli va zamonaviy kasblarni IIIU'da egallang!\n\n" \
+           "📌 Bizning yo'nalishlar:\n" \
+           "▫️ Boshlang'ich ta'lim;\n" \
+           "▫️ Amaliy psixologiya;\n" \
+           "▫️ Kompyuter ilmi va dasturlash texnologiyalari;\n" \
+           "▫️ Maktabgacha ta'lim;\n" \
+           "▫️ Filologiya va tillarni o'qitish;\n" \
+           "▫️ Buxgalteriya va audit;\n" \
+           "▫️ Moliya va moliyaviy texnologiyalar;\n" \
+           "▫️ Iqtisodiyot.\n" \
+           "✅ Ta'lim sifati kafolatlanadi:\n" \
+           "Tajribali o'qituvchilarimizning 80% qismi ilmiy darajaga ega va ular xorij universitetlarida malaka oshirishadi.\n" \
+           "✅ To'lov va moddiy ko'mak:\n" \
+           "Talabalar oylik stipendiya bilan ta'minlanadi. Shartnoma to'lovi uchun ta'lim kreditini rasmiylashtirish imkoni mavjud.\n" \
+           "✅ Onlayn imtihon:\n\n" \
+           "Test sinovidan o'tish uchun hech qayerga borishingizga hojat yo'q. DTM imtihonidan 56.7 ball to'plaganlar esa imtihonsiz qabul qilinadi.\n" \
+           "📩 @t.me/iiiu_01\n" \
+           "+998 94 740 53 20\n" \
+           "+998 94 740 62 20\n" \
+           "t.me/chirchiq_filiali_1\n"
+    photo1 = "./new.jpg"
+    await message.answer_video(video=video_id)
     with open(photo1, 'rb') as photo_file:
         await bot.send_photo(message.from_user.id, photo_file, caption=text)
-    await message.answer_location(longitude=69.21678571163685, latitude=41.23966763877322,reply_markup=menu)
+
+    await message.answer_location(longitude=69.58310128092178, latitude=41.465222691197255, reply_markup=menu)
     # await message.answer_photo(photo=contract_id)

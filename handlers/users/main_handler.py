@@ -314,26 +314,47 @@ async def main_handler(message:Message):
                     types.InputMediaPhoto(media=open(photo2, 'rb'))
                 ]
                 await message.answer_media_group(media=media_group)
-            text = "Eng kerakli va zamonaviy kasblarni IIIU'da egallang!\n\n" \
-                   "📌 Bizning yo'nalishlar:\n" \
-                   "▫️ Boshlang'ich ta'lim;\n" \
-                   "▫️ Amaliy psixologiya;\n" \
-                   "▫️ Kompyuter ilmi va dasturlash texnologiyalari;\n" \
-                   "▫️ Maktabgacha ta'lim;\n" \
-                   "▫️ Filologiya va tillarni o'qitish;\n" \
-                   "▫️ Buxgalteriya va audit;\n" \
-                   "▫️ Moliya va moliyaviy texnologiyalar;\n" \
-                   "▫️ Iqtisodiyot.\n" \
-                   "✅ Ta'lim sifati kafolatlanadi:\n" \
-                   "Tajribali o'qituvchilarimizning 80% qismi ilmiy darajaga ega va ular xorij universitetlarida malaka oshirishadi.\n\n" \
-                   "✅ To'lov va moddiy ko'mak:\n" \
-                   "Talabalar oylik stipendiya bilan ta'minlanadi. Shartnoma to'lovi uchun ta'lim kreditini rasmiylashtirish imkoni mavjud.\n" \
-                   "✅ Onlayn imtihon:\n" \
-                   "Test sinovidan o'tish uchun hech qayerga borishingizga hojat yo'q. DTM imtihonidan 56.7 ball to'plaganlar esa imtihonsiz qabul qilinadi"
-            photo1 = "./hand.jpg"
+            # text = "Eng kerakli va zamonaviy kasblarni IIIU'da egallang!\n\n" \
+            #        "📌 Bizning yo'nalishlar:\n" \
+            #        "▫️ Boshlang'ich ta'lim;\n" \
+            #        "▫️ Amaliy psixologiya;\n" \
+            #        "▫️ Kompyuter ilmi va dasturlash texnologiyalari;\n" \
+            #        "▫️ Maktabgacha ta'lim;\n" \
+            #        "▫️ Filologiya va tillarni o'qitish;\n" \
+            #        "▫️ Buxgalteriya va audit;\n" \
+            #        "▫️ Moliya va moliyaviy texnologiyalar;\n" \
+            #        "▫️ Iqtisodiyot.\n" \
+            #        "✅ Ta'lim sifati kafolatlanadi:\n" \
+            #        "Tajribali o'qituvchilarimizning 80% qismi ilmiy darajaga ega va ular xorij universitetlarida malaka oshirishadi.\n\n" \
+            #        "✅ To'lov va moddiy ko'mak:\n" \
+            #        "Talabalar oylik stipendiya bilan ta'minlanadi. Shartnoma to'lovi uchun ta'lim kreditini rasmiylashtirish imkoni mavjud.\n" \
+            #        "✅ Onlayn imtihon:\n" \
+            #        "Test sinovidan o'tish uchun hech qayerga borishingizga hojat yo'q. DTM imtihonidan 56.7 ball to'plaganlar esa imtihonsiz qabul qilinadi"
+            text="Eng kerakli va zamonaviy kasblarni IIIU'da egallang!\n\n"\
+            "📌 Bizning yo'nalishlar:\n"\
+        "▫️ Boshlang'ich ta'lim;\n"\
+        "▫️ Amaliy psixologiya;\n"\
+        "▫️ Kompyuter ilmi va dasturlash texnologiyalari;\n"\
+        "▫️ Maktabgacha ta'lim;\n"\
+        "▫️ Filologiya va tillarni o'qitish;\n"\
+        "▫️ Buxgalteriya va audit;\n"\
+        "▫️ Moliya va moliyaviy texnologiyalar;\n"\
+        "▫️ Iqtisodiyot.\n"\
+        "✅ Ta'lim sifati kafolatlanadi:\n"\
+        "Tajribali o'qituvchilarimizning 80% qismi ilmiy darajaga ega va ular xorij universitetlarida malaka oshirishadi.\n"\
+        "✅ To'lov va moddiy ko'mak:\n"\
+        "Talabalar oylik stipendiya bilan ta'minlanadi. Shartnoma to'lovi uchun ta'lim kreditini rasmiylashtirish imkoni mavjud.\n"\
+        "✅ Onlayn imtihon:\n\n"\
+        "Test sinovidan o'tish uchun hech qayerga borishingizga hojat yo'q. DTM imtihonidan 56.7 ball to'plaganlar esa imtihonsiz qabul qilinadi.\n"\
+        "📩 @t.me/iiiu_01\n"\
+        "+998 94 740 53 20\n"\
+        "+998 94 740 62 20\n"\
+        "t.me/chirchiq_filiali_1\n"
+            photo1 = "./new.jpg"
             with open(photo1, 'rb') as photo_file:
                 await bot.send_photo(message.from_user.id, photo_file, caption=text)
-            await message.answer_location(longitude=69.21678571163685, latitude=41.23966763877322, reply_markup=menu)
+
+            await message.answer_location(longitude=69.58310128092178, latitude=41.465222691197255, reply_markup=menu)
 
     elif message.text=="🔙 Ortga":
         # if state[0]=="full_name":
@@ -350,20 +371,6 @@ async def main_handler(message:Message):
             await message.answer(text=backAns["text"],reply_markup=backAns["key"])
     elif message.text=="🏠 Bosh menu":
         state[0]="menu"
-        text = "Hurmatli talabalar universitet tanlashda qiynalayapsizmi ?\n" \
-               "Qaysi Nodavlat taʼlim muassasalari diplomi tan olinadi ?\n" \
-               "Litsenizyasi haqiqiymi  yoʻqmi ? Bu joyda oʻqisam keyin pullarimga kuyib qolmaymani ? shu kabi savollar sizni qiynayaptimi ?  Unda Nodavlat taʼlim muassasalariga litseniziya beruvchi vakolatli organ Oliy taʼlim fan va Innovatsiyalar vazirligi ishonch raqami 1006 yoki call markazi  712306464 ga qoʻngʻiroq qiling\n\n" \
-               "https://stat.edu.uz/Univer-list.php\n" \
-               "quyidagi havolada Oliy taʼlm vazirligi rasmiy saytida roʻyxati koʻrsatilgan litsenziyaga ega xususiy oliygohlar bilan tanishishingiz mumkin\n"
-        path = "/home/asliddin/PycharmProjects/renaissance/mukammal-bot-paid"
-        photo1 = f"./photo1.jpg"
-        photo2 = f"./photo2.jpg"
-        if os.path.exists(photo1) and os.path.exists(photo2):
-            media_group = [
-                types.InputMediaPhoto(media=open(photo1, 'rb'), caption=text),
-                types.InputMediaPhoto(media=open(photo2, 'rb'))
-            ]
-            await message.answer_media_group(media=media_group)
         text = "Eng kerakli va zamonaviy kasblarni IIIU'da egallang!\n\n" \
                "📌 Bizning yo'nalishlar:\n" \
                "▫️ Boshlang'ich ta'lim;\n" \
@@ -375,15 +382,20 @@ async def main_handler(message:Message):
                "▫️ Moliya va moliyaviy texnologiyalar;\n" \
                "▫️ Iqtisodiyot.\n" \
                "✅ Ta'lim sifati kafolatlanadi:\n" \
-               "Tajribali o'qituvchilarimizning 80% qismi ilmiy darajaga ega va ular xorij universitetlarida malaka oshirishadi.\n\n" \
+               "Tajribali o'qituvchilarimizning 80% qismi ilmiy darajaga ega va ular xorij universitetlarida malaka oshirishadi.\n" \
                "✅ To'lov va moddiy ko'mak:\n" \
                "Talabalar oylik stipendiya bilan ta'minlanadi. Shartnoma to'lovi uchun ta'lim kreditini rasmiylashtirish imkoni mavjud.\n" \
-               "✅ Onlayn imtihon:\n" \
-               "Test sinovidan o'tish uchun hech qayerga borishingizga hojat yo'q. DTM imtihonidan 56.7 ball to'plaganlar esa imtihonsiz qabul qilinadi"
-        photo1 = "./hand.jpg"
+               "✅ Onlayn imtihon:\n\n" \
+               "Test sinovidan o'tish uchun hech qayerga borishingizga hojat yo'q. DTM imtihonidan 56.7 ball to'plaganlar esa imtihonsiz qabul qilinadi.\n" \
+               "📩 @t.me/iiiu_01\n" \
+               "+998 94 740 53 20\n" \
+               "+998 94 740 62 20\n" \
+               "t.me/chirchiq_filiali_1\n"
+        photo1 = "./new.jpg"
         with open(photo1, 'rb') as photo_file:
             await bot.send_photo(message.from_user.id, photo_file, caption=text)
-        await message.answer_location(longitude=69.21678571163685, latitude=41.23966763877322, reply_markup=menu)
+
+        await message.answer_location(longitude=69.58310128092178, latitude=41.465222691197255, reply_markup=menu)
         text = "Farida \n+998900230751\n" \
                "Gulshoda \n+998900530751\n" \
                "Dinara \n+998900630751"
