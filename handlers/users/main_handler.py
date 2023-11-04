@@ -595,13 +595,13 @@ async def remove_message(message:Message, delay_minute):
         pass
 
 
-async def accept_student(message:Message,contract_id:int,created:datetime):
+async def accept_student(message:Message,contract_id:int):
     full_info=await db.get_contract_full_info(contract_id)
     if full_info is None:
         await message.answer("Shartnoma topilmadi")
         return
     id=2000+full_info[0]
-
+    created=full_info[len(full_info)-1]
     info_data={
         # "id":full_info[0],
         "id": f"01-04/{id}",

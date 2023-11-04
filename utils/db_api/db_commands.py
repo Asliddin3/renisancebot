@@ -147,7 +147,7 @@ class Database:
 
     async def get_contract_full_info(self,contract_id):
         sql = "SELECT c.id,c.full_name,c.phone,c.extra_phone,f.name,f.time,f.summa," \
-              "f.summa_text,f.lang,c.address,c.passport,c.jshshir" \
+              "f.summa_text,f.lang,c.address,c.passport,c.jshshir,created" \
               " FROM products_contract AS c INNER JOIN products_fakultet AS f " \
               "ON f.id=c.fakultet_id  WHERE c.id=$1"
         return await self.execute(sql,contract_id,fetchrow=True)

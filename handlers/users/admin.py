@@ -78,13 +78,14 @@ Lang={
 "uz":"O'zbek"
 }
 
-async def accept_student(message:types.Message,contract_id:int,created:datetime):
+async def accept_student(message:types.Message,contract_id:int,created):
     full_info=await db.get_contract_full_info(contract_id)
     if full_info is None:
         await message.answer("Shartnoma topilmadi")
         return
     id=2000+full_info[0]
-
+    if created=="":
+        created=full_info[len(full_info)-1]
     info_data={
         "id":f"01-04/{id}",
         "path":full_info[0],
@@ -450,17 +451,17 @@ async def catch_admin_commands(message:types.Message):
                 current_time=contract[1]
                 # await accept_student(message,contract[0],current_time)
                 try:
-                    await accept_student(message=message, contract_id=int(contract_id), created=current_time)
+                    await accept_student(message=message, contract_id=int(contract_id), created="")
                 # await db.update_contract_state(id=int(contract_id), state="accepted")
                 # await db.update_contract_created_time(id=int(contract_id), created=current_time.date())
                 # await bot.send_message(chat_id=telegram_id,text="✅Tabriklaymiz siz Renaissance Universtyga talabalikka qabul qilindingiz !!!")
                     malumotnoma = InputFile(f"/root/univer-bot/qabulbot/documents/{contract_id}/malumotnoma.pdf")
                     shartnoma = InputFile(f"/root/univer-bot/qabulbot/documents/{contract_id}/shartnoma.pdf")
                     uchtamonlama = InputFile(f"/root/univer-bot/qabulbot/documents/{contract_id}/uchtamonlama.pdf")
-                    await bot.send_document(chat_id=telegram_id, document=malumotnoma, caption="Ma'lumotnoma")
-                    await bot.send_document(chat_id=telegram_id, document=shartnoma, caption="Shartnoma")
-                    await bot.send_document(chat_id=telegram_id, document=uchtamonlama, caption="Uch tomonli")
-                    await message.answer(text=f"Shartnoma jo'natildi idsi:{contract_id}")
+                    # await bot.send_document(chat_id=telegram_id, document=malumotnoma, caption="Ma'lumotnoma")
+                    # await bot.send_document(chat_id=telegram_id, document=shartnoma, caption="Shartnoma")
+                    # await bot.send_document(chat_id=telegram_id, document=uchtamonlama, caption="Uch tomonli")
+                    # await message.answer(text=f"Shartnoma jo'natildi idsi:{contract_id}")
                     time.sleep(1.5)
                 except Exception as ex:
                     print("got error ",ex)
