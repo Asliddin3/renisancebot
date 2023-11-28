@@ -68,6 +68,14 @@ class Database:
         sql = "SELECT telegram_id FROM products_user ORDER BY id DESC"
         return await self.execute(sql, fetch=True)
 
+    async def select_not_registered(self):
+        sql = ("SELECT telegram_id FROM products_user "
+               "WHERE telegram_id NOT IN (SELECT telegram_id FROM products_contract) "
+               "OR telegram_id IN (select telegram_id FROM products_contract WHERE state='new') "
+               " ORDER BY id DESC")
+        return await self.execute(sql, fetch=True)
+
+
     async def update_user_state(self,telegram_id,state):
         sql="UPDATE products_user SET state=$1 WHERE telegram_id=$2"
         return await self.execute(sql,state,telegram_id,execute=True)
@@ -125,21 +133,21 @@ class Database:
         return await self.execute(sql,state,fetch=True)
     async def get_new_contracts(self):
         sql="SELECT products_contract.id,full_name,phone,extra_phone,f.name,f.time,f.lang,address,passport,jshshir,passport_photo," \
-            "dtm,result,created,result,diplom " \
-            " FROM products_contract INNER JOIN products_fakultet AS f " \
+            "dtm,result,created,result,diplom,education,picture " \
+            " FROM products_contract LEFT JOIN products_fakultet AS f " \
             "ON f.id=fakultet_id  WHERE state='registered' ORDER BY id"
         return await self.execute(sql,fetch=True)
 
     async def get_contract_by_id(self,id):
         sql="SELECT products_contract.id,full_name,phone,extra_phone,f.name,f.time,f.lang,address,passport,jshshir,passport_photo," \
-            "dtm,result,created,result,diplom " \
-            " FROM products_contract INNER JOIN products_fakultet AS f " \
+            "dtm,result,created,result,diplom,picture " \
+            " FROM products_contract LEFT JOIN products_fakultet AS f " \
             "ON f.id=fakultet_id  WHERE state !='new' AND products_contract.id=$1"
         return await self.execute(sql,id,fetch=True)
 
     async def get_contract_full_info(self,contract_id):
         sql = "SELECT c.id,c.full_name,c.phone,c.extra_phone,f.name,f.time,f.summa," \
-              "f.summa_text,f.lang,c.address,c.passport,c.jshshir" \
+              "f.summa_text,f.lang,c.address,c.passport,c.jshshir,created" \
               " FROM products_contract AS c INNER JOIN products_fakultet AS f " \
               "ON f.id=c.fakultet_id  WHERE c.id=$1"
         return await self.execute(sql,contract_id,fetchrow=True)
@@ -180,9 +188,14 @@ class Database:
               "ON f.id=fakultet_id WHERE state='accepted' ORDER BY id"
         return await self.execute(sql, fetch=True)
     async def get_students(self):
-        sql = "SELECT products_contract.id,full_name,phone,extra_phone,f.name,f.time,f.lang,address,passport,jshshir,dtm,result,created" \
+        sql = "SELECT products_contract.id,full_name,phone,extra_phone,f.name,f.time,f.lang,address,passport,jshshir,dtm,result,created,education" \
               " FROM products_contract  LEFT JOIN products_fakultet AS f " \
               "ON f.id=fakultet_id ORDER BY id"
+        return await self.execute(sql, fetch=True)
+    async def get_new_students(self):
+        sql = "SELECT id,full_name,phone,extra_phone,address,passport,jshshir,education" \
+              " FROM products_contract  " \
+              "WHERE state IN ('registered','new') and education is not null ORDER BY id"
         return await self.execute(sql, fetch=True)
     async def update_user_photo(self,telegram_id,photo_id):
         sql="UPDATE products_contract SET passport_photo=$1 WHERE telegram_id=$2"

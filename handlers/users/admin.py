@@ -34,6 +34,8 @@ async def catch_admin_callback_data(call:types.CallbackQuery,callback_data:dict)
     action=callback_data.get("action")
     if action=="accept":
         current_time = datetime.now(timezone)
+        await call.message.answer("shartnoma jonatilmadi")
+        return
         telegram_id=await db.get_user_telegram_id_by_contract(int(contract_id))
         if telegram_id is None:
             await call.message.answer("Bu id lis shartnoma mavjud emas")
@@ -42,9 +44,9 @@ async def catch_admin_callback_data(call:types.CallbackQuery,callback_data:dict)
         await db.update_contract_state(id=int(contract_id),state="accepted")
         await db.update_contract_created_time(id=int(contract_id),created=current_time.date())
         await bot.send_message(chat_id=telegram_id,text="✅Tabriklaymiz siz Renaissance Universtyga talabalikka qabul qilindingiz !!!")
-        malumotnoma=InputFile(f"/root/univer-bot/renisancebot/documents/{contract_id}/malumotnoma.pdf")
-        shartnoma=InputFile(f"/root/univer-bot/renisancebot/documents/{contract_id}/shartnoma.pdf")
-        uchtamonlama=InputFile(f"/root/univer-bot/renisancebot/documents/{contract_id}/uchtamonlama.pdf")
+        malumotnoma=InputFile(f"/root/univer-bot/qabulbot/documents/{contract_id}/malumotnoma.pdf")
+        shartnoma=InputFile(f"/root/univer-bot/qabulbot/documents/{contract_id}/shartnoma.pdf")
+        uchtamonlama=InputFile(f"/root/univer-bot/qabulbot/documents/{contract_id}/uchtamonlama.pdf")
         await bot.send_document(chat_id=telegram_id,document=malumotnoma,caption="Ma'lumotnoma")
         await bot.send_document(chat_id=telegram_id,document=shartnoma,caption="Shartnoma")
         await bot.send_document(chat_id=telegram_id,document=uchtamonlama,caption="Uch tomonli")
@@ -76,13 +78,14 @@ Lang={
 "uz":"O'zbek"
 }
 
-async def accept_student(message:types.Message,contract_id:int,created:datetime):
+async def accept_student(message:types.Message,contract_id:int,created):
     full_info=await db.get_contract_full_info(contract_id)
     if full_info is None:
         await message.answer("Shartnoma topilmadi")
         return
     id=2000+full_info[0]
-
+    if created=="":
+        created=full_info[len(full_info)-1]
     info_data={
         "id":f"01-04/{id}",
         "path":full_info[0],
@@ -134,7 +137,7 @@ async def catch_admin_exel(message:types.Message):
         print("input",file_path.name)
         file_path=file_path.name
         process_excel(file_path)
-        path="/root/univer-bot/renisancebot"
+        path="/root/univer-bot/qabulbot"
         correct=f"{path}/handlers/users/correct.xlsx"
         incorrect=f"{path}/handlers/users/incorrect.xlsx"
         with open(correct, 'rb') as document_file:
@@ -208,7 +211,7 @@ def process_excel(input):
             correctPhones[phone_number]=""
             # correct.append((phone_number,""))
         else:
-            if "/" in phone_number:
+            if "/" in phone_number and len(phone_number)>12:
                 print("/ phone number",phone_number)
                 arr=phone_number.split("/")
                 print(arr)
@@ -225,7 +228,40 @@ def process_excel(input):
                     exist=True
                 if exist:
                     continue
-
+            if "/" in phone_number:
+                phone_number=phone_number.replace("/","")
+                phone_number=f"998{phone_number}"
+                if len(phone_number)==12:
+                    correctPhones[phone_number]=""
+                    continue
+            if len(phone_number)==18:
+                f=phone_number[:9]
+                s=phone_number[9:]
+                f = f"998{f}"
+                s = f"998{s}"
+                exists=False
+                if re.match(pattern, f):
+                    correctPhones[f] = ""
+                    exists=True
+                if re.match(pattern, s):
+                    correctPhones[s] = ""
+                    exists=True
+                if exists:
+                    continue
+            if len(phone_number)==21:
+                f=phone_number[:12]
+                s=phone_number[12:]
+                # f = f"998{f}"
+                s = f"998{s}"
+                exists=False
+                if re.match(pattern, f):
+                    correctPhones[f] = ""
+                    exists=True
+                if re.match(pattern, s):
+                    correctPhones[s] = ""
+                    exists=True
+                if exists:
+                    continue
             incorectPhones[phone_number]=""
             # print("incorrect phone number",phone_number)
             # incorect.append((phone_number,""))
@@ -245,10 +281,13 @@ def process_excel(input):
 
 @dp.message_handler(AdminContentFilter(),content_types=ContentType.ANY)
 async def catch_admin_notification(message:types.Message):
+    print("message get admin content")
     state=await db.get_user_state_by_telegram_id(message.from_user.id)
     state=state.split(";")
     if state[1] == "all":
         users = await db.select_all_users()
+    elif state[1]=="notregirtered":
+        users=await db.select_not_registered()
     else:
         users = await db.get_contract_users_by_state(state=state[1])
     if message.text == "🔙 Ortga":
@@ -263,12 +302,13 @@ async def catch_admin_notification(message:types.Message):
         if sendMap.get(user_id):
             continue
         try:
+            print("message video",message.video)
             if len(message.photo) != 0:
                 await bot.send_photo(chat_id=user_id, caption=message.caption,
                                  photo=message.photo[0].file_id)
             elif message.video is not None:
                 await bot.send_video(chat_id=user_id, caption=message.caption,
-                                 photo=message.video.file_id)
+                                 video=message.video.file_id)
             else:
                 await bot.send_message(
                 chat_id=user_id, text=message.text
@@ -280,8 +320,8 @@ async def catch_admin_notification(message:types.Message):
             print("message blocked")
         except aiogram.utils.exceptions.UserDeactivated:
             print("user diactiveted")
-        except:
-            print("get any error")
+        except Exception as ex:
+            print("get any error",ex)
     # except aiogram.utils.ex
 
 @dp.message_handler(AdminFilter(),user_id=ADMINS)
@@ -315,14 +355,28 @@ async def catch_admin_commands(message:types.Message):
                     document_ids.append(passport_id)
                 diplom=contract[15].split(":")
                 diplom_id, ptype = diplom[1], diplom[0]
+                print("ptype",ptype)
                 if ptype=="photo":
                     photo_ids.append(diplom_id)
                 else:
                     document_ids.append(diplom_id)
-                if len(photo_ids)!=0:
+                print("")
+                if contract[17] is not None:
+                    diplom = contract[17].split(":")
+                    diplom_id, ptype = diplom[1], diplom[0]
+                    print("picture")
+                    if ptype == "photo":
+                        photo_ids.append(diplom_id)
+                    else:
+                        document_ids.append(diplom_id)
+                if len(photo_ids)>1:
                     await message.answer_media_group(media=[InputMediaPhoto(media=photo_id) for photo_id in photo_ids])
-                if len(document_ids)!=0:
+                elif len(photo_ids)==1:
+                    await message.answer_photo(photo=photo_ids[0])
+                if len(document_ids)>1:
                     await message.answer_media_group(media=[InputMediaDocument(media=photo_id) for photo_id in document_ids])
+                elif len(document_ids)==1:
+                    await message.answer_document(document=document_ids[0])
                 await asyncio.sleep(0.5)
         elif text=="Arhivdagilar":
             contracts = await db.get_archived_contracts()
@@ -364,12 +418,22 @@ async def catch_admin_commands(message:types.Message):
             contracts = await db.get_students()
             df = pd.DataFrame(contracts, columns=['Shartnoma Idsi', 'F.I.SH',"Telefon raqami",
             "Ikkinchi telefon","Fakultet nomi","Ta'lim sharkli","Ta'lim Tili","Address","Passport",
-            "JSHSHIR","DTM","Test natijasi","Shartnoma berilgan sana"])
+            "JSHSHIR","DTM","Test natijasi","Shartnoma berilgan sana","Oqish shakli va talim tili"])
             excel_file_path = 'talabalar.xlsx'  # Specify the file path where the Excel file will be saved
             df.to_excel(excel_file_path, index=False)
             with open(excel_file_path, 'rb') as file:
                 await bot.send_document(message.from_user.id, file)
             os.remove(excel_file_path)
+            # contracts = await db.get_new_students()
+            # df = pd.DataFrame(contracts, columns=['Shartnoma Idsi', 'F.I.SH', "Telefon raqami",
+            #                                       "Ikkinchi telefon",
+            #                                       "Address", "Passport",
+            #                                       "JSHSHIR","Talim shakli va talim tili"])
+            # excel_file_path = 'abuturent.xlsx'  # Specify the file path where the Excel file will be saved
+            # df.to_excel(excel_file_path, index=False)
+            # with open(excel_file_path, 'rb') as file:
+            #     await bot.send_document(message.from_user.id, file)
+            # os.remove(excel_file_path)
         elif text=="Elon qilish":
             state[1]="notification"
             state=";".join(state)
@@ -388,17 +452,17 @@ async def catch_admin_commands(message:types.Message):
                 current_time=contract[1]
                 # await accept_student(message,contract[0],current_time)
                 try:
-                    await accept_student(message=message, contract_id=int(contract_id), created=current_time)
+                    await accept_student(message=message, contract_id=int(contract_id), created="")
                 # await db.update_contract_state(id=int(contract_id), state="accepted")
                 # await db.update_contract_created_time(id=int(contract_id), created=current_time.date())
                 # await bot.send_message(chat_id=telegram_id,text="✅Tabriklaymiz siz Renaissance Universtyga talabalikka qabul qilindingiz !!!")
-                    malumotnoma = InputFile(f"/root/univer-bot/renisancebot/documents/{contract_id}/malumotnoma.pdf")
-                    shartnoma = InputFile(f"/root/univer-bot/renisancebot/documents/{contract_id}/shartnoma.pdf")
-                    uchtamonlama = InputFile(f"/root/univer-bot/renisancebot/documents/{contract_id}/uchtamonlama.pdf")
-                    await bot.send_document(chat_id=telegram_id, document=malumotnoma, caption="Ma'lumotnoma")
-                    await bot.send_document(chat_id=telegram_id, document=shartnoma, caption="Shartnoma")
-                    await bot.send_document(chat_id=telegram_id, document=uchtamonlama, caption="Uch tomonli")
-                    await message.answer(text=f"Shartnoma jo'natildi idsi:{contract_id}")
+                    malumotnoma = InputFile(f"/root/univer-bot/qabulbot/documents/{contract_id}/malumotnoma.pdf")
+                    shartnoma = InputFile(f"/root/univer-bot/qabulbot/documents/{contract_id}/shartnoma.pdf")
+                    uchtamonlama = InputFile(f"/root/univer-bot/qabulbot/documents/{contract_id}/uchtamonlama.pdf")
+                    # await bot.send_document(chat_id=telegram_id, document=malumotnoma, caption="Ma'lumotnoma")
+                    # await bot.send_document(chat_id=telegram_id, document=shartnoma, caption="Shartnoma")
+                    # await bot.send_document(chat_id=telegram_id, document=uchtamonlama, caption="Uch tomonli")
+                    # await message.answer(text=f"Shartnoma jo'natildi idsi:{contract_id}")
                     time.sleep(1.5)
                 except Exception as ex:
                     print("got error ",ex)
@@ -408,8 +472,11 @@ async def catch_admin_commands(message:types.Message):
             state=";".join(state)
             await db.update_user_state(telegram_id=message.from_user.id,state=state)
             await message.answer(text="Admin menu",reply_markup=main_admin)
-        elif message.text in ["Registraciyadan o'tganlarga", "Arhivdagilarga", "Hammaga jo'natish","Qabul bolganlarga"]:
-            state[1] = notTypes[message.text]
+        elif message.text in ["Registraciyadan o'tmaganlarga", "Arhivdagilarga", "Hammaga jo'natish","Qabul bolganlarga"]:
+            if message.text!="Registraciyadan o'tmaganlarga":
+                state[1] = notTypes[message.text]
+            else:
+                state[1]="notregirtered"
             state=";".join(state)
             await db.update_user_state(telegram_id=message.from_user.id,state=state)
             await message.answer(text="Eloni kiriting",reply_markup=back)
@@ -434,7 +501,7 @@ async def catch_admin_commands(message:types.Message):
             passport_id, ptype = passport[1], passport[0]
             await message.answer(text=text,reply_markup=markup)
 
-            if ptype == "photo":
+            if "photo" in ptype:
                 # photo_ids.append(passport_id)
                 await message.answer_photo(photo=passport_id)
             else:
@@ -443,12 +510,20 @@ async def catch_admin_commands(message:types.Message):
             # print(contract[15])
             diplom = contract[15].split(":")
             diplom_id, ptype = diplom[1], diplom[0]
-            if ptype == "photo":
+            if  "photo" in ptype:
                 # photo_ids.append(diplom_id)
                 await message.answer_photo(photo=diplom_id)
             else:
                 # document_ids.append(diplom_id)
                 await message.answer_document(document=diplom_id)
+            if contract[16] is not None:
+                diplom = contract[17].split(":")
+                diplom_id, ptype = diplom[1], diplom[0]
+                print("picture")
+                if ptype == "photo":
+                    await message.answer_photo(photo=diplom_id)
+                else:
+                    await message.answer_document(document=diplom_id)
 
         else:
             await message.answer("Bu id li shartnoma topilmadi")
@@ -464,12 +539,15 @@ notTypes={
 Times = {
         'daytime':"Kunduzgi",
         "evening":'Kechgi' ,
-        "distance":"Sirtqi"
+        "distance":"Sirtqi",
+        None:""
 }
 langDic={
     "uz":"O'zbek",
     "ru":"Rus tili",
-    "en":"Ingliz"
+    "en":"Ingliz",
+    None: ""
+
 }
 
 def prepare_contract_data(contract:list):
@@ -485,6 +563,7 @@ def prepare_contract_data(contract:list):
         f"<b>JSHSHIR</b>:        {contract[9]}\n"\
         f"<b>DTM</b>:        {contract[11]}\n" \
         f"<b>Test natijasi</b>:        {contract[12]}\n"
+
     if len(contract)>=14:
         res+=f"<b>Shartnoma jo'natilgan sana</b>:        {contract[13]}\n"
         enpoint="http://78.40.219.247:8000"

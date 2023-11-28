@@ -1,9 +1,14 @@
 from aiogram import types
 from aiogram.dispatcher.filters import BoundFilter
+
+from data.config import ADMINS
 from loader import db
 
 class AdminFilter(BoundFilter):
     async def check(self, message:types.Message) -> bool:
+        print(ADMINS)
+        if str(message.from_user.id) not in list(ADMINS):
+            return False
         user=await db.get_user_state_by_telegram_id(message.from_user.id)
         state=user
         if ";" in state:
@@ -12,12 +17,14 @@ class AdminFilter(BoundFilter):
 
 class AdminContentFilter(BoundFilter):
     async def check(self, message:types.Message) -> bool:
+        if str(message.from_user.id) not in list(ADMINS):
+            return False
         user=await db.get_user_state_by_telegram_id(message.from_user.id)
         if ":" in user:
             return False
         state=user.split(";")
         if state[1]!="":
-            if state[1] in ["all","accepted","archive","registered"]:
+            if state[1] in ["all","accepted","archive","registered","notregirtered"]:
                 return True
             return False
         return False
@@ -25,6 +32,8 @@ class AdminContentFilter(BoundFilter):
 
 class AdminExelFilter(BoundFilter):
     async def check(self, message:types.Message) -> bool:
+        if str(message.from_user.id) not in list(ADMINS):
+            return False
         user=await db.get_user_state_by_telegram_id(message.from_user.id)
         if ":" in user:
             return False

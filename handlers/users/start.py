@@ -3,7 +3,8 @@ from aiogram import types
 from aiogram.dispatcher.filters.builtin import CommandStart
 from keyboards.default.start_keyboard import menu
 from loader import dp, db, bot
-video_id="BAACAgIAAxkBAAEBEktkzR61Jl98Fv4Oa7JZ-rA58JIvDAACXS8AAggwSUprpgdrbeO8rC8E"
+import  os
+video_id="BAACAgIAAxkBAAEEC1dlAAEgUuHWi0VHPGePiB2eYDeZS4AAAhYyAAKv1_hLjpgGE4_VuLkwBA"
 photo_id ="AgACAgIAAxkBAAMRZLdz6r4QA00ijBspTR4iOf8FDOgAAhTGMRtbG8FJRZd5gY8LhMABAAMCAAN5AAMvBA"
 jshshr_id="AgACAgIAAxkBAAMVZLd0XImfh0Agvl_Y0WLzt1h1ovwAAhXGMRtbG8FJN2xN2--cwsgBAAMCAAN5AAMvBA"
 contract_id="AgACAgIAAxkBAAEBEk9kzR7ahOdESywpuAABF1dYlBxyjRQAAq7MMRsPvGhK-ThtN-GNv8kBAAMCAAN4AAMvBA"
@@ -19,53 +20,44 @@ async def bot_start(message: types.Message):
     except asyncpg.exceptions.UniqueViolationError:
         await db.update_user_state(message.from_user.id,"menu::::")
         user = await db.select_user(telegram_id=message.from_user.id)
+    text="Hurmatli talabalar universitet tanlashda qiynalayapsizmi ?\n"\
+    "Qaysi Nodavlat taʼlim muassasalari diplomi tan olinadi ?\n"\
+    "Litsenizyasi haqiqiymi  yoʻqmi ? Bu joyda oʻqisam keyin pullarimga kuyib qolmaymani ? shu kabi savollar sizni qiynayaptimi ?  Unda Nodavlat taʼlim muassasalariga litseniziya beruvchi vakolatli organ Oliy taʼlim fan va Innovatsiyalar vazirligi ishonch raqami 1006 yoki call markazi  712306464 ga qoʻngʻiroq qiling\n\n"\
+    "https://stat.edu.uz/Univer-list.php\n"\
+    "quyidagi havolada Oliy taʼlm vazirligi rasmiy saytida roʻyxati koʻrsatilgan litsenziyaga ega xususiy oliygohlar bilan tanishishingiz mumkin\n"
+    path="/home/asliddin/PycharmProjects/renaissance/mukammal-bot-paid"
+    photo1=f"./photo1.jpg"
+    photo2=f"./photo2.jpg"
+    if os.path.exists(photo1) and os.path.exists(photo2):
+        media_group = [
+            types.InputMediaPhoto(media=open(photo1, 'rb'),caption=text),
+            types.InputMediaPhoto(media=open(photo2, 'rb'))
+        ]
+        await message.answer_media_group(media=media_group)
+    text = "Eng kerakli va zamonaviy kasblarni IIIU'da egallang!\n\n" \
+           "📌 Bizning yo'nalishlar:\n" \
+           "▫️ Boshlang'ich ta'lim;\n" \
+           "▫️ Amaliy psixologiya;\n" \
+           "▫️ Kompyuter ilmi va dasturlash texnologiyalari;\n" \
+           "▫️ Maktabgacha ta'lim;\n" \
+           "▫️ Filologiya va tillarni o'qitish;\n" \
+           "▫️ Buxgalteriya va audit;\n" \
+           "▫️ Moliya va moliyaviy texnologiyalar;\n" \
+           "▫️ Iqtisodiyot.\n" \
+           "✅ Ta'lim sifati kafolatlanadi:\n" \
+           "Tajribali o'qituvchilarimizning 80% qismi ilmiy darajaga ega va ular xorij universitetlarida malaka oshirishadi.\n" \
+           "✅ To'lov va moddiy ko'mak:\n" \
+           "Talabalar oylik stipendiya bilan ta'minlanadi. Shartnoma to'lovi uchun ta'lim kreditini rasmiylashtirish imkoni mavjud.\n" \
+           "✅ Onlayn imtihon:\n\n" \
+           "Test sinovidan o'tish uchun hech qayerga borishingizga hojat yo'q. DTM imtihonidan 56.7 ball to'plaganlar esa imtihonsiz qabul qilinadi.\n" \
+           "📩 @t.me/iiiu_01\n" \
+           "+998 94 740 53 20\n" \
+           "+998 94 740 62 20\n" \
+           "t.me/chirchiq_filiali_1\n"
+    photo1 = "./new.jpg"
+    await message.answer_video(video=video_id)
+    with open(photo1, 'rb') as photo_file:
+        await bot.send_photo(message.from_user.id, photo_file, caption=text)
 
-    await message.answer_video(video_id,
-                               caption="<a href='https://t.me/renuadmission/19'>Universitet haqida batafsil</a>\n\n" \
-                                       "<a href='https://t.me/renuadmission/85'>Xususiy oliygohlar diplimi haqida batafsil</a>\n\n" \
-                                       "<a href='https://t.me/renuadmission/86'>Baklavr va Magistratura yoʻnlishlari haqida batafsil (har bir yoʻnalishda nimalar oʻrgatiladi ? Asosiy fanlar qaysilar ?)</a>\n\n" \
-                                       "Telefonlar:\n" \
-                                       "+998947405220  Komila\n" \
-                                       "+998947406220  Sarvinoz\n" \
-                                       "+998947407220  Diyora\n" \
-                                       "+998911357797  Sarvinoz\n" \
-                                       "@renuqabul2023\n" \
-                                       "@Renuadmin2\n" \
-                                       "@Renaissance7220\n" \
-                                       "@Renuadmin3\n" \
-                                       "Xujjat topshirish uchun @renutestbot", reply_markup=menu)
-    await message.answer_photo(photo=photo_id)
-    await message.answer_location(longitude=69.210325, latitude=41.19043,)
-    await message.answer_photo(photo=contract_id)
-    await message.answer(text="Universtetimizga quyidagi lakatsiya orqali yoki 131/58/47/62 yoʻnalishli avtobuslarning oxirgi bekatiga tushib kelishingiz mumkin")
-    # await message.answer(text="RENAISSANCE UNIVERSITYda 500 ta grant oʻrinlari mavjud boʻlib 1 semestrni aʼlo bahoga tamomlagan talabalar oʻrtasida qoʻshimcha saralash yoʻli bilan eng yuqori bal olganlarga 2 semestrdan taqdim etiladi")
-    # await message.answer(text="Murojat uchun telefonlar:\n"\
-    #                         "+998947405220  Komila\n"\
-    #                         "+998947406220  Sarvinoz\n"\
-    #                         "+998947407220  Diyora\n"\
-    #                         "+998911357797  Sarvinoz\n"\
-    #                         "@renuqabul2023\n"\
-    #                         "@Renuadmin2\n"\
-    #                         "@Renaissance7220\n"\
-    #                         "@Renuadmin3")
-    # await message.answer(text=f"<a href=\"https://t.me/renuadmisson/15\">✅Universitet haqida</a>\n"\
-    #                              f"<a href=\"https://t.me/renuadmisson/8\">✅Taʼlim yoʻnalishlari</a>\n"\
-    #                              f"<a href=\"https://t.me/renuadmisson/57\">✅Kantrakt miqdori</a>\n"\
-    #                              f"<a href=\"https://t.me/renuadmisson/18\">✅Imtiyzolar</a>\n"\
-    #                              f"<a href=\"https://t.me/renuadmisson/16\">✅Nega ayan biz</a>\n"\
-    #                              f"<a href=\"https://t.me/renuadmisson/28\">✅Qabul 2023</a>\n"\
-    #                              f"<a href=\"https://t.me/renuadmisson/23\">✅Univertetga qanday boriladi ?</a>\n"\
-    #                              f"<a href=\"https://t.me/renuadmisson/26\">✅Kantakt maʼlumotlar</a>\n"\
-    #                              f"<a href=\"https://t.me/renuadmisson/25\">✅Lakatsiya</a>\n"\
-    #                              f"<a href=\"https://t.me/renuadmisson/27\">✅Hujjat topshirish</a>\n"\
-    #                              f"<a href=\"https://t.me/renuadmisson/10?single\">✅Litsenziya</a>\n"\
-    #             "1 mlrdlik grant",reply_markup=menu, disable_web_page_preview=True)
-    # await message.answer(
-    #     "Xush kelibsiz!",
-    #     reply_markup=menu,
-    # )
-
-    # ADMINGA xabar beramiz
-    # count = await db.count_users()
-    # msg = f"{user[1]} bazaga qo'shildi.\nBazada {count} ta foydalanuvchi bor."
-    # await bot.send_message(chat_id=ADMINS[0], text=msg)
+    await message.answer_location(longitude=69.58310128092178, latitude=41.465222691197255, reply_markup=menu)
+    # await message.answer_photo(photo=contract_id)
