@@ -70,7 +70,7 @@ class Database:
 
     async def select_not_registered(self):
         sql = ("SELECT telegram_id FROM products_user "
-               "WHERE telegram_id NOT IN (SELECT telegram_id FROM product_contract) "
+               "WHERE telegram_id NOT IN (SELECT telegram_id FROM products_contract) "
                "OR telegram_id IN (select telegram_id FROM product_contract WHERE state='new') "
                " ORDER BY id DESC")
         return await self.execute(sql, fetch=True)
