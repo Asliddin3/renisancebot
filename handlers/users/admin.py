@@ -281,6 +281,7 @@ def process_excel(input):
 
 @dp.message_handler(AdminContentFilter(),content_types=ContentType.ANY)
 async def catch_admin_notification(message:types.Message):
+    print("message get admin content")
     state=await db.get_user_state_by_telegram_id(message.from_user.id)
     state=state.split(";")
     if state[1] == "all":

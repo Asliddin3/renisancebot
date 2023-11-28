@@ -24,7 +24,7 @@ class AdminContentFilter(BoundFilter):
             return False
         state=user.split(";")
         if state[1]!="":
-            if state[1] in ["all","accepted","archive","registered"]:
+            if state[1] in ["all","accepted","archive","registered","notregirtered"]:
                 return True
             return False
         return False
